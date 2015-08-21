@@ -47,7 +47,11 @@ let App = React.createClass({
   }
 });
 
-React.render(<App/>, document.body);
+let elemDiv = document.createElement('div');
+// elemDiv.style.cssText = 'position:absolute;width:100%;height:100%;opacity:0.3;z-index:100;background:#000;';
+
+React.render(<App/>, elemDiv);
+document.body.appendChild(elemDiv);
 
 // Needed for React Developer Tools
 if (typeof window !== 'undefined') {

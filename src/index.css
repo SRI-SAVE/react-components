@@ -1,9 +1,13 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,300,500);
 
 .clearfix:after {
-   content: " ";
-   visibility: hidden;
-   display: block;
-   height: 0;
-   clear: both;
+  content: " ";
+  visibility: hidden;
+  display: block;
+  height: 0;
+  clear: both;
+}
+
+.flipsvg {
+  transform: scaleY(-1);
 }
