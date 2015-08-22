@@ -7,7 +7,3 @@
   height: 0;
   clear: both;
 }
-
-.flipsvg {
-  transform: scaleY(-1);
-}

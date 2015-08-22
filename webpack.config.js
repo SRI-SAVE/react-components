@@ -4,12 +4,15 @@ var webpack = require('webpack');
 var merge = require('webpack-merge');
 var path = require('path'); //.join(__dirname, 'build');
 var wdsDebug = false;
+var cosmosFixture = false;
 
 var TARGET = process.env.TARGET;
 var ROOT_PATH = path.resolve(__dirname);
 
 if (process.argv[ 1 ].match(/webpack-dev-server$/) != null) {
   wdsDebug = true;
+} else if (process.argv[ 1 ].match(/component-playground$/) != null) {
+  cosmosFixture = true;
 }
 
 var common = {
