@@ -19,14 +19,14 @@ const {
   Paper,
   RaisedButton,
   Styles,
+  TextField,
   Toolbar,
   ToolbarGroup,
   ToolbarSeparator,
   ToolbarTitle,
 } = mui;
-const { Spacing, Typography } = mui.Styles;
-
-const ThemeManager = new mui.Styles.ThemeManager();
+const { Colors, Spacing, Typography } = Styles;
+const ThemeManager = new Styles.ThemeManager();
 
 let App = React.createClass({
 
@@ -42,33 +42,28 @@ let App = React.createClass({
   },
 
   handleControlsClick() {
-    console.log('clicked');
+    let vis = this.state.controlsVisible;
     this.setState({
-      controlsVisible: true,
+      controlsVisible: !vis,
     });
   },
 
   render() {
-    let filterOptions = [
+    let exerciseList = [
       { payload: '1', text: 'None' },
-      { payload: '2', text: 'ExerciseA' },
-      { payload: '3', text: 'ExerciseB' },
-      { payload: '4', text: 'ExerciseC' },
-    ];
-    let iconMenuItems = [
-      { payload: '1', text: 'Download' },
-      { payload: '2', text: 'More Info' },
     ];
 
-    let palette = ThemeManager.getCurrentTheme().palette;
-    let borderColor = palette.borderColor;
-    let canvasColor = palette.canvasColor;
-
+    const palette = ThemeManager.getCurrentTheme().palette;
+    const canvasColor = palette.canvasColor;
     const styles = {
       paper: {
         backgroundColor: canvasColor,
         fontFamily: '"Roboto", sans-serif',
         marginBottom: 32,
+      },
+
+      textfield: {
+        marginTop: '-15',
       },
 
       toolbarBlock: {
@@ -92,14 +87,20 @@ let App = React.createClass({
             <Toolbar style={{ backgroundColor: canvasColor }}>
               <ToolbarGroup float="left" key={ 0 }>
                 <ToolbarTitle style={ styles.toolbarTitle } text="exercise"/>
-                <DropDownMenu menuItems={ filterOptions } style={ styles.exerciseDropdown }/>
+                <DropDownMenu menuItems={ exerciseList } style={ styles.exerciseDropdown }/>
+                  <TextField
+                    defaultValue="http://localhost:3001"
+                    errorStyle={{ color: Colors.red600 }}
+                    errorText={ this.state.serverErrorText }
+                    floatingLabelText="Exercise Server"
+                    hintText="http://<host>:<port>"
+                    onChange={ this.handleServerInputChange }
+                    style={ styles.textfield }/>
               </ToolbarGroup>
               <ToolbarGroup float="right" key={ 1 }>
                 <ToolbarTitle style={ styles.toolbarTitle } text="save"/>
-                <FontIcon className="muidocs-icon-custom-sort"/>
-                <DropDownIcon iconClassName="muidocs-icon-navigation-expand-more" menuItems={ iconMenuItems }/>
                 <ToolbarSeparator/>
-              <RaisedButton label="Controls" onClick={ this.handleControlsClick } primary={ true }/>
+                <RaisedButton label="Controls" onClick={ this.handleControlsClick } primary={ true }/>
               </ToolbarGroup>
             </Toolbar>
           </div>
