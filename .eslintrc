@@ -6,6 +6,9 @@
       "react/react-in-jsx-scope": 1
     },
     "rules": {
+        "comma-dangle": [ 2, "always-multiline" ],
+        "no-undef": 2,
+        "comma-spacing": 2,
         "quotes": [ 2, "single", "avoid-escape" ],
         "react/jsx-boolean-value": 1,
         "react/jsx-quotes": 1,
