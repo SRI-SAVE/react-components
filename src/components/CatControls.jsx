@@ -4,7 +4,7 @@ import mui from 'material-ui';
 import MapsTerrain from 'material-ui/lib/svg-icons/maps/terrain';
 import ActionRestore from 'material-ui/lib/svg-icons/action/restore';
 import ContentSend from 'material-ui/lib/svg-icons/content/send';
-
+import TooltrayList from './TooltrayList';
 // import ContentDrafts from 'material-ui/lib/svg-icons/content/drafts';
 // import ContentInbox from 'material-ui/lib/svg-icons/content/inbox';
 // import ActionList from 'material-ui/lib/svg-icons/action/list';
@@ -107,11 +107,7 @@ let CatControls = React.createClass({
     return (
       <div style={ styles.root }>
         <div style={ styles.container }>
-          { /* XXX TooltrayList component */ }
-          <List subheader="CAT Tooltray Items">
-            <ListItem leftIcon={ <MapsTerrain/> } primaryText="Shooting Range"/>
-            <ListItem leftIcon={ <MapsTerrain/> } primaryText="M4 Carbine"/>
-          </List>
+          <TooltrayList container={ false } items={[ 'Shooting Range', 'M4 Carbine' ]} subheader="CAT Tooltray Items"/>
           <List subheader="CAT Control">
             <ListItem leftIcon={ <ActionRestore/> } primaryText="Reset"/>
             <div>
@@ -120,7 +116,7 @@ let CatControls = React.createClass({
               </div>
               <TextField
                 defaultValue=""
-                errorStyle={{ color: Colors.orange500 }}
+                errorStyle={{ color: Colors.red600 }}
                 errorText={ this.state.error2Text }
                 floatingLabelText="Exercise Path and Name"
                 hintText="Ex. /PutExercise"
