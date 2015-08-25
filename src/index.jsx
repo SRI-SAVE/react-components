@@ -20,12 +20,15 @@ const {
   DropDownIcon,
   DropDownMenu,
   FontIcon,
+  Paper,
   RaisedButton,
+  Styles,
   Toolbar,
   ToolbarGroup,
   ToolbarSeparator,
   ToolbarTitle
 } = mui;
+const { Spacing, Typography } = mui.Styles;
 
 let ThemeManager = new mui.Styles.ThemeManager();
 
@@ -55,31 +58,41 @@ let App = React.createClass({
       { payload: '2', text: 'More Info' }
     ];
 
-    return (
-      <div>
-        <Toolbar>
-          <ToolbarGroup float="left" key={ 0 }>
-            <DropDownMenu menuItems={ filterOptions }/>
-          </ToolbarGroup>
-          <ToolbarGroup float="right" key={ 1 }>
-            <ToolbarTitle text="Options"/>
-            <FontIcon className="muidocs-icon-custom-sort"/>
-            <DropDownIcon iconClassName="muidocs-icon-navisgation-expand-more" menuItems={ iconMenuItems }/>
-            <ToolbarSeparator/>
-            <RaisedButton label="Create Broadcast" primary={ true }/>
-          </ToolbarGroup>
-        </Toolbar>
+    let palette = ThemeManager.getCurrentTheme().palette;
+    let borderColor = palette.borderColor;
+    let canvasColor = palette.canvasColor;
 
-        { /*
-        <ClickCounterButton disabled={ false }/>
-        <p style={{ marginBottom: '24px' }}/>
-        <ButtonComponent/>
-        <p style={{ marginBottom: '24px' }}/>
-        <SimpleMenu/>
-        <TooltrayList clearFix={ true }/>
-        */ }
-        <CatControls/>
-      </div>
+    let styles = {
+      root: {
+        backgroundColor: canvasColor,
+        fontFamily: '"Roboto", sans-serif',
+        marginBottom: 32
+      },
+      exampleBlock: {
+        borderRadius: '0 0 2px 0',
+        padding: Spacing.desktopGutter,
+        margin: 0
+      }
+    };
+
+    return (
+        <Paper style={ styles.root }>
+          <div className="clearfix" style={ styles.exampleBlock }>
+            <Toolbar>
+              <ToolbarGroup float="left" key={ 0 }>
+                <DropDownMenu menuItems={ filterOptions } style={{ width: 192 }}/>
+              </ToolbarGroup>
+              <ToolbarGroup float="right" key={ 1 }>
+                <ToolbarTitle text="SAVE"/>
+                <FontIcon className="muidocs-icon-custom-sort"/>
+                <DropDownIcon iconClassName="muidocs-icon-navigation-expand-more" menuItems={ iconMenuItems }/>
+                <ToolbarSeparator/>
+                <RaisedButton label="Create Broadcast" primary={ true }/>
+              </ToolbarGroup>
+            </Toolbar>
+          </div>
+          <CatControls/>
+        </Paper>
     );
   }
 });
