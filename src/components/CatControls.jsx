@@ -5,25 +5,11 @@ import MapsTerrain from 'material-ui/lib/svg-icons/maps/terrain';
 import ActionRestore from 'material-ui/lib/svg-icons/action/restore';
 import ContentSend from 'material-ui/lib/svg-icons/content/send';
 import TooltrayList from './TooltrayList';
-// import ContentDrafts from 'material-ui/lib/svg-icons/content/drafts';
-// import ContentInbox from 'material-ui/lib/svg-icons/content/inbox';
-// import ActionList from 'material-ui/lib/svg-icons/action/list';
 
 // import ReactRenderVisualizer from 'react-render-visualizer';
 // import MaterialUITheme from '../mixins/material-ui-theme'; // XXX cosmos testing
 
-// let { ClearFix, Mixins, SelectField, , Styles } = require('material-ui');
-
-const {
-  Checkbox,
-  IconButton,
-  List,
-  ListDivider,
-  ListItem,
-  Styles,
-  TextField,
-  Toggle
-} = mui;
+const { Checkbox, IconButton, List, ListDivider, ListItem, Styles, TextField, Toggle } = mui;
 const { Colors } = Styles;
 
 let CatControls = React.createClass({
@@ -35,17 +21,17 @@ let CatControls = React.createClass({
 
   getInitialState() {
     return {
-      error2Text: ''
+      error2Text: '',
     };
   },
 
   propTypes: {
-    height: React.PropTypes.number
+    height: React.PropTypes.number,
   },
 
   getDefaultProps() {
     return {
-      height: 350
+      height: 350,
     };
   },
 
@@ -53,22 +39,18 @@ let CatControls = React.createClass({
     let value = e.target.value;
     let isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
     this.setState({
-      error2Text: !isNumeric ? '' : 'This field must be a string'
+      error2Text: !isNumeric ? '' : 'This field must be a string',
     });
   },
 
   render() {
     const styles = {
       root: {
-        // float: 'left',
-        // marginBottom: 24,
-        // marginRight: 24,
         width: 360,
-
         position: 'fixed',
         top: '50%',
         left: '50%',
-        margin: '-25% 0 0 -25%'
+        margin: '-25% 0 0 -25%',
       },
 
       container: {
@@ -76,19 +58,17 @@ let CatControls = React.createClass({
         borderBottom: 'none',
         height: this.props.height,
         overflowY: 'scroll',
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
       },
 
       bottomTear: {
         display: 'block',
         position: 'relative',
         marginTop: -10,
-        width: 360
-        // transform: 'scaleY(-1)'
+        width: 360,
       },
 
       textfield: {
-        // marginTop: 24
       },
 
       icons: {
@@ -100,8 +80,8 @@ let CatControls = React.createClass({
         padding: 12,
         color: Colors.grey600,
         fill: Colors.grey600,
-        left: 4
-      }
+        left: 4,
+      },
     };
 
     return (
@@ -130,13 +110,7 @@ let CatControls = React.createClass({
           style={ styles.bottomTear }/>
       </div>
     );
-    //           <ListItem leftIcon={ <ContentInbox/> } open={ false } primaryText="Shooting Range">
-    //             <ListItem leftIcon={ <ActionGrade/> } primaryText="Starred"/>
-    //             <ListItem leftIcon={ <ContentSend/> } primaryText="Sent Mail">
-    //               <ListItem leftIcon={ <ContentDrafts/> } primaryText="Drafts"/>
-    //             </ListItem>
-    //         </ListItem>
-  }
+  },
 });
 
 export default CatControls;

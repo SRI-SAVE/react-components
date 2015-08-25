@@ -6,10 +6,6 @@ injectTapEventPlugin();
 import './index.css';
 
 import React from 'react';
-// import ClickCounterButton from './components/ClickCounterButton';
-// import ButtonComponent from './components/ButtonComponent';
-// import SimpleMenu from './components/SimpleMenu';
-// import TooltrayList from './components/TooltrayList.jsx';
 import CatControls from './components/CatControls.jsx';
 import MaterialUITheme from './mixins/material-ui-theme';
 import mui from 'material-ui';
@@ -26,71 +22,80 @@ const {
   Toolbar,
   ToolbarGroup,
   ToolbarSeparator,
-  ToolbarTitle
+  ToolbarTitle,
 } = mui;
 const { Spacing, Typography } = mui.Styles;
 
-let ThemeManager = new mui.Styles.ThemeManager();
+const ThemeManager = new mui.Styles.ThemeManager();
 
 let App = React.createClass({
 
   mixins: [
     ReactRenderVisualizer,
-    MaterialUITheme
+    MaterialUITheme,
   ],
 
   getInitialState() {
     return {
-      controlsVisible: false
+      controlsVisible: false,
     };
   },
 
   handleControlsClick() {
     console.log('clicked');
     this.setState({
-      controlsVisible: true
+      controlsVisible: true,
     });
   },
 
   render() {
     let filterOptions = [
-      { payload: '1', text: 'Select Exercise' },
+      { payload: '1', text: 'None' },
       { payload: '2', text: 'ExerciseA' },
       { payload: '3', text: 'ExerciseB' },
       { payload: '4', text: 'ExerciseC' },
     ];
     let iconMenuItems = [
       { payload: '1', text: 'Download' },
-      { payload: '2', text: 'More Info' }
+      { payload: '2', text: 'More Info' },
     ];
 
     let palette = ThemeManager.getCurrentTheme().palette;
     let borderColor = palette.borderColor;
     let canvasColor = palette.canvasColor;
 
-    let styles = {
-      root: {
+    const styles = {
+      paper: {
         backgroundColor: canvasColor,
         fontFamily: '"Roboto", sans-serif',
-        marginBottom: 32
+        marginBottom: 32,
       },
-      exampleBlock: {
+
+      toolbarBlock: {
         borderRadius: '0 0 2px 0',
         padding: Spacing.desktopGutter,
-        margin: 0
-      }
+        margin: 0,
+      },
+
+      toolbarTitle: {
+        textTransform: 'uppercase',
+      },
+
+      exerciseDropdown: {
+        width: 200,
+      },
     };
 
     return (
-        <Paper style={ styles.root }>
-          <div className="clearfix" style={ styles.exampleBlock }>
-            <Toolbar>
+        <Paper style={ styles.paper }>
+          <div className="clearfix" style={ styles.toolbarBlock }>
+            <Toolbar style={{ backgroundColor: canvasColor }}>
               <ToolbarGroup float="left" key={ 0 }>
-                <ToolbarTitle text="Exercise"/>
-                <DropDownMenu menuItems={ filterOptions } style={{ width: 192 }}/>
+                <ToolbarTitle style={ styles.toolbarTitle } text="exercise"/>
+                <DropDownMenu menuItems={ filterOptions } style={ styles.exerciseDropdown }/>
               </ToolbarGroup>
               <ToolbarGroup float="right" key={ 1 }>
-                <ToolbarTitle text="SAVE"/>
+                <ToolbarTitle style={ styles.toolbarTitle } text="save"/>
                 <FontIcon className="muidocs-icon-custom-sort"/>
                 <DropDownIcon iconClassName="muidocs-icon-navigation-expand-more" menuItems={ iconMenuItems }/>
                 <ToolbarSeparator/>
@@ -98,14 +103,13 @@ let App = React.createClass({
               </ToolbarGroup>
             </Toolbar>
           </div>
-          <CatControls/>
+          { this.state.controlsVisible? <CatControls/> : null }
         </Paper>
     );
-  }
+  },
 });
 
-let elemDiv = document.createElement('div');
-// elemDiv.style.cssText = 'position:absolute;width:100%;height:100%;opacity:0.3;z-index:100;background:#000;';
+const elemDiv = document.createElement('div');
 
 React.render(<App/>, elemDiv);
 document.body.appendChild(elemDiv);

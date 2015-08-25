@@ -3,15 +3,6 @@ import React from 'react';
 import mui from 'material-ui';
 import MapsTerrain from 'material-ui/lib/svg-icons/maps/terrain';
 
-// import ActionPolymer from 'material-ui/lib/svg-icons/action/polymer';
-// import ActionHome from 'material-ui/lib/svg-icons/action/home';
-// import ContentBlock from 'material-ui/lib/svg-icons/content/block';
-// import ContentClear from 'material-ui/lib/svg-icons/content/clear';
-// import ActionGrade from 'material-ui/lib/svg-icons/action/grade';
-// import ContentDrafts from 'material-ui/lib/svg-icons/content/drafts';
-// import ContentInbox from 'material-ui/lib/svg-icons/content/inbox';
-// import ContentSend from 'material-ui/lib/svg-icons/content/send';
-
 // import ReactRenderVisualizer from 'react-render-visualizer';
 
 const {
@@ -21,7 +12,7 @@ const {
   ListDivider,
   ListItem,
   Styles,
-  Toggle
+  Toggle,
 } = mui;
 const { Colors } = Styles;
 
@@ -40,7 +31,7 @@ let TooltrayList = React.createClass({
     container: React.PropTypes.bool,
     height: React.PropTypes.number,
     items: React.PropTypes.array.isRequired,
-    subheader: React.PropTypes.string
+    subheader: React.PropTypes.string,
   },
 
   getDefaultProps() {
@@ -49,7 +40,7 @@ let TooltrayList = React.createClass({
       height: 200,
       items: [ ],
       container: true,
-      subheader: undefined
+      subheader: undefined,
     };
   },
 
@@ -59,20 +50,20 @@ let TooltrayList = React.createClass({
         float: 'left',
         marginBottom: 24,
         marginRight: 24,
-        width: 360
+        width: 360,
       },
       container: {
         border: 'solid 1px #d9d9d9',
         borderBottom: 'none',
         height: this.props.height,
-        overflow: 'hidden'
+        overflow: 'hidden',
       },
       bottomTear: {
         display: 'block',
         position: 'relative',
         marginTop: -10,
-        width: 360
-      }
+        width: 360,
+      },
     };
 
     const list = (
@@ -97,7 +88,7 @@ let TooltrayList = React.createClass({
         </div>
       </div>
     ) : list;
-  }
+  },
 });
 
 export default TooltrayList;
