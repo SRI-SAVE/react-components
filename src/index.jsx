@@ -93,7 +93,7 @@ let App = React.createClass({
               </ToolbarGroup>
             </Toolbar>
           </div>
-          <ComponentDialog ref="controlsComponentDialog" title="CAT Controls">
+          <ComponentDialog ref="controlsComponentDialog" title="EUI Controls">
             <CatControls width="100%"/>
           </ComponentDialog>
         </Paper>

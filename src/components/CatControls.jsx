@@ -6,18 +6,12 @@ import ContentSend from 'material-ui/lib/svg-icons/content/send';
 import TooltrayList from './TooltrayList';
 import BottomTear from './BottomTear';
 
-// import ReactRenderVisualizer from 'react-render-visualizer';
-// import MaterialUITheme from '../mixins/material-ui-theme'; // XXX cosmos testing
-
 const { List, ListItem, Styles, TextField } = mui;
 const { Colors } = Styles;
 
 let CatControls = React.createClass({
 
-  mixins: [
-    // ReactRenderVisualizer
-    // MaterialUITheme // XXX cosmos testing
-  ],
+  mixins: [ ],
 
   getInitialState() {
     return {
@@ -82,8 +76,8 @@ let CatControls = React.createClass({
     return (
       <div style={ styles.wrapperDiv }>
         <div style={ styles.container }>
-          <TooltrayList container={ false } items={[ 'Shooting Range', 'M4 Carbine' ]} subheader="CAT Tooltray Items"/>
-          <List subheader="CAT Control">
+          <TooltrayList container={ false } items={[ 'Shooting Range', 'M4 Carbine' ]}/>
+          <List subheader="Controls">
             <ListItem leftIcon={ <ActionRestore/> } onClick={ this.handleReset } primaryText="Reset"/>
             <div>
               <div style={ styles.icons }>
