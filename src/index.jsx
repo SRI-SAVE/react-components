@@ -6,7 +6,7 @@ import CatControls from './components/CatControls.jsx';
 import MaterialUITheme from './mixins/material-ui-theme';
 import mui from 'material-ui';
 
-import ReactRenderVisualizer from 'react-render-visualizer';
+// import ReactRenderVisualizer from 'react-render-visualizer';
 
 const {
   DropDownMenu,
@@ -24,7 +24,7 @@ const { Colors, Spacing  } = Styles;
 let App = React.createClass({
 
   mixins: [
-    ReactRenderVisualizer,
+    // ReactRenderVisualizer,
     MaterialUITheme,
   ],
 
@@ -105,7 +105,7 @@ let App = React.createClass({
 
 const elemDiv = document.createElement('div');
 
-// elemDiv.style.cssText = 'opacity:1;z-index:100;background:white;';
+elemDiv.style.cssText = 'position:absolute;top:0;left:0;';
 React.render(<App/>, elemDiv);
 document.body.appendChild(elemDiv);
 
