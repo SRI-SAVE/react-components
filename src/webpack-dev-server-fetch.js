@@ -3,7 +3,7 @@ import 'whatwg-fetch';
 let httpResponse = { status: 200, headers: { 'Content-type': 'application/json' }};
 let saveFetch = window.fetch;
 let restore;
-let githubFetch = () => {
+let inventoryFetch = () => {
   let fakeData = JSON.stringify([
     {
       name: 'Shooting Range',
@@ -19,18 +19,18 @@ let githubFetch = () => {
 };
 
 export const fakeFetch = () => {
-  if (restore !== undefined) {
-    return;
-  } else {
+  if (restore == null) {
     restore = () => {
       window.fetch = saveFetch;
     };
+  } else {
+    return;
   }
 
   window.fetch = (path) => {
     switch (path) {
       case 'http://localhost:3001/CAT/inventory':
-        return githubFetch();
+        return inventoryFetch();
       default:
         return Promise.reject(new Error('fakeFetch has no handler for: ' + path));
     }
@@ -40,7 +40,7 @@ export const fakeFetch = () => {
 };
 
 export const restoreFetch = () => {
-  if (restore !== 'undefined') {
+  if (restore != null) {
     restore();
   }
 };

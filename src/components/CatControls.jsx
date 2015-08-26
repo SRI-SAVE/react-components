@@ -56,7 +56,7 @@ let CatControls = React.createClass({
     .then((json) => {
       if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
         this.setState({
-          fetchJson: json,
+          // fetchJson: json,
           tooltray: json.tooltray,
           loaded: true,
         });
@@ -109,7 +109,7 @@ let CatControls = React.createClass({
     return (
       <div style={ styles.wrapperDiv }>
         <div style={ styles.container }>
-          <TooltrayList container={ false } items={[ 'Shooting Range', 'M4 Carbine' ]}/>
+          <TooltrayList container={ false } items={ this.state.tooltray }/>
           <List subheader="Controls">
             <ListItem leftIcon={ <ActionRestore/> } onClick={ this.handleReset } primaryText="Reset"/>
             <div>

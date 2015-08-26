@@ -56,8 +56,8 @@ let TooltrayList = React.createClass({
     const list = (
       <List subheader={ this.props.subheader || 'Tooltray Items' }>
         {
-          this.props.items.map((name, i) => {
-            return <ListItem key={ i } leftIcon={ <MapsTerrain/> } primaryText={ name }/>
+          this.props.items.map((ttObj, i) => {
+            return <ListItem key={ i } leftIcon={ <MapsTerrain/> } primaryText={ ttObj.name }/>
           })
         }
       </List>
