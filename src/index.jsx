@@ -3,6 +3,7 @@ import './index.css';
 
 import React from 'react';
 import CatControls from './components/CatControls.jsx';
+import ComponentDialog from './components/ComponentDialog.jsx';
 import MaterialUITheme from './mixins/material-ui-theme';
 import mui from 'material-ui';
 
@@ -29,16 +30,11 @@ let App = React.createClass({
   ],
 
   getInitialState() {
-    return {
-      controlsVisible: false,
-    };
+    return { };
   },
 
   handleControlsClick() {
-    let vis = this.state.controlsVisible;
-    this.setState({
-      controlsVisible: !vis,
-    });
+    this.refs.controlsComponentDialog.show();
   },
 
   render() {
@@ -97,7 +93,9 @@ let App = React.createClass({
               </ToolbarGroup>
             </Toolbar>
           </div>
-          { this.state.controlsVisible? <CatControls/> : null }
+          <ComponentDialog ref="controlsComponentDialog" title="CAT Controls">
+            <CatControls width="100%"/>
+          </ComponentDialog>
         </Paper>
     );
   },

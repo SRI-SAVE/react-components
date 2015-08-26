@@ -9,7 +9,7 @@ import BottomTear from './BottomTear';
 // import ReactRenderVisualizer from 'react-render-visualizer';
 // import MaterialUITheme from '../mixins/material-ui-theme'; // XXX cosmos testing
 
-const { Dialog, FlatButton, List, ListItem, Styles, TextField } = mui;
+const { List, ListItem, Styles, TextField } = mui;
 const { Colors } = Styles;
 
 let CatControls = React.createClass({
@@ -22,17 +22,18 @@ let CatControls = React.createClass({
   getInitialState() {
     return {
       errorTextExerciseName: '',
-      modal: false,
     };
   },
 
   propTypes: {
     height: React.PropTypes.number,
+    width: React.PropTypes.number,
   },
 
   getDefaultProps() {
     return {
       height: 350,
+      width: 360,
     };
   },
 
@@ -50,20 +51,16 @@ let CatControls = React.createClass({
 
   render() {
     const styles = {
-      root: {
-        width: 360,
-        position: 'fixed',
-        top: '50%',
-        left: '50%',
-        margin: '-25% 0 0 -25%',
+      wrapperDiv: {
       },
 
       container: {
+        backgroundColor: '#fff',
         border: 'solid 1px #d9d9d9',
         borderBottom: 'none',
         height: this.props.height,
         overflowY: 'scroll',
-        backgroundColor: '#fff',
+        width: this.props.width,
       },
 
       textfield: {
@@ -82,22 +79,8 @@ let CatControls = React.createClass({
       },
     };
 
-    const dialogActions = [
-      <FlatButton
-        key={ 1 }
-        label="Cancel"
-        onTouchTap={ this.handleDialogCancel }
-        secondary={ true }/>,
-
-      <FlatButton
-        key={ 2 }
-        label="Submit"
-        onTouchTap={ this.handleDialogSubmit }
-        primary={ true }/>,
-    ];
-
     return (
-      <div style={ styles.root }>
+      <div style={ styles.wrapperDiv }>
         <div style={ styles.container }>
           <TooltrayList container={ false } items={[ 'Shooting Range', 'M4 Carbine' ]} subheader="CAT Tooltray Items"/>
           <List subheader="CAT Control">
@@ -117,18 +100,7 @@ let CatControls = React.createClass({
             </div>
           </List>
         </div>
-        <BottomTear/>
-        <Dialog
-          actions={ dialogActions }
-          autoDetectWindowHeight={ true }
-          autoScrollBodyContent={ true }
-          modal={ this.state.modal }
-          ref="scrollableContentDialog"
-          title="Dialog With Scrollable Content">
-          <div style={{ height: '1000px' }}>
-            Really long content
-          </div>
-        </Dialog>
+        <BottomTear width={ this.props.width }/>
       </div>
     );
   },

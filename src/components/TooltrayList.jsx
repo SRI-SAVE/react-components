@@ -4,15 +4,11 @@ import mui from 'material-ui';
 import MapsTerrain from 'material-ui/lib/svg-icons/maps/terrain';
 import BottomTear from './BottomTear';
 
-// import ReactRenderVisualizer from 'react-render-visualizer';
-
 const {  List, ListItem } = mui;
 
 let TooltrayList = React.createClass({
 
-  mixins: [
-    // ReactRenderVisualizer
-  ],
+  mixins: [ ],
 
   propTypes: {
     clearFix: React.PropTypes.bool,
@@ -20,6 +16,7 @@ let TooltrayList = React.createClass({
     height: React.PropTypes.number,
     items: React.PropTypes.array.isRequired,
     subheader: React.PropTypes.string,
+    width: React.PropTypes.number,
   },
 
   getDefaultProps() {
@@ -29,12 +26,13 @@ let TooltrayList = React.createClass({
       items: [ ],
       container: true,
       subheader: undefined,
+      width: 360,
     };
   },
 
   render() {
     const styles = {
-      root: {
+      wrapperDiv: {
         float: 'left',
         marginBottom: 24,
         marginRight: 24,
@@ -61,7 +59,7 @@ let TooltrayList = React.createClass({
 
     return this.props.container? (
       <div className={ this.props.clearFix ? 'clearfix' : '' }>
-        <div style={ styles.root }> { /* material-ui docs MobileTearSheet */ }
+        <div style={ styles.wrapperDiv }>
           <div style={ styles.container }>
             { list }
           </div>
