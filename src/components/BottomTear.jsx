@@ -10,7 +10,10 @@ let BottomTear = React.createClass({
   ],
 
   propTypes: {
-    width: React.PropTypes.number,
+    width:  React.PropTypes.oneOfType([
+      React.PropTypes.number,
+      React.PropTypes.string,
+    ]),
   },
 
   getDefaultProps() {

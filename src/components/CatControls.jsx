@@ -1,3 +1,7 @@
+/*global __WEBPACK_DEV_SERVER_DEBUG__*/
+if (__WEBPACK_DEV_SERVER_DEBUG__) {
+  require('../webpack-dev-server-fetch');
+}
 
 import React from 'react';
 import mui from 'material-ui';
@@ -16,12 +20,19 @@ let CatControls = React.createClass({
   getInitialState() {
     return {
       errorTextExerciseName: '',
+      tooltray: undefined,
     };
   },
 
   propTypes: {
-    height: React.PropTypes.number,
-    width: React.PropTypes.number,
+    height:  React.PropTypes.oneOfType([
+      React.PropTypes.number,
+      React.PropTypes.string,
+    ]),
+    width:  React.PropTypes.oneOfType([
+      React.PropTypes.number,
+      React.PropTypes.string,
+    ]),
   },
 
   getDefaultProps() {
@@ -29,6 +40,29 @@ let CatControls = React.createClass({
       height: 350,
       width: 360,
     };
+  },
+
+  componentDidMount() {
+    if (this.state.tooltray == null) {
+      this.fetchTooltray();
+    }
+  },
+
+  fetchTooltray() {
+    fetch(`http://localhost:3001/CAT/inventory`)
+    .then((response) => {
+      return response.json();
+    })
+    .then((json) => {
+      if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
+        this.setState({
+          fetchJson: json,
+          tooltray: json.tooltray,
+          loaded: true,
+        });
+      }
+    })
+    .catch((e) => { console.error(e); });
   },
 
   handleExerciseNameChange(e) {
@@ -40,7 +74,6 @@ let CatControls = React.createClass({
   },
 
   handleReset(/* e */) {
-    this.refs.scrollableContentDialog.show();
   },
 
   render() {

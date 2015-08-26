@@ -13,10 +13,16 @@ let TooltrayList = React.createClass({
   propTypes: {
     clearFix: React.PropTypes.bool,
     container: React.PropTypes.bool,
-    height: React.PropTypes.number,
+    height: React.PropTypes.oneOfType([
+      React.PropTypes.number,
+      React.PropTypes.string,
+    ]),
     items: React.PropTypes.array.isRequired,
     subheader: React.PropTypes.string,
-    width: React.PropTypes.number,
+    width:  React.PropTypes.oneOfType([
+      React.PropTypes.number,
+      React.PropTypes.string,
+    ]),
   },
 
   getDefaultProps() {
