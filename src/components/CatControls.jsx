@@ -97,7 +97,7 @@ let CatControls = React.createClass({
     ];
 
     return (
-      <div ref="fooBaz" style={ styles.root }>
+      <div style={ styles.root }>
         <div style={ styles.container }>
           <TooltrayList container={ false } items={[ 'Shooting Range', 'M4 Carbine' ]} subheader="CAT Tooltray Items"/>
           <List subheader="CAT Control">
@@ -125,7 +125,7 @@ let CatControls = React.createClass({
           modal={ this.state.modal }
           ref="scrollableContentDialog"
           title="Dialog With Scrollable Content">
-          <div ref="fooBar" style={{ height: '1000px' }}>
+          <div style={{ height: '1000px' }}>
             Really long content
           </div>
         </Dialog>
