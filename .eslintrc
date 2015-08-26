@@ -10,6 +10,7 @@
     "eqeqeq": [ 2, "allow-null" ],
     "comma-dangle": [ 2, "always-multiline" ],
     "no-undef": 2,
+    "no-unused-vars": [ 2, { "vars": "all", "args": "after-used" }],
     "comma-spacing": 2,
     "consistent-return": 0,
     "strict": 0,

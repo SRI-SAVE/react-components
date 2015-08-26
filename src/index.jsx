@@ -9,9 +9,7 @@ import mui from 'material-ui';
 import ReactRenderVisualizer from 'react-render-visualizer';
 
 const {
-  DropDownIcon,
   DropDownMenu,
-  FontIcon,
   Paper,
   RaisedButton,
   Styles,
@@ -21,7 +19,7 @@ const {
   ToolbarSeparator,
   ToolbarTitle,
 } = mui;
-const { Colors, Spacing, Typography } = Styles;
+const { Colors, Spacing  } = Styles;
 
 let App = React.createClass({
 

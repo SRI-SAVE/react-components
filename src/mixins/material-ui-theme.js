@@ -15,7 +15,6 @@ injectTapEventPlugin();
 
 import React from 'react';
 import { Styles } from 'material-ui';
-import ReactRenderVisualizer from 'react-render-visualizer';
 
 const ThemeManager = new Styles.ThemeManager();
 
