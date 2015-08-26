@@ -1,7 +1,3 @@
-// See why this is here, there ...
-import injectTapEventPlugin from 'react-tap-event-plugin';
-injectTapEventPlugin();
-// http://material-ui.com/#/get-started
 
 import './index.css';
 
@@ -26,7 +22,6 @@ const {
   ToolbarTitle,
 } = mui;
 const { Colors, Spacing, Typography } = Styles;
-const ThemeManager = new Styles.ThemeManager();
 
 let App = React.createClass({
 
@@ -53,7 +48,7 @@ let App = React.createClass({
       { payload: '1', text: 'None' },
     ];
 
-    const palette = ThemeManager.getCurrentTheme().palette;
+    const palette = this.getChildContext().muiTheme.palette;
     const canvasColor = palette.canvasColor;
     const styles = {
       paper: {
@@ -100,7 +95,7 @@ let App = React.createClass({
               <ToolbarGroup float="right" key={ 1 }>
                 <ToolbarTitle style={ styles.toolbarTitle } text="save"/>
                 <ToolbarSeparator/>
-                <RaisedButton label="Controls" onClick={ this.handleControlsClick } primary={ true }/>
+                <RaisedButton label="Controls" onClick={ this.handleControlsClick }/>
               </ToolbarGroup>
             </Toolbar>
           </div>
@@ -112,6 +107,7 @@ let App = React.createClass({
 
 const elemDiv = document.createElement('div');
 
+// elemDiv.style.cssText = 'opacity:1;z-index:100;background:white;';
 React.render(<App/>, elemDiv);
 document.body.appendChild(elemDiv);
 

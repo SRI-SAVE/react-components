@@ -58,7 +58,7 @@ let CatControls = React.createClass({
         borderBottom: 'none',
         height: this.props.height,
         overflowY: 'scroll',
-        backgroundColor: '#ffffff',
+        backgroundColor: '#fff',
       },
 
       bottomTear: {

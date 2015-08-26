@@ -1,3 +1,9 @@
+
+// See why this is here, there ...
+import injectTapEventPlugin from 'react-tap-event-plugin';
+injectTapEventPlugin();
+// http://material-ui.com/#/get-started
+
 // Material-UI's ThemeManager component uses React's context feature to manage
 // Theme objects. Contexts in React propogates values down from one component
 // down to all of its children and grandchildren. Insert the following code in
@@ -8,21 +14,21 @@
 // to start working.
 
 import React from 'react';
-import mui from 'material-ui';
+import { Styles } from 'material-ui';
 import ReactRenderVisualizer from 'react-render-visualizer';
 
-let ThemeManager = new mui.Styles.ThemeManager();
+const ThemeManager = new Styles.ThemeManager();
 
 export default {
 
   childContextTypes: {
-    muiTheme: React.PropTypes.object
+    muiTheme: React.PropTypes.object,
   },
 
   getChildContext() {
 
     return {
-      muiTheme: ThemeManager.getCurrentTheme()
+      muiTheme: ThemeManager.getCurrentTheme(),
     };
-  }
+  },
 }
