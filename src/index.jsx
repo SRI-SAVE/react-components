@@ -94,7 +94,7 @@ let App = React.createClass({
             </Toolbar>
           </div>
           <ComponentDialog ref="controlsComponentDialog" title="EUI Controls">
-            <CatControls width="100%"/>
+            <CatControls/>
           </ComponentDialog>
         </Paper>
     );
@@ -103,7 +103,7 @@ let App = React.createClass({
 
 const elemDiv = document.createElement('div');
 
-elemDiv.style.cssText = 'position:absolute;top:0;left:0;';
+elemDiv.style.cssText = 'position:fixed;top:5;left:5;';
 React.render(<App/>, elemDiv);
 document.body.appendChild(elemDiv);
 

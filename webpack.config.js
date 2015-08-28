@@ -4,7 +4,7 @@ var webpack = require('webpack');
 var merge = require('webpack-merge');
 var path = require('path'); //.join(__dirname, 'build');
 var wdsDebug = false;
-var cosmosFixture = false;
+// var cosmosFixture = false;
 
 var TARGET = process.env.TARGET;
 var ROOT_PATH = path.resolve(__dirname);
@@ -17,7 +17,7 @@ if (process.argv[ 1 ].match(/webpack-dev-server$/) != null) {
 
 var common = {
   entry: [
-    './src/index.jsx'
+    './src/index.jsx',
   ],
   resolve: {
     // When requiring, you won't need to add these extensions
@@ -25,23 +25,24 @@ var common = {
   },
   output: {
     path: path.dirname(),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
   },
   module: {
     preLoaders: [
-      { test: /\.jsx?$/, loader: 'eslint-loader', exclude: /node_modules/ }
+      { test: /\.jsx?$/, loader: 'eslint-loader', exclude: /node_modules/ },
     ],
     loaders: [
       { test: /\.jsx?$/, loaders: [ 'react-hot', 'babel' ], exclude: /node_modules/ },
-      { test: /\.css$/, loaders: [ 'style', 'css' ], include: path.resolve(ROOT_PATH, 'src') }
+      { test: /\.css$/, loaders: [ 'style', 'css' ], include: path.resolve(ROOT_PATH, 'src') },
       // { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") }
     ]
   },
   eslint: {
-    configFile: '.eslintrc'
+    configFile: '.eslintrc',
   },
   plugins: [
-    new webpack.NoErrorsPlugin()
+    new webpack.NoErrorsPlugin(),
+    new webpack.DefinePlugin({ '__WEBPACK_DEV_SERVER_DEBUG__': wdsDebug }),
     // new ExtractTextPlugin('bundle.css')
   ]
 };
@@ -50,12 +51,12 @@ if (wdsDebug) {
   module.exports = merge(common, {
     entry: [
       'webpack-dev-server/client?http://0.0.0.0:8080', // webpack-dev-server --inline
-      'webpack/hot/only-dev-server' // webpack-dev-server --hot
+      'webpack/hot/only-dev-server', // webpack-dev-server --hot
     ],
     devServer: {
       historyApiFallback: true, // webpack-dev-server --history-api-fallback
       colors: true, // webpack-dev-server --colors
-      progress: true // webpack-dev-server --progress
+      progress: true, // webpack-dev-server --progress
       // inline: true,
       // hot: true,
     },
@@ -65,7 +66,6 @@ if (wdsDebug) {
         title: 'SAVE React Components App'
       }),
       new webpack.HotModuleReplacementPlugin(),
-      new webpack.DefinePlugin({ '__WEBPACK_DEV_SERVER_DEBUG__': wdsDebug })
     ]
   });
 } else {

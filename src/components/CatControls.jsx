@@ -8,7 +8,7 @@ import mui from 'material-ui';
 import ActionRestore from 'material-ui/lib/svg-icons/action/restore';
 import ContentSend from 'material-ui/lib/svg-icons/content/send';
 import TooltrayList from './TooltrayList';
-import BottomTear from './BottomTear';
+import 'whatwg-fetch';
 
 const { List, ListItem, Styles, TextField } = mui;
 const { Colors } = Styles;
@@ -37,8 +37,8 @@ let CatControls = React.createClass({
 
   getDefaultProps() {
     return {
-      height: 350,
-      width: 360,
+      height: '100%',
+      width: '100%',
     };
   },
 
@@ -78,13 +78,9 @@ let CatControls = React.createClass({
 
   render() {
     const styles = {
-      wrapperDiv: {
-      },
-
       container: {
-        backgroundColor: '#fff',
+        // backgroundColor: '#fff',
         border: 'solid 1px #d9d9d9',
-        borderBottom: 'none',
         height: this.props.height,
         overflowY: 'scroll',
         width: this.props.width,
@@ -107,27 +103,24 @@ let CatControls = React.createClass({
     };
 
     return (
-      <div style={ styles.wrapperDiv }>
-        <div style={ styles.container }>
-          <TooltrayList container={ false } items={ this.state.tooltray }/>
-          <List subheader="Controls">
-            <ListItem leftIcon={ <ActionRestore/> } onClick={ this.handleReset } primaryText="Reset"/>
-            <div>
-              <div style={ styles.icons }>
-                <ContentSend/>
-              </div>
-              <TextField
-                defaultValue=""
-                errorStyle={{ color: Colors.red600 }}
-                errorText={ this.state.errorTextExerciseName }
-                floatingLabelText="Exercise Path and Name"
-                hintText="Ex. /PutExercise"
-                onChange={ this.handleExerciseNameChange }
-                style={ styles.textfield }/>
+      <div ref="container" style={ styles.container }>
+        <TooltrayList container={ false } items={ this.state.tooltray }/>
+        <List subheader="Controls">
+          <ListItem leftIcon={ <ActionRestore/> } onClick={ this.handleReset } primaryText="Reset"/>
+          <div>
+            <div style={ styles.icons }>
+              <ContentSend/>
             </div>
-          </List>
-        </div>
-        <BottomTear width={ this.props.width }/>
+            <TextField
+              defaultValue=""
+              errorStyle={{ color: Colors.red600 }}
+              errorText={ this.state.errorTextExerciseName }
+              floatingLabelText="Exercise Path and Name"
+              hintText="Ex. /PutExercise"
+              onChange={ this.handleExerciseNameChange }
+              style={ styles.textfield }/>
+          </div>
+        </List>
       </div>
     );
   },
