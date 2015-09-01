@@ -4,13 +4,13 @@ if (__WEBPACK_DEV_SERVER_DEBUG__) {
 }
 
 import React from 'react';
-import mui from 'material-ui';
+import { List, ListItem, Styles } from 'material-ui';
 import ActionRestore from 'material-ui/lib/svg-icons/action/restore';
 import ContentSend from 'material-ui/lib/svg-icons/content/send';
 import TooltrayList from './TooltrayList';
+import ExerciseNameField from './ExerciseNameField';
 import 'whatwg-fetch';
 
-const { List, ListItem, Styles, TextField } = mui;
 const { Colors } = Styles;
 
 let CatControls = React.createClass({
@@ -20,7 +20,8 @@ let CatControls = React.createClass({
   getInitialState() {
     return {
       errorTextExerciseName: '',
-      tooltray: undefined,
+      // tooltray: undefined,
+      // type: 'CAT',
     };
   },
 
@@ -29,6 +30,7 @@ let CatControls = React.createClass({
       React.PropTypes.number,
       React.PropTypes.string,
     ]),
+    type: React.PropTypes.string.isRequired,
     width:  React.PropTypes.oneOfType([
       React.PropTypes.number,
       React.PropTypes.string,
@@ -111,14 +113,7 @@ let CatControls = React.createClass({
             <div style={ styles.icons }>
               <ContentSend/>
             </div>
-            <TextField
-              defaultValue=""
-              errorStyle={{ color: Colors.red600 }}
-              errorText={ this.state.errorTextExerciseName }
-              floatingLabelText="Exercise Path and Name"
-              hintText="Ex. /PutExercise"
-              onChange={ this.handleExerciseNameChange }
-              style={ styles.textfield }/>
+            <ExerciseNameField/>
           </div>
         </List>
       </div>
