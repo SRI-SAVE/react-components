@@ -4,24 +4,20 @@ if (__WEBPACK_DEV_SERVER_DEBUG__) {
 }
 
 import React from 'react';
-import { List, ListItem, Styles } from 'material-ui';
+import { List, ListItem } from 'material-ui';
 import ActionRestore from 'material-ui/lib/svg-icons/action/restore';
-import ContentSend from 'material-ui/lib/svg-icons/content/send';
+import MenuDivider from 'material-ui/lib/menus/menu-divider';
 import TooltrayList from './TooltrayList';
 import ExerciseNameField from './ExerciseNameField';
 import 'whatwg-fetch';
 
-const { Colors } = Styles;
-
-let CatControls = React.createClass({
+let Controls = React.createClass({
 
   mixins: [ ],
 
   getInitialState() {
     return {
-      errorTextExerciseName: '',
       // tooltray: undefined,
-      // type: 'CAT',
     };
   },
 
@@ -30,7 +26,7 @@ let CatControls = React.createClass({
       React.PropTypes.number,
       React.PropTypes.string,
     ]),
-    type: React.PropTypes.string.isRequired,
+    type: React.PropTypes.string.isRequired, // 'CAT' || 'EUI'
     width:  React.PropTypes.oneOfType([
       React.PropTypes.number,
       React.PropTypes.string,
@@ -64,18 +60,13 @@ let CatControls = React.createClass({
         });
       }
     })
-    .catch((e) => { console.error(e); });
-  },
-
-  handleExerciseNameChange(e) {
-    let value = e.target.value;
-    let isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
-    this.setState({
-      errorTextExerciseName: !isNumeric ? '' : 'This field must be a string',
-    });
+    .catch(e => { console.error(e); });
   },
 
   handleReset(/* e */) {
+  },
+
+  handleSave(/* e */) {
   },
 
   render() {
@@ -87,38 +78,20 @@ let CatControls = React.createClass({
         overflowY: 'scroll',
         width: this.props.width,
       },
-
-      textfield: {
-      },
-
-      icons: {
-        height: 24,
-        width: 24,
-        display: 'inline-block',
-        position: 'relative',
-        top: 0, // 12 || 4 || 0,
-        padding: 12,
-        color: Colors.grey600,
-        fill: Colors.grey600,
-        left: 4,
-      },
     };
 
     return (
       <div ref="container" style={ styles.container }>
         <TooltrayList container={ false } items={ this.state.tooltray }/>
+        <MenuDivider/>
         <List subheader="Controls">
           <ListItem leftIcon={ <ActionRestore/> } onClick={ this.handleReset } primaryText="Reset"/>
-          <div>
-            <div style={ styles.icons }>
-              <ContentSend/>
-            </div>
-            <ExerciseNameField/>
-          </div>
+          <ExerciseNameField/>
+          <ListItem leftIcon={ null } onClick={ this.handleSave } primaryText="Save"/>
         </List>
       </div>
     );
   },
 });
 
-export default CatControls;
+export default Controls;

@@ -9,12 +9,12 @@ import RemoveRedEye from 'material-ui/lib/svg-icons/image/remove-red-eye';
 let SimpleMenu = React.createClass({
 
   propTypes: {
-    clearFix: React.PropTypes.bool
+    clearFix: React.PropTypes.bool,
   },
 
   getDefaultProps() {
     return {
-      clearFix: true
+      clearFix: true,
     };
   },
 
@@ -26,8 +26,8 @@ let SimpleMenu = React.createClass({
         marginBottom: 32,
         float: 'left',
         position: 'relative',
-        zIndex: 0
-      }
+        zIndex: 0,
+      },
     };
 
     return (
@@ -39,7 +39,7 @@ let SimpleMenu = React.createClass({
         </Menu>
       </div>
     );
-  }
+  },
 });
 
 export default SimpleMenu;

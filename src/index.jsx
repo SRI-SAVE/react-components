@@ -2,7 +2,7 @@
 import './index.css';
 
 import React from 'react';
-import CatControls from './components/CatControls.jsx';
+import Controls from './components/Controls.jsx';
 import ComponentDialog from './components/ComponentDialog.jsx';
 import MaterialUITheme from './mixins/material-ui-theme';
 import mui from 'material-ui';
@@ -94,7 +94,7 @@ let App = React.createClass({
             </Toolbar>
           </div>
           <ComponentDialog ref="controlsComponentDialog" title="EUI Controls">
-            <CatControls type='CAT'/>
+            <Controls type='CAT'/>
           </ComponentDialog>
         </Paper>
     );

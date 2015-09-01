@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Styles, TextField } from 'material-ui';
+import ContentSend from 'material-ui/lib/svg-icons/content/send';
 
 const { Colors } = Styles;
 
@@ -21,18 +22,37 @@ let ExerciseNameField = React.createClass({
   },
 
   render() {
-    const textfield = {
+    const styles = {
+      icons: {
+        height: 24,
+        width: 24,
+        display: 'inline-block',
+        position: 'relative',
+        top: 0, // 12 || 4 || 0,
+        padding: 12,
+        color: Colors.grey600,
+        fill: Colors.grey600,
+        left: 4,
+      },
+
+      textfield: {
+      },
     };
 
     return (
-      <TextField
-        defaultValue=""
-        errorStyle={{ color: Colors.red600 }}
-        errorText={ this.state.errorTextExerciseName }
-        floatingLabelText="Exercise Path and Name"
-        hintText="Ex. /PutExercise"
-        onChange={ this.handleExerciseNameChange }
-        style={ textfield }/>
+      <div>
+        <div style={ styles.icons }>
+          <ContentSend/>
+        </div>
+        <TextField
+          defaultValue=""
+          errorStyle={{ color: Colors.red600 }}
+          errorText={ this.state.errorTextExerciseName }
+          floatingLabelText="Exercise Path and Name"
+          hintText="Ex. /PutExercise"
+          onChange={ this.handleExerciseNameChange }
+          style={ styles.textfield }/>
+      </div>
     );
   },
 });
