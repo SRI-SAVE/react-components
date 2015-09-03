@@ -6,13 +6,14 @@ import Controls from './components/Controls.jsx';
 import ComponentDialog from './components/ComponentDialog.jsx';
 import MaterialUITheme from './mixins/material-ui-theme';
 import mui from 'material-ui';
+import NavigationMenu from 'material-ui/lib/svg-icons/navigation/menu';
 
 // import ReactRenderVisualizer from 'react-render-visualizer';
 
 const {
   DropDownMenu,
   Paper,
-  RaisedButton,
+  FlatButton,
   Styles,
   TextField,
   Toolbar,
@@ -89,7 +90,9 @@ let App = React.createClass({
               <ToolbarGroup float="right" key={ 1 }>
                 <ToolbarTitle style={ styles.toolbarTitle } text="save"/>
                 <ToolbarSeparator/>
-                <RaisedButton label="Controls" onClick={ this.handleControlsClick }/>
+                <FlatButton label="Controls" onClick={ this.handleControlsClick }>
+                  <NavigationMenu/>
+                </FlatButton>
               </ToolbarGroup>
             </Toolbar>
           </div>

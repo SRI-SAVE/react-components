@@ -6,6 +6,7 @@ if (__WEBPACK_DEV_SERVER_DEBUG__) {
 import React from 'react';
 import { List, ListItem } from 'material-ui';
 import ActionRestore from 'material-ui/lib/svg-icons/action/restore';
+import ActionBackup from 'material-ui/lib/svg-icons/action/backup';
 import MenuDivider from 'material-ui/lib/menus/menu-divider';
 import TooltrayList from './TooltrayList';
 import ExerciseNameField from './ExerciseNameField';
@@ -87,7 +88,7 @@ let Controls = React.createClass({
         <List subheader="Controls">
           <ListItem leftIcon={ <ActionRestore/> } onClick={ this.handleReset } primaryText="Reset"/>
           <ExerciseNameField/>
-          <ListItem leftIcon={ null } onClick={ this.handleSave } primaryText="Save"/>
+          <ListItem leftIcon={ <ActionBackup/> } onClick={ this.handleSave } primaryText="Save"/>
         </List>
       </div>
     );

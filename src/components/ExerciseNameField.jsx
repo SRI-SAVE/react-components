@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Styles, TextField } from 'material-ui';
-import ContentSend from 'material-ui/lib/svg-icons/content/send';
+import ActionInput from 'material-ui/lib/svg-icons/action/input';
 
 const { Colors } = Styles;
 
@@ -42,7 +42,7 @@ let ExerciseNameField = React.createClass({
     return (
       <div>
         <div style={ styles.icons }>
-          <ContentSend/>
+          <ActionInput/>
         </div>
         <TextField
           defaultValue=""

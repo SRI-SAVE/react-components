@@ -6,7 +6,8 @@
   "scripts": {
     "hot": "webpack-dev-server",
     "cosmos": "component-playground --components-path src/components/ --fixtures-path tests/fixtures/",
-    "build": "webpack --colors --profile --progress",
+    "build": "webpack --colors --profile --progress && mv bundle.js",
+    "deploy": "webpack --colors --profile --progress && echo bundle.js ... deployed && mv bundle.js ../Sandbox/support/client/lib/vwf/view/SAVE/bundle.js",
     "lint": "eslint src || true",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
