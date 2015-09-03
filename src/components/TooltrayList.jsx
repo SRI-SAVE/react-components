@@ -4,7 +4,7 @@ import mui from 'material-ui';
 import MapsTerrain from 'material-ui/lib/svg-icons/maps/terrain';
 import BottomTear from './BottomTear';
 
-const {  List, ListItem } = mui;
+const { List, ListItem } = mui;
 
 let TooltrayList = React.createClass({
 

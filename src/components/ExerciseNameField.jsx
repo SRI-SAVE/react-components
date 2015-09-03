@@ -13,7 +13,7 @@ let ExerciseNameField = React.createClass({
     };
   },
 
-  handleExerciseNameChange(e) {
+  onExerciseNameChange(e) {
     let value = e.target.value;
     let isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
     this.setState({
@@ -50,7 +50,7 @@ let ExerciseNameField = React.createClass({
           errorText={ this.state.errorTextExerciseName }
           floatingLabelText="Exercise Path and Name"
           hintText="Ex. /PutExercise"
-          onChange={ this.handleExerciseNameChange }
+          onChange={ this.onExerciseNameChange }
           style={ styles.textfield }/>
       </div>
     );

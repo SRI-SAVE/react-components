@@ -1,10 +1,6 @@
-/*global __WEBPACK_DEV_SERVER_DEBUG__*/
-if (__WEBPACK_DEV_SERVER_DEBUG__) {
-  require('../webpack-dev-server-fetch');
-}
 
 import React from 'react';
-import { List, ListItem } from 'material-ui';
+import { List, ListItem, LinearProgress } from 'material-ui';
 import ActionRestore from 'material-ui/lib/svg-icons/action/restore';
 import ActionBackup from 'material-ui/lib/svg-icons/action/backup';
 import MenuDivider from 'material-ui/lib/menus/menu-divider';
@@ -18,16 +14,22 @@ let Controls = React.createClass({
 
   getInitialState() {
     return {
-      // tooltray: undefined,
+      assessment: false,
+      instructorMode: false,
+      loaded: false,
     };
   },
 
   propTypes: {
+    baseServer: React.PropTypes.string.isRequired,
     height:  React.PropTypes.oneOfType([
       React.PropTypes.number,
       React.PropTypes.string,
     ]),
-    type: React.PropTypes.string.isRequired, // 'CAT' || 'EUI'
+    onAssessment: React.PropTypes.func,
+    onSave: React.PropTypes.func,
+    savePrimaryText: React.PropTypes.string,
+    type: React.PropTypes.oneOf([ 'CAT', 'EUI' ]),
     width:  React.PropTypes.oneOfType([
       React.PropTypes.number,
       React.PropTypes.string,
@@ -37,25 +39,30 @@ let Controls = React.createClass({
   getDefaultProps() {
     return {
       height: '100%',
+      onAssessment: this.onAssessment,
+      onSave: this.onSave,
+      savePrimaryText: 'Save Exercise', // CAT primary-text
+      type: 'CAT',
       width: '100%',
     };
   },
 
   componentDidMount() {
     if (this.state.tooltray == null) {
-      this.fetchTooltray();
+      setTimeout(this.fetchTooltray, 1500);
     }
   },
 
   fetchTooltray() {
-    fetch(`http://localhost:3001/CAT/inventory`)
+    fetch(this.props.baseServer)
     .then((response) => {
       return response.json();
     })
     .then((json) => {
       if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
         this.setState({
-          // fetchJson: json,
+          assessment: this.props.type !== 'CAT' && !json.instructorMode,
+          instructorMode: json.instructorMode,
           tooltray: json.tooltray,
           loaded: true,
         });
@@ -64,10 +71,13 @@ let Controls = React.createClass({
     .catch(e => { console.error(e); });
   },
 
-  handleReset(/* e */) {
+  onAssessment(/* e */) {
   },
 
-  handleSave(/* e */) {
+  onReset(/* e */) {
+  },
+
+  onSave(/* e */) {
   },
 
   render() {
@@ -83,15 +93,16 @@ let Controls = React.createClass({
 
     return (
       <div ref="container" style={ styles.container }>
-        <TooltrayList container={ false } items={ this.state.tooltray }/>
+        { this.state.loaded? <TooltrayList container={ false } items={ this.state.tooltray }/> : <LinearProgress mode="indeterminate"/> }
         <MenuDivider/>
         <List subheader="Controls">
-          <ListItem leftIcon={ <ActionRestore/> } onClick={ this.handleReset } primaryText="Reset"/>
-          <ExerciseNameField/>
-          <ListItem leftIcon={ <ActionBackup/> } onClick={ this.handleSave } primaryText="Save"/>
+          <ListItem leftIcon={ <ActionRestore/> } onClick={ this.onReset } primaryText="Reset"/>
+          { this.props.type === 'CAT'? <ExerciseNameField/> : null }
+          { this.state.assessment? null : <ListItem leftIcon={ <ActionBackup/> } onClick={ this.onSave } primaryText={ this.props.savePrimaryText }/> }
+          { this.state.assessment? <ListItem leftIcon={ <ActionBackup/> } onClick={ this.onAssessment } primaryText="Assessment"/> : null }
         </List>
       </div>
-    );
+    )
   },
 });
 
