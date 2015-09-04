@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Dialog, FlatButton } from 'material-ui';
+import { Dialog } from 'material-ui';
 
 // import ReactRenderVisualizer from 'react-render-visualizer';
 // import MaterialUITheme from '../mixins/material-ui-theme'; // XXX cosmos testing
@@ -38,17 +38,14 @@ let ComponentDialog = React.createClass({
   },
 
   render() {
-    const dialogActions = [
-      <FlatButton
-        key={ 2 }
-        label="OK"
-        onTouchTap={ this.dismiss }
-        primary={ true }/>,
+    const standardActions = [
+      { text: 'OK', onTouchTap: this.onDialogOK, ref: 'ok' },
     ];
 
     return (
         <Dialog
-          actions={ dialogActions }
+          actionFocus = "ok"
+          actions={ standardActions }
           autoDetectWindowHeight={ true }
           autoScrollBodyContent={ true }
           modal={ this.state.modal }

@@ -103,12 +103,15 @@ let App = React.createClass({
         marginBottom: 32,
       },
 
+      exerciseDropdown: {
+        width: 200,
+      },
+
       exerciseProgress: {
         width: 80,
       },
 
       textfield: {
-        // marginTop: '-15',
         top: '-15',
       },
 
@@ -120,10 +123,6 @@ let App = React.createClass({
 
       toolbarTitle: {
         textTransform: 'uppercase',
-      },
-
-      exerciseDropdown: {
-        width: 200,
       },
     };
 
@@ -168,8 +167,3 @@ const elemDiv = document.createElement('div');
 elemDiv.style.cssText = 'position:fixed;top:5;left:5;';
 React.render(<App/>, elemDiv);
 document.body.appendChild(elemDiv);
-
-// Needed for React Developer Tools
-if (typeof window !== 'undefined') {
-    window.React = React;
-}

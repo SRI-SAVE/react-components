@@ -98,8 +98,10 @@ let Controls = React.createClass({
         <List subheader="Controls">
           <ListItem leftIcon={ <ActionRestore/> } onClick={ this.onReset } primaryText="Reset"/>
           { this.props.type === 'CAT'? <ExerciseNameField/> : null }
-          { this.state.assessment? null : <ListItem leftIcon={ <ActionBackup/> } onClick={ this.onSave } primaryText={ this.props.savePrimaryText }/> }
-          { this.state.assessment? <ListItem leftIcon={ <ActionBackup/> } onClick={ this.onAssessment } primaryText="Assessment"/> : null }
+          { this.state.assessment?
+            <ListItem leftIcon={ <ActionBackup/> } onClick={ this.onAssessment } primaryText="Assessment"/> :
+            <ListItem leftIcon={ <ActionBackup/> } onClick={ this.onSave } primaryText={ this.props.savePrimaryText }/>
+          }
         </List>
       </div>
     )

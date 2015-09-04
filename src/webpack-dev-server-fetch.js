@@ -55,6 +55,7 @@ export const fakeFetch = () => {
     switch (path) {
       case 'http://localhost:3001/CAT/inventory':
         return inventoryCATFetch();
+      case 'None/inventory':
       case '/exercises/071-100-0032/step01/m4_flora_clear/inventory':
         return inventoryEUIFetch();
       case 'http://localhost:3001/listfiles/exercise/json':
