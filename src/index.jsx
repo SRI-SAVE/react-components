@@ -19,6 +19,7 @@ const {
   DropDownMenu,
   Paper,
   IconButton,
+  Snackbar,
   Styles,
   TextField,
   Toolbar,
@@ -93,6 +94,10 @@ let App = React.createClass({
     this.setState({ selectedExerciseListIndex: selectedIndex });
   },
 
+  onSnackbarAction() {
+    this.refs.snackbarInstructorMode.dismiss();
+  },
+
   render() {
     const palette = this.getChildContext().muiTheme.palette;
     const canvasColor = palette.canvasColor;
@@ -157,6 +162,13 @@ let App = React.createClass({
           <ComponentDialog ref="controlsComponentDialog" title="EUI Controls">
             <Controls baseServer={ this.state.exerciseList[ this.state.selectedExerciseListIndex ].payload } savePrimaryText="Save" type='EUI'/>
           </ComponentDialog>
+          <Snackbar
+            action="close"
+            autoHideDuration={ 0 }
+            message="Instructor Mode"
+            onActionTouchTap={ this.onSnackbarAction }
+            openOnMount={ true }
+            ref="snackbarInstructorMode"/>
         </Paper>
     );
   },

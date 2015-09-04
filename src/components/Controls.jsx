@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { List, ListItem, LinearProgress } from 'material-ui';
+import { List, ListItem, LinearProgress, Snackbar } from 'material-ui';
 import ActionRestore from 'material-ui/lib/svg-icons/action/restore';
 import ActionBackup from 'material-ui/lib/svg-icons/action/backup';
 import MenuDivider from 'material-ui/lib/menus/menu-divider';
@@ -53,6 +53,10 @@ let Controls = React.createClass({
     }
   },
 
+  componentWillUpdate(newProps, newState) {
+    if (newState.instructorMode) this.refs.snackBarInstructorMode.show();
+  },
+
   fetchTooltray() {
     fetch(this.props.baseServer + '/inventory')
     .then((response) => {
@@ -66,6 +70,8 @@ let Controls = React.createClass({
           tooltray: json.tooltray,
           loaded: true,
         });
+
+        // if (json.instructorMode) this.refs.snackBarInstructorMode.show();
       }
     })
     .catch(e => { console.error(e); });
@@ -103,6 +109,12 @@ let Controls = React.createClass({
             <ListItem leftIcon={ <ActionBackup/> } onClick={ this.onSave } primaryText={ this.props.savePrimaryText }/>
           }
         </List>
+        <Snackbar
+          action=""
+          autoHideDuration={ 2000 /* this.state.autoHideDuration */ }
+          message="Instructor Mode"
+          onActionTouchTap={ this.onSnackbarAction }
+          ref="snackBarInstructorMode"/>
       </div>
     )
   },
