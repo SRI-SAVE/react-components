@@ -38,7 +38,7 @@ let App = React.createClass({
   getInitialState() {
     return {
       loadedExerciseList: false,
-      exerciseList: [{ xnid: '1', text: 'None' }],
+      exerciseList: [{ xnid: 1, name: 'None', text: 'None' }],
     };
   },
 
@@ -55,8 +55,17 @@ let App = React.createClass({
     })
     .then((json) => {
       if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
+        let list = this.state.exerciseList;
+
+        json.forEach((e, i) => {
+          list.push({
+            xnid: 1 + i,
+            name: null,
+            text: e.replace('http://localhost:3001', ''),
+          });
+        });
         this.setState({
-          exerciseNames: json,
+          exerciseList: list,
           loadedExerciseList: true,
         });
       }
@@ -66,6 +75,10 @@ let App = React.createClass({
 
   onControlsClick() {
     this.refs.controlsComponentDialog.show();
+  },
+
+  onExerciseSelect(e) {
+    console.log(e);
   },
 
   render() {
@@ -108,7 +121,7 @@ let App = React.createClass({
             <Toolbar style={{ backgroundColor: canvasColor }}>
               <ToolbarGroup float="left" key={ 0 }>
                 <ToolbarTitle style={ styles.toolbarTitle } text="exercise"/>
-                { this.state.loadedExerciseList? <DropDownMenu menuItems={ this.state.exerciseList } style={ styles.exerciseDropdown }/> : <CircularProgress mode="indeterminate" size={ .5 } style={ styles.exerciseProgress }/> }
+                { this.state.loadedExerciseList? <DropDownMenu menuItems={ this.state.exerciseList } onChange={ this.onExerciseSelect } style={ styles.exerciseDropdown }/> : <CircularProgress mode="indeterminate" size={ .5 } style={ styles.exerciseProgress }/> }
                 <TextField
                   defaultValue="http://localhost:3001"
                   errorStyle={{ color: Colors.red600 }}
