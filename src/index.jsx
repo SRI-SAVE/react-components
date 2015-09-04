@@ -37,8 +37,9 @@ let App = React.createClass({
 
   getInitialState() {
     return {
+      exerciseList: [{ payload: 'None', text: 'None' }],
       loadedExerciseList: false,
-      exerciseList: [{ xnid: 1, name: 'None', text: 'None' }],
+      selectedExerciseListIndex: 0,
     };
   },
 
@@ -49,7 +50,9 @@ let App = React.createClass({
   },
 
   fetchExercises() {
-    fetch('http://localhost:3001/listfiles/exercise/json')
+    let exerciseServer = this.refs.exerciseServer.getValue();
+
+    fetch(exerciseServer + '/listfiles/exercise/json')
     .then((response) => {
       return response.json();
     })
@@ -57,28 +60,37 @@ let App = React.createClass({
       if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
         let list = this.state.exerciseList;
 
-        json.forEach((e, i) => {
+        json.forEach((e /*, i */) => {
+          let pathName = e.replace(exerciseServer, '');
+
           list.push({
-            xnid: 1 + i,
-            name: null,
-            text: e.replace('http://localhost:3001', ''),
+            payload: pathName,
+            text: pathName,
           });
         });
         this.setState({
           exerciseList: list,
           loadedExerciseList: true,
         });
+        this.setExerciseListWidth();
       }
     })
     .catch(e => { console.error(e); });
+  },
+
+  setExerciseListWidth() {
+    let el = React.findDOMNode(this.refs.exerciseList);
+    let menuItemsDom = React.findDOMNode(this.refs.exerciseList.refs.menuItems);
+
+    el.style.width = menuItemsDom.offsetWidth + 'px';
   },
 
   onControlsClick() {
     this.refs.controlsComponentDialog.show();
   },
 
-  onExerciseSelect(e) {
-    console.log(e);
+  onExerciseSelect(e, selectedIndex /*, menuItem */) {
+    this.setState({ selectedExerciseListIndex: selectedIndex });
   },
 
   render() {
@@ -122,7 +134,7 @@ let App = React.createClass({
               <ToolbarGroup float="left" key={ 0 }>
                 <ToolbarTitle style={ styles.toolbarTitle } text="exercise"/>
                 { this.state.loadedExerciseList?
-                  <DropDownMenu menuItems={ this.state.exerciseList } onChange={ this.onExerciseSelect } style={ styles.exerciseDropdown } valueMember="name"/> :
+                  <DropDownMenu menuItems={ this.state.exerciseList } onChange={ this.onExerciseSelect } ref="exerciseList" style={ styles.exerciseDropdown }/> :
                   <CircularProgress mode="indeterminate" size={ .5 } style={ styles.exerciseProgress }/>
                 }
                 <TextField
@@ -132,6 +144,7 @@ let App = React.createClass({
                   floatingLabelText="Exercise Server"
                   hintText="http://<host>:<port>"
                   onChange={ this.handleServerInputChange }
+                  ref="exerciseServer"
                   style={ styles.textfield }/>
               </ToolbarGroup>
               <ToolbarGroup float="right" key={ 1 }>
@@ -143,7 +156,7 @@ let App = React.createClass({
             </Toolbar>
           </div>
           <ComponentDialog ref="controlsComponentDialog" title="EUI Controls">
-            <Controls baseServer="/exercises/071-100-0032/step01/m4_flora_clear/inventory" savePrimaryText="Save" type='EUI'/>
+            <Controls baseServer={ this.state.exerciseList[ this.state.selectedExerciseListIndex ].payload } savePrimaryText="Save" type='EUI'/>
           </ComponentDialog>
         </Paper>
     );

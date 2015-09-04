@@ -54,7 +54,7 @@ let Controls = React.createClass({
   },
 
   fetchTooltray() {
-    fetch(this.props.baseServer)
+    fetch(this.props.baseServer + '/inventory')
     .then((response) => {
       return response.json();
     })
