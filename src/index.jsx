@@ -121,7 +121,10 @@ let App = React.createClass({
             <Toolbar style={{ backgroundColor: canvasColor }}>
               <ToolbarGroup float="left" key={ 0 }>
                 <ToolbarTitle style={ styles.toolbarTitle } text="exercise"/>
-                { this.state.loadedExerciseList? <DropDownMenu menuItems={ this.state.exerciseList } onChange={ this.onExerciseSelect } style={ styles.exerciseDropdown }/> : <CircularProgress mode="indeterminate" size={ .5 } style={ styles.exerciseProgress }/> }
+                { this.state.loadedExerciseList?
+                  <DropDownMenu menuItems={ this.state.exerciseList } onChange={ this.onExerciseSelect } style={ styles.exerciseDropdown } valueMember="name"/> :
+                  <CircularProgress mode="indeterminate" size={ .5 } style={ styles.exerciseProgress }/>
+                }
                 <TextField
                   defaultValue="http://localhost:3001"
                   errorStyle={{ color: Colors.red600 }}
