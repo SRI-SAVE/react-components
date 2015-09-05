@@ -27,6 +27,7 @@ let Controls = React.createClass({
       React.PropTypes.string,
     ]),
     onAssessment: React.PropTypes.func,
+    onInstructorModeChange: React.PropTypes.func,
     onSave: React.PropTypes.func,
     savePrimaryText: React.PropTypes.string,
     type: React.PropTypes.oneOf([ 'CAT', 'EUI' ]),
@@ -40,6 +41,7 @@ let Controls = React.createClass({
     return {
       height: '100%',
       onAssessment: this.onAssessment,
+      onInstructorModeChange: (/* newValue */) => {},
       onSave: this.onSave,
       savePrimaryText: 'Save Exercise', // CAT primary-text
       type: 'CAT',
@@ -55,6 +57,10 @@ let Controls = React.createClass({
 
   componentWillUpdate(newProps, newState) {
     if (newState.instructorMode) this.refs.snackBarInstructorMode.show();
+  },
+
+  componentWillUnmount() {
+    this.props.onInstructorModeChange(this.state.instructorMode);
   },
 
   fetchTooltray() {
@@ -110,10 +116,8 @@ let Controls = React.createClass({
           }
         </List>
         <Snackbar
-          action=""
-          autoHideDuration={ 2000 /* this.state.autoHideDuration */ }
+          autoHideDuration={ 2000 }
           message="Instructor Mode"
-          onActionTouchTap={ this.onSnackbarAction }
           ref="snackBarInstructorMode"/>
       </div>
     )

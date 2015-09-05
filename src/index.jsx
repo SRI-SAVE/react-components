@@ -22,6 +22,7 @@ const {
   Snackbar,
   Styles,
   TextField,
+  Toggle,
   Toolbar,
   ToolbarGroup,
   ToolbarSeparator,
@@ -41,6 +42,7 @@ let App = React.createClass({
       exerciseList: [{ payload: 'None', text: 'None' }],
       loadedExerciseList: false,
       selectedExerciseListIndex: 0,
+      instructorToggle: false,
     };
   },
 
@@ -48,6 +50,24 @@ let App = React.createClass({
     if (this.state.tooltray == null) {
       setTimeout(this.fetchExercises, 1500);
     }
+  },
+
+  processFetchedExercises(exerciseServer, json) {
+    let list = this.state.exerciseList;
+
+    json.forEach((e /*, i */) => {
+      let pathName = e.replace(exerciseServer, '');
+
+      list.push({
+        payload: pathName,
+        text: pathName,
+      });
+    });
+    this.setState({
+      exerciseList: list,
+      loadedExerciseList: true,
+    });
+    this.setExerciseListWidth();
   },
 
   fetchExercises() {
@@ -59,21 +79,7 @@ let App = React.createClass({
     })
     .then((json) => {
       if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
-        let list = this.state.exerciseList;
-
-        json.forEach((e /*, i */) => {
-          let pathName = e.replace(exerciseServer, '');
-
-          list.push({
-            payload: pathName,
-            text: pathName,
-          });
-        });
-        this.setState({
-          exerciseList: list,
-          loadedExerciseList: true,
-        });
-        this.setExerciseListWidth();
+        this.processFetchedExercises(exerciseServer, json);
       }
     })
     .catch(e => { console.error(e); });
@@ -94,8 +100,15 @@ let App = React.createClass({
     this.setState({ selectedExerciseListIndex: selectedIndex });
   },
 
-  onSnackbarAction() {
-    this.refs.snackbarInstructorMode.dismiss();
+  onInstructorModeChange(instructorMode) {
+    if (instructorMode) {
+      this.refs.snackbarInstructorMode.show();
+      this.setState({ instructorToggle: true });
+    }
+  },
+
+  onInstructorModeToggle(e, toggled) {
+    console.log(toggled);
   },
 
   render() {
@@ -153,21 +166,32 @@ let App = React.createClass({
               </ToolbarGroup>
               <ToolbarGroup float="right" key={ 1 }>
                 <ToolbarSeparator/>
-              <IconButton onClick={ this.onControlsClick } tooltip="Controls">
-                  <NavigationMenu/>
-                </IconButton>
+                <div style={{ width: 116 }}>
+                  { this.state.instructorToggle?
+                    <Toggle
+                      defaultToggled={ true }
+                      onToggle={ this.onInstructorModeToggle }
+                      ref="instructorToggle"
+                      style={{ display: 'inline-block', width: 42 }}/> :
+                    null
+                  }
+                  <IconButton onClick={ this.onControlsClick } tooltip="Controls">
+                    <NavigationMenu/>
+                  </IconButton>
+                </div>
               </ToolbarGroup>
             </Toolbar>
           </div>
           <ComponentDialog ref="controlsComponentDialog" title="EUI Controls">
-            <Controls baseServer={ this.state.exerciseList[ this.state.selectedExerciseListIndex ].payload } savePrimaryText="Save" type='EUI'/>
+            <Controls
+              baseServer={ this.state.exerciseList[ this.state.selectedExerciseListIndex ].payload }
+              onInstructorModeChange={ this.onInstructorModeChange }
+              savePrimaryText="Save"
+              type='EUI'/>
           </ComponentDialog>
           <Snackbar
-            action="close"
             autoHideDuration={ 0 }
             message="Instructor Mode"
-            onActionTouchTap={ this.onSnackbarAction }
-            openOnMount={ true }
             ref="snackbarInstructorMode"/>
         </Paper>
     );
