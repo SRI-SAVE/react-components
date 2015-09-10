@@ -30,16 +30,31 @@ const {
 } = mui;
 const { Colors, Spacing  } = Styles;
 
+let baseServer;
+let baseServerAddress;
+
 export const EUI = React.createClass({
 
   statics: {
-    baseServer: 'http://localhost:3001',
+    setBase(options) {
+      const { host, exercise } = options;
+
+      baseServer = host || baseServer;
+
+      if (exercise) {
+        baseServerAddress = baseServer + '/' + exercise;
+      }
+    },
   },
 
   mixins: [
     // ReactRenderVisualizer,
     MaterialUITheme,
   ],
+
+  propTypes: {
+    baseServerHost: React.PropTypes.string,
+  },
 
   getInitialState() {
     return {
@@ -51,17 +66,29 @@ export const EUI = React.createClass({
     };
   },
 
+  getDefaultProps() {
+    return {
+      baseServerHost: 'http://localhost:3001',
+    }
+  },
+
+  componentWillMount() {
+    const { selectedExerciseListIndex, exerciseList } = this.state;
+
+    EUI.setBase({ host: this.props.baseServerHost, exercise: exerciseList[ selectedExerciseListIndex ].payload });
+  },
+
   componentDidMount() {
     if (this.state.tooltray == null) {
       setTimeout(this.fetchExercises, 1500);
     }
   },
 
-  processFetchedExercises(exerciseServer, json) {
+  processFetchedExercises(json) {
     const list = this.state.exerciseList;
 
-    json.forEach((e /*, i */) => {
-      const pathName = e.replace(exerciseServer, '');
+    json.forEach(e /*, i */ => {
+      const pathName = e.replace(baseServer, '');
 
       list.push({
         payload: pathName,
@@ -76,9 +103,10 @@ export const EUI = React.createClass({
   },
 
   saveSolution() {
-    fetch(this.state.exerciseList[ this.state.selectedExerciseListIndex ].payload + '/generateSolution')
+    fetch(baseServerAddress + '/generateSolution',  { mode: 'cors' })
     .then(() => {
       this.setState({ instructorToggle: false });
+      this.refs.snackbarStudentMode.show();
     })
     .catch(e => {
       this.refs.snackbarInstructorMode.show();
@@ -87,13 +115,11 @@ export const EUI = React.createClass({
   },
 
   fetchExercises() {
-    const exerciseServer = this.refs.exerciseServer.getValue();
-
-    fetch(exerciseServer + '/listfiles/exercise/json')
+    fetch(baseServer + '/listfiles/exercise/json',  { mode: 'cors' })
     .then(response => response.json())
     .then(json => {
       if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
-        this.processFetchedExercises(exerciseServer, json);
+        this.processFetchedExercises(json);
       }
     })
     .catch(e => console.error(e));
@@ -115,6 +141,10 @@ export const EUI = React.createClass({
       instructorToggle: false,
       selectedExerciseListIndex: selectedIndex,
     });
+
+    const eidx = this.state.selectedExerciseListIndex;
+
+    EUI.setBase({ exercise: this.state.exerciseList[ eidx ].payload });
     this.refs.snackbarInstructorMode.dismiss();
   },
 
@@ -134,11 +164,18 @@ export const EUI = React.createClass({
   onServerInputChange(e) {
     const value = e.target.value;
     const isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
+    const missingProtocol = value.match(/^(http|https):\/\//) == null;
+    const eidx = this.state.selectedExerciseListIndex;
+    let serverErrorText = '';
 
-    this.setState({
-      serverErrorText: !isNumeric ? '' : 'This field must be a string',
-    });
-    EUI.baseServer = value;
+    if (isNumeric) {
+      serverErrorText = 'This field must be a string';
+    } else if (missingProtocol) {
+      serverErrorText = 'Field example http://<host>:<port>';
+    }
+
+    this.setState({ serverErrorText: serverErrorText });
+    EUI.setBase({ host: value, exercise: this.state.exerciseList[ eidx ].payload });
   },
 
   render() {
@@ -173,6 +210,12 @@ export const EUI = React.createClass({
         textTransform: 'uppercase',
       },
     };
+    const {
+      exerciseList,
+      instructorToggle,
+      loadedExerciseList,
+      serverErrorText,
+    } = this.state;
 
     return (
         <Paper style={ styles.paper }>
@@ -180,14 +223,14 @@ export const EUI = React.createClass({
             <Toolbar style={{ backgroundColor: canvasColor }}>
               <ToolbarGroup float="left" key={ 0 }>
                 <ToolbarTitle style={ styles.toolbarTitle } text="exercise"/>
-                { this.state.loadedExerciseList?
-                  <DropDownMenu menuItems={ this.state.exerciseList } onChange={ this.onExerciseSelect } ref="exerciseList" style={ styles.exerciseDropdown }/> :
+                { loadedExerciseList?
+                  <DropDownMenu menuItems={ exerciseList } onChange={ this.onExerciseSelect } ref="exerciseList" style={ styles.exerciseDropdown }/> :
                   <CircularProgress mode="indeterminate" size={ .5 } style={ styles.exerciseProgress }/>
                 }
                 <TextField
-                  defaultValue={ EUI.baseServer }
+                  defaultValue={ this.props.baseServerHost }
                   errorStyle={{ color: Colors.red600 }}
-                  errorText={ this.state.serverErrorText }
+                  errorText={ serverErrorText }
                   floatingLabelText="Exercise Server"
                   hintText="http://<host>:<port>"
                   onChange={ this.onServerInputChange }
@@ -197,7 +240,7 @@ export const EUI = React.createClass({
               <ToolbarGroup float="right" key={ 1 }>
                 <ToolbarSeparator/>
                 <div style={{ width: 116 }}>
-                  { this.state.instructorToggle?
+                  { instructorToggle?
                     <Toggle
                       defaultToggled={ true }
                       onToggle={ this.onInstructorModeToggle }
@@ -214,7 +257,7 @@ export const EUI = React.createClass({
           </div>
           <ComponentDialog ref="controlsComponentDialog" title="EUI Controls">
             <Controls
-              baseServer={ this.state.exerciseList[ this.state.selectedExerciseListIndex ].payload }
+              baseServerAddress={ baseServerAddress }
               onInstructorModeChange={ this.onInstructorModeChange }
               onSave={ this.saveSolution }
               savePrimaryText="Save"
@@ -224,6 +267,10 @@ export const EUI = React.createClass({
             autoHideDuration={ 0 }
             message="Instructor Mode"
             ref="snackbarInstructorMode"/>
+          <Snackbar
+            autoHideDuration={ 0 }
+            message="Student Mode"
+            ref="snackbarStudentMode"/>
         </Paper>
     );
   },

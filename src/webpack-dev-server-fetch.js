@@ -5,10 +5,8 @@ let saveFetch = window.fetch;
 let restore;
 let exerciseFetch = () => {
   let exercises = [
-    'http://localhost:3001/PutExercise/exercise',
+    'http://localhost:3001/PutExercise',
     'http://localhost:3001/exercises/071-100-0032/step01/m4_clear',
-    'http://localhost:3001/exercises/071-100-0032/step01/m4_clear_exer_with_subtasks',
-    'http://localhost:3001/exercises/071-100-0032/step01/m4_clear_exer_with_subtasks_v2',
     'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear',
     'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear_exer_ese',
   ];
@@ -44,6 +42,10 @@ let inventoryEUIFetch = () => {
 let generateSolutionEUIFetch = () => {
   return Promise.resolve(new window.Response(null, httpResponse));
 };
+let queryEUIFetch = options => {
+  console.log(options);
+  return Promise.resolve(new window.Response(null, httpResponse));
+};
 
 export const fakeFetch = () => {
   if (restore == null) {
@@ -54,15 +56,18 @@ export const fakeFetch = () => {
     return;
   }
 
-  window.fetch = path => {
+  window.fetch = (path, options) => {
     switch (path) {
       case 'http://localhost:3001/CAT/inventory':
         return inventoryCATFetch();
-      case 'None/inventory':
-      case '/exercises/071-100-0032/step01/m4_flora_clear/inventory':
+      case 'http://localhost:3001/None/inventory':
+      case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/inventory':
         return inventoryEUIFetch();
-      case 'None/generateSolution':
-      case '/exercises/071-100-0032/step01/m4_flora_clear/generateSolution':
+      case 'http://localhost:3001/None/query':
+      case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/query':
+        return queryEUIFetch(options);
+      case 'http://localhost:3001/None/generateSolution':
+      case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/generateSolution':
         return generateSolutionEUIFetch();
       case 'http://localhost:3001/listfiles/exercise/json':
         return exerciseFetch();

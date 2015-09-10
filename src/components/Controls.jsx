@@ -21,7 +21,7 @@ export const Controls = React.createClass({
   },
 
   propTypes: {
-    baseServer: React.PropTypes.string.isRequired,
+    baseServerAddress: React.PropTypes.string.isRequired,
     height:  React.PropTypes.oneOfType([
       React.PropTypes.number,
       React.PropTypes.string,
@@ -51,7 +51,7 @@ export const Controls = React.createClass({
 
   componentDidMount() {
     if (this.state.tooltray == null) {
-      setTimeout(this.fetchTooltray, 1500);
+      setTimeout(this.fetchTooltray, 1000);
     }
   },
 
@@ -64,7 +64,7 @@ export const Controls = React.createClass({
   },
 
   fetchTooltray() {
-    fetch(this.props.baseServer + '/inventory')
+    fetch(this.props.baseServerAddress + '/inventory',  { mode: 'cors' })
     .then(response => response.json())
     .then(json => {
       if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
@@ -85,6 +85,14 @@ export const Controls = React.createClass({
   },
 
   onReset(/* e */) {
+    fetch(this.props.baseServerAddress + '/query',  {
+      method: 'post',
+      mode: 'cors',
+      body: 'query=' + JSON.stringify({ type: 'Reset' }),
+    })
+    .catch(e => {
+      console.error(e);
+    });
   },
 
   onSave(/* e */) {
