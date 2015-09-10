@@ -41,6 +41,9 @@ let inventoryEUIFetch = () => {
 
   return Promise.resolve(new window.Response(jsonData, httpResponse));
 };
+let generateSolutionEUIFetch = () => {
+  return Promise.resolve(new window.Response(null, httpResponse));
+};
 
 export const fakeFetch = () => {
   if (restore == null) {
@@ -51,13 +54,16 @@ export const fakeFetch = () => {
     return;
   }
 
-  window.fetch = (path) => {
+  window.fetch = path => {
     switch (path) {
       case 'http://localhost:3001/CAT/inventory':
         return inventoryCATFetch();
       case 'None/inventory':
       case '/exercises/071-100-0032/step01/m4_flora_clear/inventory':
         return inventoryEUIFetch();
+      case 'None/generateSolution':
+      case '/exercises/071-100-0032/step01/m4_flora_clear/generateSolution':
+        return generateSolutionEUIFetch();
       case 'http://localhost:3001/listfiles/exercise/json':
         return exerciseFetch();
       default:

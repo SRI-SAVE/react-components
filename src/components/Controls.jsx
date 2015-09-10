@@ -78,7 +78,7 @@ export const Controls = React.createClass({
         // if (json.instructorMode) this.refs.snackBarInstructorMode.show();
       }
     })
-    .catch(e => { console.error(e); });
+    .catch(e => console.error(e));
   },
 
   onAssessment(/* e */) {
@@ -88,6 +88,11 @@ export const Controls = React.createClass({
   },
 
   onSave(/* e */) {
+    this.setState({
+      instructorMode: false,
+      assessment: this.props.type !== 'CAT',
+    });
+    this.props.onSave();
   },
 
   render() {

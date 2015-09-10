@@ -32,6 +32,10 @@ const { Colors, Spacing  } = Styles;
 
 export const EUI = React.createClass({
 
+  statics: {
+    baseServer: 'http://localhost:3001',
+  },
+
   mixins: [
     // ReactRenderVisualizer,
     MaterialUITheme,
@@ -71,6 +75,17 @@ export const EUI = React.createClass({
     this.setExerciseListWidth();
   },
 
+  saveSolution() {
+    fetch(this.state.exerciseList[ this.state.selectedExerciseListIndex ].payload + '/generateSolution')
+    .then(() => {
+      this.setState({ instructorToggle: false });
+    })
+    .catch(e => {
+      this.refs.snackbarInstructorMode.show();
+      console.error(e);
+    });
+  },
+
   fetchExercises() {
     const exerciseServer = this.refs.exerciseServer.getValue();
 
@@ -81,7 +96,7 @@ export const EUI = React.createClass({
         this.processFetchedExercises(exerciseServer, json);
       }
     })
-    .catch(e => { console.error(e); });
+    .catch(e => console.error(e));
   },
 
   setExerciseListWidth() {
@@ -111,7 +126,9 @@ export const EUI = React.createClass({
   },
 
   onInstructorModeToggle(e, toggled) {
-    console.log(toggled);
+    if (!toggled) {
+      this.saveSolution();
+    }
   },
 
   onServerInputChange(e) {
@@ -121,6 +138,7 @@ export const EUI = React.createClass({
     this.setState({
       serverErrorText: !isNumeric ? '' : 'This field must be a string',
     });
+    EUI.baseServer = value;
   },
 
   render() {
@@ -167,7 +185,7 @@ export const EUI = React.createClass({
                   <CircularProgress mode="indeterminate" size={ .5 } style={ styles.exerciseProgress }/>
                 }
                 <TextField
-                  defaultValue="http://localhost:3001"
+                  defaultValue={ EUI.baseServer }
                   errorStyle={{ color: Colors.red600 }}
                   errorText={ this.state.serverErrorText }
                   floatingLabelText="Exercise Server"
@@ -198,6 +216,7 @@ export const EUI = React.createClass({
             <Controls
               baseServer={ this.state.exerciseList[ this.state.selectedExerciseListIndex ].payload }
               onInstructorModeChange={ this.onInstructorModeChange }
+              onSave={ this.saveSolution }
               savePrimaryText="Save"
               type='EUI'/>
           </ComponentDialog>
