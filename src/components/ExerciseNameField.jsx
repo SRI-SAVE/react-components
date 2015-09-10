@@ -5,7 +5,7 @@ import ActionInput from 'material-ui/lib/svg-icons/action/input';
 
 const { Colors } = Styles;
 
-let ExerciseNameField = React.createClass({
+export const ExerciseNameField = React.createClass({
 
   getInitialState() {
     return {
@@ -14,8 +14,9 @@ let ExerciseNameField = React.createClass({
   },
 
   onExerciseNameChange(e) {
-    let value = e.target.value;
-    let isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
+    const value = e.target.value;
+    const isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
+
     this.setState({
       errorTextExerciseName: !isNumeric ? '' : 'This field must be a string',
     });

@@ -40,9 +40,10 @@ export const EUI = React.createClass({
   getInitialState() {
     return {
       exerciseList: [{ payload: 'None', text: 'None' }],
+      instructorToggle: false,
       loadedExerciseList: false,
       selectedExerciseListIndex: 0,
-      instructorToggle: false,
+      serverErrorText: '',
     };
   },
 
@@ -53,10 +54,10 @@ export const EUI = React.createClass({
   },
 
   processFetchedExercises(exerciseServer, json) {
-    let list = this.state.exerciseList;
+    const list = this.state.exerciseList;
 
     json.forEach((e /*, i */) => {
-      let pathName = e.replace(exerciseServer, '');
+      const pathName = e.replace(exerciseServer, '');
 
       list.push({
         payload: pathName,
@@ -71,13 +72,11 @@ export const EUI = React.createClass({
   },
 
   fetchExercises() {
-    let exerciseServer = this.refs.exerciseServer.getValue();
+    const exerciseServer = this.refs.exerciseServer.getValue();
 
     fetch(exerciseServer + '/listfiles/exercise/json')
-    .then((response) => {
-      return response.json();
-    })
-    .then((json) => {
+    .then(response => response.json())
+    .then(json => {
       if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
         this.processFetchedExercises(exerciseServer, json);
       }
@@ -86,8 +85,8 @@ export const EUI = React.createClass({
   },
 
   setExerciseListWidth() {
-    let el = React.findDOMNode(this.refs.exerciseList);
-    let menuItemsDom = React.findDOMNode(this.refs.exerciseList.refs.menuItems);
+    const el = React.findDOMNode(this.refs.exerciseList);
+    const menuItemsDom = React.findDOMNode(this.refs.exerciseList.refs.menuItems);
 
     el.style.width = menuItemsDom.offsetWidth + 'px';
   },
@@ -97,7 +96,11 @@ export const EUI = React.createClass({
   },
 
   onExerciseSelect(e, selectedIndex /*, menuItem */) {
-    this.setState({ selectedExerciseListIndex: selectedIndex });
+    this.setState({
+      instructorToggle: false,
+      selectedExerciseListIndex: selectedIndex,
+    });
+    this.refs.snackbarInstructorMode.dismiss();
   },
 
   onInstructorModeChange(instructorMode) {
@@ -109,6 +112,15 @@ export const EUI = React.createClass({
 
   onInstructorModeToggle(e, toggled) {
     console.log(toggled);
+  },
+
+  onServerInputChange(e) {
+    const value = e.target.value;
+    const isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
+
+    this.setState({
+      serverErrorText: !isNumeric ? '' : 'This field must be a string',
+    });
   },
 
   render() {
@@ -160,7 +172,7 @@ export const EUI = React.createClass({
                   errorText={ this.state.serverErrorText }
                   floatingLabelText="Exercise Server"
                   hintText="http://<host>:<port>"
-                  onChange={ this.handleServerInputChange }
+                  onChange={ this.onServerInputChange }
                   ref="exerciseServer"
                   style={ styles.textfield }/>
               </ToolbarGroup>

@@ -6,7 +6,7 @@ import MenuDivider from 'material-ui/lib/menus/menu-divider';
 import Download from 'material-ui/lib/svg-icons/file/file-download';
 import RemoveRedEye from 'material-ui/lib/svg-icons/image/remove-red-eye';
 
-let SimpleMenu = React.createClass({
+export const SimpleMenu = React.createClass({
 
   propTypes: {
     clearFix: React.PropTypes.bool,
@@ -19,8 +19,7 @@ let SimpleMenu = React.createClass({
   },
 
   render() {
-
-    let styles = {
+    const styles = {
       menu: {
         marginRight: 32,
         marginBottom: 32,

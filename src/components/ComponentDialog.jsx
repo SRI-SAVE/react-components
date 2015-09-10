@@ -5,7 +5,7 @@ import { Dialog } from 'material-ui';
 // import ReactRenderVisualizer from 'react-render-visualizer';
 // import MaterialUITheme from '../mixins/material-ui-theme'; // XXX cosmos testing
 
-let ComponentDialog = React.createClass({
+export const ComponentDialog = React.createClass({
 
   mixins: [
     // ReactRenderVisualizer

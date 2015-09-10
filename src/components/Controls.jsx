@@ -8,7 +8,7 @@ import TooltrayList from './TooltrayList';
 import ExerciseNameField from './ExerciseNameField';
 import 'whatwg-fetch';
 
-let Controls = React.createClass({
+export const Controls = React.createClass({
 
   mixins: [ ],
 
@@ -65,10 +65,8 @@ let Controls = React.createClass({
 
   fetchTooltray() {
     fetch(this.props.baseServer + '/inventory')
-    .then((response) => {
-      return response.json();
-    })
-    .then((json) => {
+    .then(response => response.json())
+    .then(json => {
       if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
         this.setState({
           assessment: this.props.type !== 'CAT' && !json.instructorMode,

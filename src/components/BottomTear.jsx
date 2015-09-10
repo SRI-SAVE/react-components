@@ -3,7 +3,7 @@ import React from 'react';
 
 // import ReactRenderVisualizer from 'react-render-visualizer';
 
-let BottomTear = React.createClass({
+export const BottomTear = React.createClass({
 
   mixins: [
     // ReactRenderVisualizer

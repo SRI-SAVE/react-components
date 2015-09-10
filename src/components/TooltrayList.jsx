@@ -6,7 +6,7 @@ import BottomTear from './BottomTear';
 
 const { List, ListItem } = mui;
 
-let TooltrayList = React.createClass({
+export const TooltrayList = React.createClass({
 
   mixins: [ ],
 
@@ -56,9 +56,7 @@ let TooltrayList = React.createClass({
     const list = (
       <List subheader={ this.props.subheader || 'Tooltray Items' }>
         {
-          this.props.items.map((ttObj, i) => {
-            return <ListItem key={ i } leftIcon={ <MapsTerrain/> } primaryText={ ttObj.name }/>
-          })
+          this.props.items.map((ttObj, i) => <ListItem key={ i } leftIcon={ <MapsTerrain/> } primaryText={ ttObj.name }/>)
         }
       </List>
     );
