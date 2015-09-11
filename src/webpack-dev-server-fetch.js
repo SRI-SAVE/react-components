@@ -3,6 +3,7 @@ import 'whatwg-fetch';
 let httpResponse = { status: 200, headers: { 'Content-type': 'application/json' }};
 let saveFetch = window.fetch;
 let restore;
+let instructorMode = true;
 let exerciseFetch = () => {
   let exercises = [
     'http://localhost:3001/PutExercise',
@@ -35,15 +36,17 @@ let inventoryEUIFetch = () => {
       ID: 'myM4',
     },
   ]);
-  let jsonData = '{ "instructorMode": true, "tooltray": ' + fakeData + ' }';
+  let jsonData = '{ "instructorMode": ' + instructorMode + ', "tooltray": ' + fakeData + ' }';
 
   return Promise.resolve(new window.Response(jsonData, httpResponse));
 };
 let generateSolutionEUIFetch = () => {
+  instructorMode = false;
   return Promise.resolve(new window.Response(null, httpResponse));
 };
 let queryEUIFetch = options => {
   console.log(options);
+  instructorMode = true;
   return Promise.resolve(new window.Response(null, httpResponse));
 };
 

@@ -20,6 +20,7 @@ export const ComponentDialog = React.createClass({
 
   propTypes: {
     children: React.PropTypes.element.isRequired,
+    onDismiss: React.PropTypes.func,
     title: React.PropTypes.string,
   },
 
@@ -49,6 +50,7 @@ export const ComponentDialog = React.createClass({
           autoDetectWindowHeight={ true }
           autoScrollBodyContent={ true }
           modal={ this.state.modal }
+          onDismiss={ this.props.onDismiss }
           ref="scrollableContentDialog"
           title={ this.props.title }>
           { this.props.children }

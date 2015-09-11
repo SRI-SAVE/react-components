@@ -42,7 +42,7 @@ export const EUI = React.createClass({
       baseServer = host || baseServer;
 
       if (exercise) {
-        baseServerAddress = baseServer + '/' + exercise;
+        baseServerAddress = baseServer + exercise;
       }
     },
   },
@@ -58,9 +58,10 @@ export const EUI = React.createClass({
 
   getInitialState() {
     return {
-      exerciseList: [{ payload: 'None', text: 'None' }],
+      exerciseList: [{ payload: '/None', text: 'None' }],
       instructorToggle: false,
       loadedExerciseList: false,
+      reloadTray: false,
       selectedExerciseListIndex: 0,
       serverErrorText: '',
     };
@@ -79,9 +80,7 @@ export const EUI = React.createClass({
   },
 
   componentDidMount() {
-    if (this.state.tooltray == null) {
-      setTimeout(this.fetchExercises, 1500);
-    }
+    setTimeout(this.fetchExercises, 1000);
   },
 
   processFetchedExercises(json) {
@@ -132,6 +131,19 @@ export const EUI = React.createClass({
     el.style.width = menuItemsDom.offsetWidth + 'px';
   },
 
+  showAssessment() {
+    this.refs.controlsComponentDialog.dismiss();
+  },
+
+  reset() {
+    this.setState({ instructorToggle: false });
+    this.refs.controlsComponentDialog.dismiss();
+  },
+
+  dialogDismiss() {
+    if (this.state.reloadTray) this.setState({ reloadTray: false });
+  },
+
   onControlsClick() {
     this.refs.controlsComponentDialog.show();
   },
@@ -139,12 +151,11 @@ export const EUI = React.createClass({
   onExerciseSelect(e, selectedIndex /*, menuItem */) {
     this.setState({
       instructorToggle: false,
+      reloadTray: this.state.selectedExerciseListIndex !== selectedIndex? true : false,
       selectedExerciseListIndex: selectedIndex,
     });
 
-    const eidx = this.state.selectedExerciseListIndex;
-
-    EUI.setBase({ exercise: this.state.exerciseList[ eidx ].payload });
+    EUI.setBase({ exercise: this.state.exerciseList[ selectedIndex ].payload });
     this.refs.snackbarInstructorMode.dismiss();
   },
 
@@ -255,10 +266,13 @@ export const EUI = React.createClass({
               </ToolbarGroup>
             </Toolbar>
           </div>
-          <ComponentDialog ref="controlsComponentDialog" title="EUI Controls">
+          <ComponentDialog onDismiss={ this.dialogDismiss } ref="controlsComponentDialog" title="EUI Controls">
             <Controls
               baseServerAddress={ baseServerAddress }
+              forceUpdate={ this.state.reloadTray }
+              onAssessment={ this.showAssessment }
               onInstructorModeChange={ this.onInstructorModeChange }
+              onReset= { this.reset }
               onSave={ this.saveSolution }
               savePrimaryText="Save"
               type='EUI'/>
