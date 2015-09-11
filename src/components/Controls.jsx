@@ -8,11 +8,9 @@ import TooltrayList from './TooltrayList';
 import ExerciseNameField from './ExerciseNameField';
 import 'whatwg-fetch';
 
-let tooltray;
-
 export const Controls = React.createClass({
 
-  mixins: [ ],
+  // mixins: [ ],
 
   getInitialState() {
     return {
@@ -57,18 +55,16 @@ export const Controls = React.createClass({
 
   componentWillMount() {
     if (this.props.forceUpdate) {
-      tooltray = undefined;
-    } else if (tooltray) {
+      this.tooltray = undefined;
+    } else if (this.tooltray) {
       this.setState({
-        // assessment: this.props.type !== 'CAT' && !json.instructorMode,
-        // instructorMode: json.instructorMode,
         loaded: true,
       });
     }
   },
 
   componentDidMount() {
-    if (tooltray == null) {
+    if (this.tooltray == null) {
       setTimeout(this.fetchTooltray, 1000);
     }
   },
@@ -86,7 +82,7 @@ export const Controls = React.createClass({
     .then(response => response.json())
     .then(json => {
       if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
-        tooltray = json.tooltray;
+        this.tooltray = json.tooltray;
         this.setState({
           assessment: this.props.type !== 'CAT' && !json.instructorMode,
           instructorMode: json.instructorMode,
@@ -104,7 +100,7 @@ export const Controls = React.createClass({
       body: 'query=' + JSON.stringify({ type: 'Reset' }),
     })
     .then(() => {
-      tooltray = undefined;
+      this.tooltray = undefined;
       this.props.onReset();
     })
     .catch(e => { console.error(e); });
@@ -131,7 +127,7 @@ export const Controls = React.createClass({
 
     return (
       <div ref="container" style={ styles.container }>
-        { this.state.loaded? <TooltrayList container={ false } items={ tooltray }/> : <LinearProgress mode="indeterminate"/> }
+        { this.state.loaded? <TooltrayList container={ false } items={ this.tooltray }/> : <LinearProgress mode="indeterminate"/> }
         <MenuDivider/>
         <List subheader="Controls">
           <ListItem leftIcon={ <ActionRestore/> } onClick={ this.onReset } primaryText="Reset"/>

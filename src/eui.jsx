@@ -1,6 +1,6 @@
 /*global __WEBPACK_DEV_SERVER_DEBUG__*/
 if (__WEBPACK_DEV_SERVER_DEBUG__) {
-  require('./webpack-dev-server-fetch');
+  // require('./webpack-dev-server-fetch');
 }
 
 import './index.css';
@@ -30,22 +30,7 @@ const {
 } = mui;
 const { Colors, Spacing  } = Styles;
 
-let baseServer;
-let baseServerAddress;
-
 export const EUI = React.createClass({
-
-  statics: {
-    setBase(options) {
-      const { host, exercise } = options;
-
-      baseServer = host || baseServer;
-
-      if (exercise) {
-        baseServerAddress = baseServer + exercise;
-      }
-    },
-  },
 
   mixins: [
     // ReactRenderVisualizer,
@@ -76,33 +61,53 @@ export const EUI = React.createClass({
   componentWillMount() {
     const { selectedExerciseListIndex, exerciseList } = this.state;
 
-    EUI.setBase({ host: this.props.baseServerHost, exercise: exerciseList[ selectedExerciseListIndex ].payload });
+    this.setBase({ host: this.props.baseServerHost, exercise: exerciseList[ selectedExerciseListIndex ].payload });
   },
 
   componentDidMount() {
-    setTimeout(this.fetchExercises, 1000);
+    this.refs.snackbarSimulateBackend.show();
+  },
+
+  setBase(options) {
+    const { host, exercise } = options;
+
+    this.baseServer = host || this.baseServer;
+
+    if (exercise) {
+      this.baseServerAddress = this.baseServer + exercise;
+    }
+  },
+
+  dismissedSimulateBackend() {
+    if (!this.simulatedBackend) this.fetchExercises();
+
+    this.setState({ noSnackbarSimulateBackend: true });
+  },
+
+  simulateBackend() {
+    this.simulatedBackend = true;
+    this.refs.snackbarSimulateBackend.dismiss();
+    require('./webpack-dev-server-fetch');
+    this.fetchExercises();
   },
 
   processFetchedExercises(json) {
     const list = this.state.exerciseList;
 
     json.forEach(e /*, i */ => {
-      const pathName = e.replace(baseServer, '');
+      const pathName = e.replace(this.baseServer, '');
 
       list.push({
         payload: pathName,
         text: pathName,
       });
     });
-    this.setState({
-      exerciseList: list,
-      loadedExerciseList: true,
-    });
+    this.setState({ loadedExerciseList: true });
     this.setExerciseListWidth();
   },
 
   saveSolution() {
-    fetch(baseServerAddress + '/generateSolution',  { mode: 'cors' })
+    fetch(this.baseServerAddress + '/generateSolution',  { mode: 'cors' })
     .then(() => {
       this.setState({ instructorToggle: false });
       this.refs.snackbarStudentMode.show();
@@ -114,7 +119,7 @@ export const EUI = React.createClass({
   },
 
   fetchExercises() {
-    fetch(baseServer + '/listfiles/exercise/json',  { mode: 'cors' })
+    fetch(this.baseServer + '/listfiles/exercise/json',  { mode: 'cors' })
     .then(response => response.json())
     .then(json => {
       if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
@@ -155,7 +160,7 @@ export const EUI = React.createClass({
       selectedExerciseListIndex: selectedIndex,
     });
 
-    EUI.setBase({ exercise: this.state.exerciseList[ selectedIndex ].payload });
+    this.setBase({ exercise: this.state.exerciseList[ selectedIndex ].payload });
     this.refs.snackbarInstructorMode.dismiss();
   },
 
@@ -186,7 +191,7 @@ export const EUI = React.createClass({
     }
 
     this.setState({ serverErrorText: serverErrorText });
-    EUI.setBase({ host: value, exercise: this.state.exerciseList[ eidx ].payload });
+    this.setBase({ host: value, exercise: this.state.exerciseList[ eidx ].payload });
   },
 
   render() {
@@ -268,7 +273,7 @@ export const EUI = React.createClass({
           </div>
           <ComponentDialog onDismiss={ this.dialogDismiss } ref="controlsComponentDialog" title="EUI Controls">
             <Controls
-              baseServerAddress={ baseServerAddress }
+              baseServerAddress={ this.baseServerAddress }
               forceUpdate={ this.state.reloadTray }
               onAssessment={ this.showAssessment }
               onInstructorModeChange={ this.onInstructorModeChange }
@@ -285,6 +290,16 @@ export const EUI = React.createClass({
             autoHideDuration={ 0 }
             message="Student Mode"
             ref="snackbarStudentMode"/>
+          { !this.state.noSnackbarSimulateBackend?
+            <Snackbar
+              action="Simulate"
+              autoHideDuration={ 3500 }
+              message="Backend"
+              onActionTouchTap={ this.simulateBackend }
+              onDismiss={ this.dismissedSimulateBackend }
+              ref="snackbarSimulateBackend"/> :
+            null
+          }
         </Paper>
     );
   },
