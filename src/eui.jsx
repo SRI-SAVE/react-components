@@ -1,9 +1,7 @@
 /*global __WEBPACK_DEV_SERVER_DEBUG__*/
 if (__WEBPACK_DEV_SERVER_DEBUG__) {
-  // require('./webpack-dev-server-fetch');
+  require('./webpack-dev-server-fetch');
 }
-
-import './index.css';
 
 import React from 'react';
 import Controls from './components/Controls.jsx';
@@ -43,6 +41,7 @@ export const EUI = React.createClass({
 
   getInitialState() {
     return {
+      assessmentChoice: false,
       exerciseList: [{ payload: '/None', text: 'None' }],
       instructorToggle: false,
       loadedExerciseList: false,
@@ -109,7 +108,7 @@ export const EUI = React.createClass({
   saveSolution() {
     fetch(this.baseServerAddress + '/generateSolution',  { mode: 'cors' })
     .then(() => {
-      this.setState({ instructorToggle: false });
+      this.setState({ assessmentChoice: true, instructorToggle: false });
       this.refs.snackbarStudentMode.show();
     })
     .catch(e => {
@@ -138,15 +137,23 @@ export const EUI = React.createClass({
 
   showAssessment() {
     this.refs.controlsComponentDialog.dismiss();
+    this.refs.assessmentComponentDialog.show();
   },
 
   reset() {
-    this.setState({ instructorToggle: false });
+    this.setState({ assessmentChoice: false, instructorToggle: false });
     this.refs.controlsComponentDialog.dismiss();
   },
 
   dialogDismiss() {
     if (this.state.reloadTray) this.setState({ reloadTray: false });
+  },
+
+  instructorModeChange(instructorMode) {
+    if (instructorMode) {
+      this.refs.snackbarInstructorMode.show();
+      this.setState({ instructorToggle: true });
+    }
   },
 
   onControlsClick() {
@@ -156,19 +163,12 @@ export const EUI = React.createClass({
   onExerciseSelect(e, selectedIndex /*, menuItem */) {
     this.setState({
       instructorToggle: false,
-      reloadTray: this.state.selectedExerciseListIndex !== selectedIndex? true : false,
+      reloadTray: true, //this.state.selectedExerciseListIndex !== selectedIndex? true : false,
       selectedExerciseListIndex: selectedIndex,
     });
 
     this.setBase({ exercise: this.state.exerciseList[ selectedIndex ].payload });
     this.refs.snackbarInstructorMode.dismiss();
-  },
-
-  onInstructorModeChange(instructorMode) {
-    if (instructorMode) {
-      this.refs.snackbarInstructorMode.show();
-      this.setState({ instructorToggle: true });
-    }
   },
 
   onInstructorModeToggle(e, toggled) {
@@ -198,6 +198,12 @@ export const EUI = React.createClass({
     const palette = this.getChildContext().muiTheme.palette;
     const canvasColor = palette.canvasColor;
     const styles = {
+      assessment: {
+        border: 0,
+        height: 600,
+        width: '100%',
+      },
+
       paper: {
         backgroundColor: canvasColor,
         fontFamily: '"Roboto", sans-serif',
@@ -275,12 +281,21 @@ export const EUI = React.createClass({
             <Controls
               baseServerAddress={ this.baseServerAddress }
               forceUpdate={ this.state.reloadTray }
+              hasAssessmentChoice={ this.state.assessmentChoice }
               onAssessment={ this.showAssessment }
-              onInstructorModeChange={ this.onInstructorModeChange }
+              onInstructorModeChange={ this.instructorModeChange }
               onReset= { this.reset }
               onSave={ this.saveSolution }
               savePrimaryText="Save"
               type='EUI'/>
+          </ComponentDialog>
+          <ComponentDialog ref="assessmentComponentDialog" title="Assessment">
+            <div style={ styles.assessment }>
+              <iframe
+                name="assessment"
+                src="data:text/html;base64,PGh0bWw+PGJvZHk+PGRpdiBpZD0iY29udGVudCI+PHA+PGI+WW91IGZvcmdvdCB0aGVzZSBzdGVwczo8L2I+PGJyLz48dWw+PGxpPlB1bGwgYW5kIGhvbGQgY2hhcmdpbmcgaGFuZGxlIDwvbGk+PGxpPlB1c2ggYW5kIGhvbGQgYm90dG9tIG9mIGJvbHQgY2F0Y2ggPC9saT48bGk+UmVsZWFzZSBjaGFyZ2luZyBoYW5kbGUgdG8gY29jayByaWZsZSA8L2xpPGxpPkxldCBnbyBvZiBib2x0IGNhdGNoIGJvdHRvbSA8L2xpPjxsaT5SZXR1cm4gY2hhcmdpbmcgaGFuZGxlIHRvIGZvcndhcmQgcG9zaXRpb24gPC9saT48bGk+Q2hlY2sgY2hhbWJlciBmb3IgYW1tbyA8L2xpPjxsaT5TZWxlY3QgPGk+U2FmZTwvaT4gbW9kZSA8L2xpPjxsaT5SZWxlYXNlIGJvbHQgYnkgcHVzaGluZyBib2x0IGNhdGNoIHRvcCA8L2xpPjxsaT5TZWxlY3QgPGk+U2VtaTwvaT4gbW9kZSA8L2xpPjxsaT5QdWxsIHRyaWdnZXIgdG8gZmlyZSB0aGUgd2VhcG9uIDwvbGk+PGxpPlB1bGwgYW5kIGhvbGQgY2hhcmdpbmcgaGFuZGxlIDwvbGk+PGxpPlJlbGVhc2UgY2hhcmdpbmcgaGFuZGxlIHRvIGNvY2sgcmlmbGUgPC9saT48bGk+U2VsZWN0IDxpPlNhZmU8L2k+IG1vZGUgPC9saT48L3VsPjwvcD48L2Rpdj48L2JvZHk+PC9odG1sPgo="
+                style={ styles.assessment }/> { /* src={ this.baseServerAddress + '/assessment' } */}
+            </div>
           </ComponentDialog>
           <Snackbar
             autoHideDuration={ 0 }

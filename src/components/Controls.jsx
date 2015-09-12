@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { List, ListItem, LinearProgress, Snackbar } from 'material-ui';
+import { List, ListItem, LinearProgress } from 'material-ui';
 import ActionRestore from 'material-ui/lib/svg-icons/action/restore';
 import ActionBackup from 'material-ui/lib/svg-icons/action/backup';
 import MenuDivider from 'material-ui/lib/menus/menu-divider';
@@ -10,11 +10,15 @@ import 'whatwg-fetch';
 
 export const Controls = React.createClass({
 
+  statics: {
+    tooltray: undefined,
+  },
+
   // mixins: [ ],
 
   getInitialState() {
     return {
-      assessment: false,
+      hasAssessmentChoice: false,
       instructorMode: false,
       loaded: false,
     };
@@ -23,6 +27,7 @@ export const Controls = React.createClass({
   propTypes: {
     baseServerAddress: React.PropTypes.string.isRequired,
     forceUpdate: React.PropTypes.bool,
+    hasAssessmentChoice: React.PropTypes.bool,
     height:  React.PropTypes.oneOfType([
       React.PropTypes.number,
       React.PropTypes.string,
@@ -55,8 +60,8 @@ export const Controls = React.createClass({
 
   componentWillMount() {
     if (this.props.forceUpdate) {
-      this.tooltray = undefined;
-    } else if (this.tooltray) {
+      Controls.tooltray = undefined;
+    } else if (Controls.tooltray) {
       this.setState({
         loaded: true,
       });
@@ -64,27 +69,25 @@ export const Controls = React.createClass({
   },
 
   componentDidMount() {
-    if (this.tooltray == null) {
+    if (Controls.tooltray == null) {
       setTimeout(this.fetchTooltray, 1000);
     }
   },
 
-  componentWillUpdate(newProps, newState) {
-    if (newState.instructorMode) this.refs.snackBarInstructorMode.show();
-  },
-
-  componentWillUnmount() {
-    this.props.onInstructorModeChange(this.state.instructorMode);
-  },
+  // componentWillUpdate(newProps, newState) {
+  //   if (newState.instructorMode) {
+  //     this.refs.snackBarInstructorMode.show();
+  //   }
+  // },
 
   fetchTooltray() {
     fetch(this.props.baseServerAddress + '/inventory',  { mode: 'cors' })
     .then(response => response.json())
     .then(json => {
       if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
-        this.tooltray = json.tooltray;
+        Controls.tooltray = json.tooltray;
+        this.props.onInstructorModeChange(json.instructorMode);
         this.setState({
-          assessment: this.props.type !== 'CAT' && !json.instructorMode,
           instructorMode: json.instructorMode,
           loaded: true,
         });
@@ -100,17 +103,16 @@ export const Controls = React.createClass({
       body: 'query=' + JSON.stringify({ type: 'Reset' }),
     })
     .then(() => {
-      this.tooltray = undefined;
+      Controls.tooltray = undefined;
+      this.setState({ instructorMode: false });
       this.props.onReset();
     })
     .catch(e => { console.error(e); });
   },
 
   onSave(/* e */) {
-    this.setState({
-      instructorMode: false,
-      assessment: this.props.type !== 'CAT',
-    });
+    if (this.props.hasAssessmentChoice) this.setState({ instructorMode: false });
+
     this.props.onSave();
   },
 
@@ -127,20 +129,20 @@ export const Controls = React.createClass({
 
     return (
       <div ref="container" style={ styles.container }>
-        { this.state.loaded? <TooltrayList container={ false } items={ this.tooltray }/> : <LinearProgress mode="indeterminate"/> }
+        { this.state.loaded? <TooltrayList container={ false } items={ Controls.tooltray }/> : <LinearProgress mode="indeterminate"/> }
         <MenuDivider/>
         <List subheader="Controls">
           <ListItem leftIcon={ <ActionRestore/> } onClick={ this.onReset } primaryText="Reset"/>
           { this.props.type === 'CAT'? <ExerciseNameField/> : null }
-          { this.state.assessment?
+          { this.props.hasAssessmentChoice && !this.state.instructorMode?
             <ListItem leftIcon={ <ActionBackup/> } onClick={ this.props.onAssessment } primaryText="Assessment"/> :
-            <ListItem leftIcon={ <ActionBackup/> } onClick={ this.onSave } primaryText={ this.props.savePrimaryText }/>
+            null
+          }
+          { this.state.loaded && !this.props.hasAssessmentChoice?
+            <ListItem leftIcon={ <ActionBackup/> } onClick={ this.onSave } primaryText={ this.props.savePrimaryText }/> :
+            null
           }
         </List>
-        <Snackbar
-          autoHideDuration={ 2000 }
-          message="Instructor Mode"
-          ref="snackBarInstructorMode"/>
       </div>
     )
   },
