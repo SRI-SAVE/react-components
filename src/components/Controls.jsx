@@ -14,11 +14,8 @@ export const Controls = React.createClass({
     tooltray: undefined,
   },
 
-  // mixins: [ ],
-
   getInitialState() {
     return {
-      hasAssessmentChoice: false,
       instructorMode: false,
       loaded: false,
     };
@@ -27,7 +24,6 @@ export const Controls = React.createClass({
   propTypes: {
     baseServerAddress: React.PropTypes.string.isRequired,
     forceUpdate: React.PropTypes.bool,
-    hasAssessmentChoice: React.PropTypes.bool,
     height:  React.PropTypes.oneOfType([
       React.PropTypes.number,
       React.PropTypes.string,
@@ -74,24 +70,16 @@ export const Controls = React.createClass({
     }
   },
 
-  // componentWillUpdate(newProps, newState) {
-  //   if (newState.instructorMode) {
-  //     this.refs.snackBarInstructorMode.show();
-  //   }
-  // },
-
   fetchTooltray() {
     fetch(this.props.baseServerAddress + '/inventory',  { mode: 'cors' })
     .then(response => response.json())
     .then(json => {
-      if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
-        Controls.tooltray = json.tooltray;
-        this.props.onInstructorModeChange(json.instructorMode);
-        this.setState({
-          instructorMode: json.instructorMode,
-          loaded: true,
-        });
-      }
+      Controls.tooltray = json.tooltray;
+      this.props.onInstructorModeChange(json.instructorMode);
+      this.setState({
+        instructorMode: json.instructorMode,
+        loaded: true,
+      });
     })
     .catch(e => console.error(e));
   },
@@ -111,9 +99,25 @@ export const Controls = React.createClass({
   },
 
   onSave(/* e */) {
-    if (this.props.hasAssessmentChoice) this.setState({ instructorMode: false });
+    if (this.isEUI()) this.setState({ instructorMode: false });
 
     this.props.onSave();
+  },
+
+  isCAT() {
+    return this.props.type === 'CAT';
+  },
+
+  isEUI() {
+    return this.props.type === 'EUI';
+  },
+
+  hasEUIAssessmentItemAvailable() {
+    return this.state.loaded && this.isEUI() && !this.state.instructorMode;
+  },
+
+  hasSaveItemAvaialable() {
+    return this.state.loaded && !this.hasEUIAssessmentItemAvailable();
   },
 
   render() {
@@ -133,12 +137,12 @@ export const Controls = React.createClass({
         <MenuDivider/>
         <List subheader="Controls">
           <ListItem leftIcon={ <ActionRestore/> } onClick={ this.onReset } primaryText="Reset"/>
-          { this.props.type === 'CAT'? <ExerciseNameField/> : null }
-          { this.props.hasAssessmentChoice && !this.state.instructorMode?
+          { this.isCAT()? <ExerciseNameField/> : null }
+          { this.hasEUIAssessmentItemAvailable()?
             <ListItem leftIcon={ <ActionBackup/> } onClick={ this.props.onAssessment } primaryText="Assessment"/> :
             null
           }
-          { this.state.loaded && !this.props.hasAssessmentChoice?
+          { this.hasSaveItemAvaialable()?
             <ListItem leftIcon={ <ActionBackup/> } onClick={ this.onSave } primaryText={ this.props.savePrimaryText }/> :
             null
           }

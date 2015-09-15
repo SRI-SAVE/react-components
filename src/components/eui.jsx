@@ -1,12 +1,12 @@
 /*global __WEBPACK_DEV_SERVER_DEBUG__*/
 if (__WEBPACK_DEV_SERVER_DEBUG__) {
-  require('./webpack-dev-server-fetch');
+  require('../webpack-dev-server-fetch');
 }
 
 import React from 'react';
-import Controls from './components/Controls.jsx';
-import ComponentDialog from './components/ComponentDialog.jsx';
-import MaterialUITheme from './mixins/material-ui-theme';
+import Controls from './Controls.jsx';
+import ComponentDialog from './ComponentDialog.jsx';
+import MaterialUITheme from '../mixins/material-ui-theme';
 import mui from 'material-ui';
 import NavigationMenu from 'material-ui/lib/svg-icons/navigation/menu';
 
@@ -41,7 +41,6 @@ export const EUI = React.createClass({
 
   getInitialState() {
     return {
-      assessmentChoice: false,
       exerciseList: [{ payload: '/None', text: 'None' }],
       instructorToggle: false,
       loadedExerciseList: false,
@@ -86,7 +85,7 @@ export const EUI = React.createClass({
   simulateBackend() {
     this.simulatedBackend = true;
     this.refs.snackbarSimulateBackend.dismiss();
-    require('./webpack-dev-server-fetch');
+    require('../webpack-dev-server-fetch');
     this.fetchExercises();
   },
 
@@ -108,8 +107,9 @@ export const EUI = React.createClass({
   saveSolution() {
     fetch(this.baseServerAddress + '/generateSolution',  { mode: 'cors' })
     .then(() => {
-      this.setState({ assessmentChoice: true, instructorToggle: false });
+      this.setState({ instructorToggle: false });
       this.refs.snackbarStudentMode.show();
+      this.refs.controlsComponentDialog.dismiss();
     })
     .catch(e => {
       this.refs.snackbarInstructorMode.show();
@@ -121,9 +121,7 @@ export const EUI = React.createClass({
     fetch(this.baseServer + '/listfiles/exercise/json',  { mode: 'cors' })
     .then(response => response.json())
     .then(json => {
-      if (this.isMounted()) { // By the time our promise comes true the component may no longer be mounted, be sure it is first!
-        this.processFetchedExercises(json);
-      }
+      this.processFetchedExercises(json);
     })
     .catch(e => console.error(e));
   },
@@ -141,7 +139,7 @@ export const EUI = React.createClass({
   },
 
   reset() {
-    this.setState({ assessmentChoice: false, instructorToggle: false });
+    this.setState({ instructorToggle: false });
     this.refs.controlsComponentDialog.dismiss();
   },
 
@@ -281,7 +279,6 @@ export const EUI = React.createClass({
             <Controls
               baseServerAddress={ this.baseServerAddress }
               forceUpdate={ this.state.reloadTray }
-              hasAssessmentChoice={ this.state.assessmentChoice }
               onAssessment={ this.showAssessment }
               onInstructorModeChange={ this.instructorModeChange }
               onReset= { this.reset }
