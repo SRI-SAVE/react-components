@@ -262,7 +262,7 @@ export const EUI = React.createClass({
                 <div style={{ width: 116 }}>
                   { instructorToggle?
                     <Toggle
-                      defaultToggled={ true }
+                      defaultToggled
                       onToggle={ this.onInstructorModeToggle }
                       ref="instructorToggle"
                       style={{ display: 'inline-block', width: 42 }}/> :

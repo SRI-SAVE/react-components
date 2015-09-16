@@ -1,21 +1,24 @@
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-// var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var webpack = require('webpack');
-var merge = require('webpack-merge');
-var path = require('path'); //.join(__dirname, 'build');
-var wdsDebug = false;
-// var cosmosFixture = false;
 
-var TARGET = process.env.TARGET;
-var ROOT_PATH = path.resolve(__dirname);
+'use strict';
+
+let HtmlWebpackPlugin = require('html-webpack-plugin');
+// let ExtractTextPlugin = require('extract-text-webpack-plugin');
+let webpack = require('webpack');
+let merge = require('webpack-merge');
+let path = require('path'); //.join(__dirname, 'build');
+let wdsDebug = false;
+// let cosmosFixture = false;
+
+// let TARGET = process.env.TARGET;
+let ROOT_PATH = path.resolve(__dirname);
 
 if (process.argv[ 1 ].match(/webpack-dev-server$/) != null) {
   wdsDebug = true;
 } else if (process.argv[ 1 ].match(/component-playground$/) != null) {
-  cosmosFixture = true;
+  // cosmosFixture = true;
 }
 
-var common = {
+let common = {
   entry: [
     './src/index.jsx',
   ],
@@ -35,7 +38,7 @@ var common = {
       { test: /\.jsx?$/, loaders: [ 'react-hot', 'babel' ], exclude: /node_modules/ },
       { test: /\.css$/, loaders: [ 'style', 'css' ], include: path.resolve(ROOT_PATH, 'src') },
       // { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") }
-    ]
+    ],
   },
   eslint: {
     configFile: '.eslintrc',
@@ -44,7 +47,7 @@ var common = {
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({ '__WEBPACK_DEV_SERVER_DEBUG__': wdsDebug }),
     // new ExtractTextPlugin('bundle.css')
-  ]
+  ],
 };
 
 if (wdsDebug) {
@@ -55,7 +58,6 @@ if (wdsDebug) {
     ],
     devServer: {
       historyApiFallback: true, // webpack-dev-server --history-api-fallback
-      colors: true, // webpack-dev-server --colors
       progress: true, // webpack-dev-server --progress
       // inline: true,
       // hot: true,
@@ -63,10 +65,10 @@ if (wdsDebug) {
     devtool: 'eval', // webpack-dev-server --devtool eval
     plugins: [
       new HtmlWebpackPlugin({
-        title: 'SAVE React Components App'
+        title: 'SAVE React Components App',
       }),
       new webpack.HotModuleReplacementPlugin(),
-    ]
+    ],
   });
 } else {
   module.exports = common;

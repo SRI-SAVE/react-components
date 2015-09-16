@@ -47,8 +47,8 @@ export const ComponentDialog = React.createClass({
         <Dialog
           actionFocus = "ok"
           actions={ standardActions }
-          autoDetectWindowHeight={ true }
-          autoScrollBodyContent={ true }
+          autoDetectWindowHeight
+          autoScrollBodyContent
           modal={ this.state.modal }
           onDismiss={ this.props.onDismiss }
           ref="scrollableContentDialog"
