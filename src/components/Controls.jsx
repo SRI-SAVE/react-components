@@ -8,11 +8,9 @@ import TooltrayList from './TooltrayList';
 import ExerciseNameField from './ExerciseNameField';
 import 'whatwg-fetch';
 
-export const Controls = React.createClass({
+let tooltrayItems = [ ];
 
-  statics: {
-    tooltray: undefined,
-  },
+export const Controls = React.createClass({
 
   getInitialState() {
     return {
@@ -28,6 +26,7 @@ export const Controls = React.createClass({
       React.PropTypes.number,
       React.PropTypes.string,
     ]),
+    instructorMode: React.PropTypes.bool,
     onAssessment: React.PropTypes.func,
     onInstructorModeChange: React.PropTypes.func,
     onReset: React.PropTypes.func,
@@ -56,16 +55,17 @@ export const Controls = React.createClass({
 
   componentWillMount() {
     if (this.props.forceUpdate) {
-      Controls.tooltray = undefined;
-    } else if (Controls.tooltray) {
+      this.resetAnd();
+    } else if (tooltrayItems.length) {
       this.setState({
+        instructorMode: this.props.instructorMode,
         loaded: true,
       });
     }
   },
 
   componentDidMount() {
-    if (Controls.tooltray == null) {
+    if (tooltrayItems.length === 0) {
       setTimeout(this.fetchTooltray, 1000);
     }
   },
@@ -74,7 +74,7 @@ export const Controls = React.createClass({
     fetch(this.props.baseServerAddress + '/inventory',  { mode: 'cors' })
     .then(response => response.json())
     .then(json => {
-      Controls.tooltray = json.tooltray;
+      tooltrayItems = json.tooltray;
       this.props.onInstructorModeChange(json.instructorMode);
       this.setState({
         instructorMode: json.instructorMode,
@@ -84,6 +84,13 @@ export const Controls = React.createClass({
     .catch(e => console.error(e));
   },
 
+  resetAnd(andFunc) {
+    tooltrayItems = [ ];
+    // this.setState({ instructorMode: false });
+
+    if (andFunc) andFunc();
+  },
+
   onReset(/* e */) {
     fetch(this.props.baseServerAddress + '/query',  {
       method: 'post',
@@ -91,9 +98,7 @@ export const Controls = React.createClass({
       body: 'query=' + JSON.stringify({ type: 'Reset' }),
     })
     .then(() => {
-      Controls.tooltray = undefined;
-      this.setState({ instructorMode: false });
-      this.props.onReset();
+      this.resetAnd(this.props.onReset);
     })
     .catch(e => { console.error(e); });
   },
@@ -133,7 +138,7 @@ export const Controls = React.createClass({
 
     return (
       <div ref="container" style={ styles.container }>
-        { this.state.loaded? <TooltrayList container={ false } items={ Controls.tooltray }/> : <LinearProgress mode="indeterminate"/> }
+        { this.state.loaded? <TooltrayList container={ false } items={ tooltrayItems }/> : <LinearProgress mode="indeterminate"/> }
         <MenuDivider/>
         <List subheader="Controls">
           <ListItem leftIcon={ <ActionRestore/> } onClick={ this.onReset } primaryText="Reset"/>

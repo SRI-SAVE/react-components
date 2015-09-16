@@ -276,15 +276,27 @@ export const EUI = React.createClass({
             </Toolbar>
           </div>
           <ComponentDialog onDismiss={ this.dialogDismiss } ref="controlsComponentDialog" title="EUI Controls">
-            <Controls
-              baseServerAddress={ this.baseServerAddress }
-              forceUpdate={ this.state.reloadTray }
-              onAssessment={ this.showAssessment }
-              onInstructorModeChange={ this.instructorModeChange }
-              onReset= { this.reset }
-              onSave={ this.saveSolution }
-              savePrimaryText="Save"
-              type='EUI'/>
+            { this.state.instructorToggle?
+              <Controls
+                baseServerAddress={ this.baseServerAddress }
+                forceUpdate={ this.state.reloadTray }
+                instructorMode
+                onAssessment={ this.showAssessment }
+                onInstructorModeChange={ this.instructorModeChange }
+                onReset= { this.reset }
+                onSave={ this.saveSolution }
+                savePrimaryText="Save"
+                type='EUI'/> :
+              <Controls
+                baseServerAddress={ this.baseServerAddress }
+                forceUpdate={ this.state.reloadTray }
+                onAssessment={ this.showAssessment }
+                onInstructorModeChange={ this.instructorModeChange }
+                onReset= { this.reset }
+                onSave={ this.saveSolution }
+                savePrimaryText="Save"
+                type='EUI'/>
+            }
           </ComponentDialog>
           <ComponentDialog ref="assessmentComponentDialog" title="Assessment">
             <div style={ styles.assessment }>
