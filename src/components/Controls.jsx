@@ -86,7 +86,6 @@ export const Controls = React.createClass({
 
   resetAnd(andFunc) {
     tooltrayItems = [ ];
-    // this.setState({ instructorMode: false });
 
     if (andFunc) andFunc();
   },

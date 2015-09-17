@@ -161,7 +161,7 @@ export const EUI = React.createClass({
   onExerciseSelect(e, selectedIndex /*, menuItem */) {
     this.setState({
       instructorToggle: false,
-      reloadTray: true, //this.state.selectedExerciseListIndex !== selectedIndex? true : false,
+      reloadTray: true,
       selectedExerciseListIndex: selectedIndex,
     });
 
