@@ -8,7 +8,7 @@ import TooltrayList from './TooltrayList';
 import ExerciseNameField from './ExerciseNameField';
 import 'whatwg-fetch';
 
-let tooltrayItems = [ ];
+let tooltrayItems = null;
 
 export const Controls = React.createClass({
 
@@ -31,6 +31,7 @@ export const Controls = React.createClass({
     onInstructorModeChange: React.PropTypes.func,
     onReset: React.PropTypes.func,
     onSave: React.PropTypes.func,
+    onToolTrayItemClick: React.PropTypes.func,
     savePrimaryText: React.PropTypes.string,
     type: React.PropTypes.oneOf([ 'CAT', 'EUI' ]),
     width:  React.PropTypes.oneOfType([
@@ -47,6 +48,7 @@ export const Controls = React.createClass({
       onInstructorModeChange: (/* newValue */) => {},
       onReset: () => {},
       onSave: () => {},
+      onToolTrayItemClick: () => {},
       savePrimaryText: 'Save Exercise', // CAT primary-text
       type: 'CAT',
       width: '100%',
@@ -56,7 +58,7 @@ export const Controls = React.createClass({
   componentWillMount() {
     if (this.props.forceUpdate) {
       this.resetAnd();
-    } else if (tooltrayItems.length) {
+    } else if (tooltrayItems) {
       this.setState({
         instructorMode: this.props.instructorMode,
         loaded: true,
@@ -65,13 +67,13 @@ export const Controls = React.createClass({
   },
 
   componentDidMount() {
-    if (tooltrayItems.length === 0) {
+    if (tooltrayItems == null) {
       setTimeout(this.fetchTooltray, 1000);
     }
   },
 
   fetchTooltray() {
-    fetch(this.props.baseServerAddress + '/inventory',  { mode: 'cors' })
+    fetch(`${ this.props.baseServerAddress }/inventory`,  { mode: 'cors' })
     .then(response => response.json())
     .then(json => {
       tooltrayItems = json.tooltray;
@@ -85,13 +87,13 @@ export const Controls = React.createClass({
   },
 
   resetAnd(andFunc) {
-    tooltrayItems = [ ];
+    tooltrayItems = null;
 
     if (andFunc) andFunc();
   },
 
-  onReset(/* e */) {
-    fetch(this.props.baseServerAddress + '/query',  {
+  handleResetClick(/* e */) {
+    fetch(`${ this.props.baseServerAddress }/query`,  {
       method: 'post',
       mode: 'cors',
       body: 'query=' + JSON.stringify({ type: 'Reset' }),
@@ -102,10 +104,16 @@ export const Controls = React.createClass({
     .catch(e => { console.error(e); });
   },
 
-  onSave(/* e */) {
+  handleSaveClick(/* e */) {
     if (this.isEUI()) this.setState({ instructorMode: false });
 
     this.props.onSave();
+  },
+
+  handleToolTrayItemClick(itemIdx) {
+    tooltrayItems.splice(itemIdx, 1);
+    // XXX Call something in SAVE.js to create the child
+    this.props.onToolTrayItemClick(itemIdx);
   },
 
   isCAT() {
@@ -137,17 +145,24 @@ export const Controls = React.createClass({
 
     return (
       <div ref="container" style={ styles.container }>
-        { this.state.loaded? <TooltrayList container={ false } items={ tooltrayItems }/> : <LinearProgress mode="indeterminate"/> }
+        { this.state.loaded?
+          <TooltrayList
+            baseServerAddress={ this.props.baseServerAddress }
+            container={ false }
+            items={ tooltrayItems }
+            onItemClick={ this.handleToolTrayItemClick }/> :
+          <LinearProgress mode="indeterminate"/>
+        }
         <MenuDivider/>
         <List subheader="Controls">
-          <ListItem leftIcon={ <ActionRestore/> } onClick={ this.onReset } primaryText="Reset"/>
+          <ListItem leftIcon={ <ActionRestore/> } onClick={ this.handleResetClick } primaryText="Reset"/>
           { this.isCAT()? <ExerciseNameField/> : null }
           { this.hasEUIAssessmentItemAvailable()?
             <ListItem leftIcon={ <ActionBackup/> } onClick={ this.props.onAssessment } primaryText="Assessment"/> :
             null
           }
           { this.hasSaveItemAvaialable()?
-            <ListItem leftIcon={ <ActionBackup/> } onClick={ this.onSave } primaryText={ this.props.savePrimaryText }/> :
+            <ListItem leftIcon={ <ActionBackup/> } onClick={ this.handleSaveClick } primaryText={ this.props.savePrimaryText }/> :
             null
           }
         </List>

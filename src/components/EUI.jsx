@@ -105,7 +105,7 @@ export const EUI = React.createClass({
   },
 
   saveSolution() {
-    fetch(this.baseServerAddress + '/generateSolution',  { mode: 'cors' })
+    fetch(`${ this.baseServerAddress }/generateSolution`,  { mode: 'cors' })
     .then(() => {
       this.setState({ instructorToggle: false });
       this.refs.snackbarStudentMode.show();
@@ -118,7 +118,7 @@ export const EUI = React.createClass({
   },
 
   fetchExercises() {
-    fetch(this.baseServer + '/listfiles/exercise/json',  { mode: 'cors' })
+    fetch(`${ this.baseServer }/listfiles/exercise/json`,  { mode: 'cors' })
     .then(response => response.json())
     .then(json => {
       this.processFetchedExercises(json);
@@ -130,7 +130,7 @@ export const EUI = React.createClass({
     const el = React.findDOMNode(this.refs.exerciseList);
     const menuItemsDom = React.findDOMNode(this.refs.exerciseList.refs.menuItems);
 
-    el.style.width = menuItemsDom.offsetWidth + 'px';
+    el.style.width = `${ menuItemsDom.offsetWidth }px`;
   },
 
   showAssessment() {
@@ -154,11 +154,11 @@ export const EUI = React.createClass({
     }
   },
 
-  onControlsClick() {
+  handleControlsClick() {
     this.refs.controlsComponentDialog.show();
   },
 
-  onExerciseSelect(e, selectedIndex /*, menuItem */) {
+  handleExerciseSelectChange(e, selectedIndex /*, menuItem */) {
     this.setState({
       instructorToggle: false,
       reloadTray: true,
@@ -169,13 +169,13 @@ export const EUI = React.createClass({
     this.refs.snackbarInstructorMode.dismiss();
   },
 
-  onInstructorModeToggle(e, toggled) {
+  handleInstructorModeToggle(e, toggled) {
     if (!toggled) {
       this.saveSolution();
     }
   },
 
-  onServerInputChange(e) {
+  handleServerInputChange(e) {
     const value = e.target.value;
     const isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
     const missingProtocol = value.match(/^(http|https):\/\//) == null;
@@ -190,6 +190,10 @@ export const EUI = React.createClass({
 
     this.setState({ serverErrorText: serverErrorText });
     this.setBase({ host: value, exercise: this.state.exerciseList[ eidx ].payload });
+  },
+
+  handleToolTrayItemClick(/* itemIdx */) {
+    this.refs.controlsComponentDialog.dismiss();
   },
 
   render() {
@@ -236,6 +240,7 @@ export const EUI = React.createClass({
       loadedExerciseList,
       serverErrorText,
     } = this.state;
+    const controlsOther = { instructorMode: this.state.instructorToggle };
 
     return (
         <Paper style={ styles.paper }>
@@ -244,7 +249,7 @@ export const EUI = React.createClass({
               <ToolbarGroup float="left" key={ 0 }>
                 <ToolbarTitle style={ styles.toolbarTitle } text="exercise"/>
                 { loadedExerciseList?
-                  <DropDownMenu menuItems={ exerciseList } onChange={ this.onExerciseSelect } ref="exerciseList" style={ styles.exerciseDropdown }/> :
+                  <DropDownMenu menuItems={ exerciseList } onChange={ this.handleExerciseSelectChange } ref="exerciseList" style={ styles.exerciseDropdown }/> :
                   <CircularProgress mode="indeterminate" size={ .5 } style={ styles.exerciseProgress }/>
                 }
                 <TextField
@@ -253,7 +258,7 @@ export const EUI = React.createClass({
                   errorText={ serverErrorText }
                   floatingLabelText="Exercise Server"
                   hintText="http://<host>:<port>"
-                  onChange={ this.onServerInputChange }
+                  onChange={ this.handleServerInputChange }
                   ref="exerciseServer"
                   style={ styles.textfield }/>
               </ToolbarGroup>
@@ -263,12 +268,12 @@ export const EUI = React.createClass({
                   { instructorToggle?
                     <Toggle
                       defaultToggled
-                      onToggle={ this.onInstructorModeToggle }
+                      onToggle={ this.handleInstructorModeToggle }
                       ref="instructorToggle"
                       style={{ display: 'inline-block', width: 42 }}/> :
                     null
                   }
-                  <IconButton onClick={ this.onControlsClick } tooltip="Controls">
+                  <IconButton onClick={ this.handleControlsClick } tooltip="Controls">
                     <NavigationMenu/>
                   </IconButton>
                 </div>
@@ -276,27 +281,17 @@ export const EUI = React.createClass({
             </Toolbar>
           </div>
           <ComponentDialog onDismiss={ this.dialogDismiss } ref="controlsComponentDialog" title="EUI Controls">
-            { this.state.instructorToggle?
-              <Controls
-                baseServerAddress={ this.baseServerAddress }
-                forceUpdate={ this.state.reloadTray }
-                instructorMode
-                onAssessment={ this.showAssessment }
-                onInstructorModeChange={ this.instructorModeChange }
-                onReset= { this.reset }
-                onSave={ this.saveSolution }
-                savePrimaryText="Save"
-                type='EUI'/> :
-              <Controls
-                baseServerAddress={ this.baseServerAddress }
-                forceUpdate={ this.state.reloadTray }
-                onAssessment={ this.showAssessment }
-                onInstructorModeChange={ this.instructorModeChange }
-                onReset= { this.reset }
-                onSave={ this.saveSolution }
-                savePrimaryText="Save"
-                type='EUI'/>
-            }
+            <Controls
+              baseServerAddress={ this.baseServerAddress }
+              forceUpdate={ this.state.reloadTray }
+              { ...controlsOther }
+              onAssessment={ this.showAssessment }
+              onInstructorModeChange={ this.instructorModeChange }
+              onReset= { this.reset }
+              onSave={ this.saveSolution }
+              onToolTrayItemClick={ this.handleToolTrayItemClick }
+              savePrimaryText="Save"
+              type='EUI'/>
           </ComponentDialog>
           <ComponentDialog ref="assessmentComponentDialog" title="Assessment">
             <div style={ styles.assessment }>
