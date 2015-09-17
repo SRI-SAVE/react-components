@@ -1,7 +1,7 @@
 
 import './index.css';
 import React from 'react';
-import { EUI } from './components/EUIApp';
+import { EUI } from './components/EUI';
 
 const elemDiv = document.createElement('div');
 
