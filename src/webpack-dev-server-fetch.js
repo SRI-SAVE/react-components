@@ -49,6 +49,10 @@ let queryEUIFetch = options => {
   instructorMode = true;
   return Promise.resolve(new window.Response(null, httpResponse));
 };
+let objectEUIFetch = options => {
+  console.log(options);
+  return Promise.resolve(new window.Response(null, httpResponse));
+};
 
 export const fakeFetch = () => {
   if (restore == null) {
@@ -69,6 +73,9 @@ export const fakeFetch = () => {
       case 'http://localhost:3001/None/query':
       case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/query':
         return queryEUIFetch(options);
+      case 'http://localhost:3001/None/object':
+      case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/object':
+        return objectEUIFetch(options);
       case 'http://localhost:3001/None/generateSolution':
       case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/generateSolution':
         return generateSolutionEUIFetch();
