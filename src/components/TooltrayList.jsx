@@ -42,7 +42,7 @@ export const TooltrayList = React.createClass({
     fetch(`${ this.props.baseServerAddress }/object`,  {
       method: 'post',
       mode: 'cors',
-      body: `object=${ JSON.stringify({ type: 'create', ID: 1, auto: false }) }`,
+      body: `object=${ JSON.stringify({ type: 'create', ID: this.props.items[ key ].ID, auto: false }) }`,
     })
     .then(() => {
       this.props.onItemClick(key);
