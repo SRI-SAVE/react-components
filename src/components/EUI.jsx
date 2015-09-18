@@ -41,11 +41,11 @@ export const EUI = React.createClass({
 
   getInitialState() {
     return {
-      exerciseList: [{ payload: '/None', text: 'None' }],
+      exerciseList: [ ],
       instructorToggle: false,
       loadedExerciseList: false,
       reloadTray: false,
-      selectedExerciseListIndex: 0,
+      selectedExerciseListIndex: null,
       serverErrorText: '',
     };
   },
@@ -58,8 +58,9 @@ export const EUI = React.createClass({
 
   componentWillMount() {
     const { selectedExerciseListIndex, exerciseList } = this.state;
+    const exercisePathname = exerciseList.length? exerciseList[ selectedExerciseListIndex ].payload : '';
 
-    this.setBase({ host: this.props.baseServerHost, exercise: exerciseList[ selectedExerciseListIndex ].payload });
+    this.setBase({ host: this.props.baseServerHost, exercise: exercisePathname });
   },
 
   componentDidMount() {
@@ -70,10 +71,7 @@ export const EUI = React.createClass({
     const { host, exercise } = options;
 
     this.baseServer = host || this.baseServer;
-
-    if (exercise) {
-      this.baseServerAddress = this.baseServer + exercise;
-    }
+    this.baseServerAddress = this.baseServer + exercise;
   },
 
   dismissedSimulateBackend() {
@@ -238,6 +236,7 @@ export const EUI = React.createClass({
       exerciseList,
       instructorToggle,
       loadedExerciseList,
+      selectedExerciseListIndex,
       serverErrorText,
     } = this.state;
     const controlsOther = { instructorMode: this.state.instructorToggle };
@@ -249,7 +248,12 @@ export const EUI = React.createClass({
               <ToolbarGroup float="left" key={ 0 }>
                 <ToolbarTitle style={ styles.toolbarTitle } text="exercise"/>
                 { loadedExerciseList?
-                  <DropDownMenu menuItems={ exerciseList } onChange={ this.handleExerciseSelectChange } ref="exerciseList" style={ styles.exerciseDropdown }/> :
+                  <DropDownMenu
+                    menuItems={ exerciseList }
+                    onChange={ this.handleExerciseSelectChange }
+                    ref="exerciseList"
+                    selectedIndex={ selectedExerciseListIndex }
+                    style={ styles.exerciseDropdown }/> :
                   <CircularProgress mode="indeterminate" size={ .5 } style={ styles.exerciseProgress }/>
                 }
                 <TextField
