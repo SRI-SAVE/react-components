@@ -32,7 +32,7 @@ export const TooltrayList = React.createClass({
       height: 200,
       items: [ ],
       container: true,
-      onItemClick: () => {},
+      onItemClick: (/* key, json */) => {},
       subheader: undefined,
       width: 360,
     };
@@ -44,8 +44,9 @@ export const TooltrayList = React.createClass({
       mode: 'cors',
       body: `object=${ JSON.stringify({ type: 'create', ID: this.props.items[ key ].ID, auto: false }) }`,
     })
-    .then(() => {
-      this.props.onItemClick(key);
+    .then(response => response.json())
+    .then(json => {
+      this.props.onItemClick(key, json);
     })
     .catch(e => { console.error(e); });
   },

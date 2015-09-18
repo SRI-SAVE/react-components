@@ -110,8 +110,9 @@ export const Controls = React.createClass({
     this.props.onSave();
   },
 
-  handleToolTrayItemClick(itemIdx) {
+  handleToolTrayItemClick(itemIdx, json) {
     tooltrayItems.splice(itemIdx, 1);
+    console.log(json[0]);
     // XXX Call something in SAVE.js to create the child
     this.props.onToolTrayItemClick(itemIdx);
   },
