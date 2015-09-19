@@ -1,12 +1,16 @@
+/*global __WEBPACK_DEV_SERVER_DEBUG__*/
+if (__WEBPACK_DEV_SERVER_DEBUG__) {
+  require('../webpack-dev-server-util');
+}
 
 import React from 'react';
+import 'whatwg-fetch';
 import { List, ListItem, LinearProgress } from 'material-ui';
 import ActionRestore from 'material-ui/lib/svg-icons/action/restore';
 import ActionBackup from 'material-ui/lib/svg-icons/action/backup';
 import MenuDivider from 'material-ui/lib/menus/menu-divider';
 import TooltrayList from './TooltrayList';
 import ExerciseNameField from './ExerciseNameField';
-import 'whatwg-fetch';
 
 let tooltrayItems = null;
 
@@ -111,9 +115,15 @@ export const Controls = React.createClass({
   },
 
   handleToolTrayItemClick(itemIdx, json) {
+    const tti = tooltrayItems[ itemIdx ];
+    const name = tti.name;
+    const ID = tti.ID;
+    const assetURL = json[ 0 ].assetURL;
+    const KbId = json[ 0 ].KbId;
+    const grouping = json[ 0 ].grouping;
+
     tooltrayItems.splice(itemIdx, 1);
-    console.log(json[0]);
-    // XXX Call something in SAVE.js to create the child
+    window._dSAVE.createS3D(name, ID, assetURL, KbId, grouping);
     this.props.onToolTrayItemClick(itemIdx);
   },
 
