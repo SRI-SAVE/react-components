@@ -236,10 +236,27 @@ export const EUI = React.createClass({
       exerciseList,
       instructorToggle,
       loadedExerciseList,
+      reloadTray,
       selectedExerciseListIndex,
       serverErrorText,
     } = this.state;
-    const controlsOther = { instructorMode: this.state.instructorToggle };
+    const controlsProps = {
+      baseServerAddress: this.baseServerAddress,
+      forceUpdate: reloadTray,
+      instructorMode: instructorToggle,
+      onAssessment: this.showAssessment,
+      onInstructorModeChange: this.instructorModeChange,
+      onReset: this.reset,
+      onSave: this.saveSolution,
+      onToolTrayItemClick: this.handleToolTrayItemClick,
+      savePrimaryText: 'Save',
+      type: 'EUI',
+    };
+    const controlsIconButtonProps = {
+      disabled: !loadedExerciseList,
+      onClick: this.handleControlsClick,
+      tooltip: 'Controls',
+    };
 
     return (
         <Paper style={ styles.paper }>
@@ -277,7 +294,7 @@ export const EUI = React.createClass({
                       style={{ display: 'inline-block', width: 42 }}/> :
                     null
                   }
-                  <IconButton onClick={ this.handleControlsClick } tooltip="Controls">
+                  <IconButton { ...controlsIconButtonProps }>
                     <NavigationMenu/>
                   </IconButton>
                 </div>
@@ -285,17 +302,7 @@ export const EUI = React.createClass({
             </Toolbar>
           </div>
           <ComponentDialog onDismiss={ this.dialogDismiss } ref="controlsComponentDialog" title="EUI Controls">
-            <Controls
-              baseServerAddress={ this.baseServerAddress }
-              forceUpdate={ this.state.reloadTray }
-              { ...controlsOther }
-              onAssessment={ this.showAssessment }
-              onInstructorModeChange={ this.instructorModeChange }
-              onReset= { this.reset }
-              onSave={ this.saveSolution }
-              onToolTrayItemClick={ this.handleToolTrayItemClick }
-              savePrimaryText="Save"
-              type='EUI'/>
+            <Controls { ...controlsProps }/>
           </ComponentDialog>
           <ComponentDialog ref="assessmentComponentDialog" title="Assessment">
             <div style={ styles.assessment }>
