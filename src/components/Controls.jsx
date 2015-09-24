@@ -117,13 +117,12 @@ export const Controls = React.createClass({
   handleToolTrayItemClick(itemIdx, json) {
     const tti = tooltrayItems[ itemIdx ];
     const name = tti.name;
-    const ID = tti.ID;
     const assetURL = json[ 0 ].assetURL;
     const KbId = json[ 0 ].KbId;
     const grouping = json[ 0 ].grouping;
 
     tooltrayItems.splice(itemIdx, 1);
-    window._dSAVE.createS3D(name, ID, assetURL, KbId, grouping);
+    window._dSAVE.createS3D(name, assetURL, KbId, grouping);
     this.props.onToolTrayItemClick(itemIdx);
   },
 

@@ -121,6 +121,10 @@ export const EUI = React.createClass({
     .then(json => {
       this.processFetchedExercises(json);
     })
+    .then(() => {
+      // call window._dSAVE.issueautoloads...
+      // and call a _dSAVE function to set the baseServerAddress property
+    })
     .catch(e => console.error(e));
   },
 
@@ -323,7 +327,7 @@ export const EUI = React.createClass({
           { !this.state.noSnackbarSimulateBackend?
             <Snackbar
               action="Simulate"
-              autoHideDuration={ 3500 }
+              autoHideDuration={ 10000 }
               message="Backend"
               onActionTouchTap={ this.simulateBackend }
               onDismiss={ this.dismissedSimulateBackend }
