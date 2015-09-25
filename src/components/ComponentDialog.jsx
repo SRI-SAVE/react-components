@@ -1,15 +1,13 @@
 
 import React from 'react';
-import { Dialog } from 'material-ui';
+import Dialog from 'material-ui/lib/dialog';
 
 // import ReactRenderVisualizer from 'react-render-visualizer';
-// import MaterialUITheme from '../mixins/material-ui-theme'; // XXX cosmos testing
 
 export const ComponentDialog = React.createClass({
 
   mixins: [
     // ReactRenderVisualizer
-    // MaterialUITheme // XXX cosmos testing
   ],
 
   getInitialState() {
@@ -36,6 +34,10 @@ export const ComponentDialog = React.createClass({
 
   dismiss() {
     this.refs.scrollableContentDialog.dismiss();
+  },
+
+  isOpen() {
+    return this.refs.scrollableContentDialog.isOpen()
   },
 
   render() {

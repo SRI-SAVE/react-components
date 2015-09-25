@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { Styles, TextField } from 'material-ui';
+import Styles from 'material-ui/lib/styles/';
+import TextField from 'material-ui/lib/text-field';
 import ActionInput from 'material-ui/lib/svg-icons/action/input';
 
 const { Colors } = Styles;

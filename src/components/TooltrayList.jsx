@@ -1,11 +1,10 @@
 
 import React from 'react';
-import mui from 'material-ui';
+import List from 'material-ui/lib/lists/list';
+import ListItem from 'material-ui/lib/lists/list-item';
 import MapsTerrain from 'material-ui/lib/svg-icons/maps/terrain';
 import BottomTear from './BottomTear';
 import 'whatwg-fetch';
-
-const { List, ListItem } = mui;
 
 export const TooltrayList = React.createClass({
 

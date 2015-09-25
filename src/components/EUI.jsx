@@ -7,25 +7,23 @@ import React from 'react';
 import Controls from './Controls.jsx';
 import ComponentDialog from './ComponentDialog.jsx';
 import MaterialUITheme from '../mixins/material-ui-theme';
-import mui from 'material-ui';
+import CircularProgress from 'material-ui/lib/circular-progress';
+import DropDownMenu from 'material-ui/lib/drop-down-menu';
+import Paper from 'material-ui/lib/paper';
+import IconButton from 'material-ui/lib/icon-button';
+import Snackbar from 'material-ui/lib/snackbar';
+import Styles from 'material-ui/lib/styles/';
+import TextField from 'material-ui/lib/text-field';
+import Toggle from 'material-ui/lib/toggle';
+import Toolbar from 'material-ui/lib/toolbar/toolbar';
+import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
+import ToolbarSeparator from 'material-ui/lib/toolbar/toolbar-separator';
+import ToolbarTitle from 'material-ui/lib/toolbar/toolbar-title';
 import NavigationMenu from 'material-ui/lib/svg-icons/navigation/menu';
+import LightRawTheme from 'material-ui/lib/styles/raw-themes/light-raw-theme';
 
 // import ReactRenderVisualizer from 'react-render-visualizer';
 
-const {
-  CircularProgress,
-  DropDownMenu,
-  Paper,
-  IconButton,
-  Snackbar,
-  Styles,
-  TextField,
-  Toggle,
-  Toolbar,
-  ToolbarGroup,
-  ToolbarSeparator,
-  ToolbarTitle,
-} = mui;
 const { Colors, Spacing  } = Styles;
 
 export const EUI = React.createClass({
@@ -108,11 +106,15 @@ export const EUI = React.createClass({
   },
 
   saveSolution() {
-    fetch(`${ this.baseServerAddress }/generateSolution`,  { mode: 'cors' })
+    fetch(`${ this.baseServerAddress }/generateSolution`, { mode: 'cors' })
     .then(() => {
-      this.setState({ instructorToggle: false });
+      if (this.refs.controlsComponentDialog.isOpen()) this.refs.controlsComponentDialog.dismiss(); // do this first since it does a setState!
+
+      this.setState({
+        reloadTray: true,
+        instructorToggle: false,
+      });
       this.refs.snackbarStudentMode.show();
-      this.refs.controlsComponentDialog.dismiss();
     })
     .catch(e => {
       this.refs.snackbarInstructorMode.show();
@@ -121,7 +123,7 @@ export const EUI = React.createClass({
   },
 
   fetchExercises() {
-    fetch(`${ this.baseServer }/listfiles/exercise/json`,  { mode: 'cors' })
+    fetch(`${ this.baseServer }/listfiles/exercise/json`, { mode: 'cors' })
     .then(response => response.json())
     .then(json => {
       this.processFetchedExercises(json);
@@ -172,8 +174,8 @@ export const EUI = React.createClass({
     this.refs.snackbarInstructorMode.dismiss();
   },
 
-  handleInstructorModeToggle(e, toggled) {
-    if (!toggled) {
+  handleInstructorModeToggle(e, toggle) {
+    if (!toggle) {
       this.saveSolution();
     }
   },
@@ -200,8 +202,7 @@ export const EUI = React.createClass({
   },
 
   render() {
-    const palette = this.getChildContext().muiTheme.palette;
-    const canvasColor = palette.canvasColor;
+    const canvasColor = LightRawTheme.palette.canvasColor;
     const styles = {
       assessment: {
         border: 0,

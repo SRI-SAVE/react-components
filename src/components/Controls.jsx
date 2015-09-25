@@ -5,7 +5,9 @@ if (__WEBPACK_DEV_SERVER_DEBUG__) {
 
 import React from 'react';
 import 'whatwg-fetch';
-import { List, ListItem, LinearProgress } from 'material-ui';
+import List from 'material-ui/lib/lists/list';
+import ListItem from 'material-ui/lib/lists/list-item';
+import LinearProgress from 'material-ui/lib/linear-progress';
 import ActionRestore from 'material-ui/lib/svg-icons/action/restore';
 import ActionBackup from 'material-ui/lib/svg-icons/action/backup';
 import MenuDivider from 'material-ui/lib/menus/menu-divider';
@@ -48,6 +50,7 @@ export const Controls = React.createClass({
     return {
       forceUpdate: false,
       height: '100%',
+      instructorMode: false,
       onAssessment: () => {},
       onInstructorModeChange: (/* newValue */) => {},
       onReset: () => {},
@@ -145,7 +148,6 @@ export const Controls = React.createClass({
   render() {
     const styles = {
       container: {
-        // backgroundColor: '#fff',
         border: 'solid 1px #d9d9d9',
         height: this.props.height,
         overflowY: 'scroll',
