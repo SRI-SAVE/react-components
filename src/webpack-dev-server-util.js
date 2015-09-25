@@ -1,10 +1,14 @@
 
 export const _dSAVE = {
-    createS3D() {
+    createSemanticAsset() {
       console.log(arguments);
     },
 
     installAutoLoads() {
+      console.log(arguments);
+    },
+
+    setBaseServerAddress() {
       console.log(arguments);
     },
 };

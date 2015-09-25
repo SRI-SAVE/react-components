@@ -122,7 +122,7 @@ export const Controls = React.createClass({
     const grouping = json[ 0 ].grouping;
 
     tooltrayItems.splice(itemIdx, 1);
-    window._dSAVE.createS3D(name, assetURL, KbId, grouping);
+    window._dSAVE.createSemanticAsset(name, assetURL, KbId, grouping);
     this.props.onToolTrayItemClick(itemIdx);
   },
 

@@ -72,6 +72,11 @@ export const EUI = React.createClass({
 
     this.baseServer = host || this.baseServer;
     this.baseServerAddress = this.baseServer + exercise;
+
+    if (exercise !== '') {
+      window._dSAVE.setBaseServerAddress(this.baseServerAddress);
+      // call window._dSAVE.issueautoloads...
+    }
   },
 
   dismissedSimulateBackend() {
@@ -120,10 +125,6 @@ export const EUI = React.createClass({
     .then(response => response.json())
     .then(json => {
       this.processFetchedExercises(json);
-    })
-    .then(() => {
-      // call window._dSAVE.issueautoloads...
-      // and call a _dSAVE function to set the baseServerAddress property
     })
     .catch(e => console.error(e));
   },

@@ -13,12 +13,14 @@ const routeHandler = (route, options) => {
   case 'http://localhost:3001/CAT/inventory':
     return inventoryCATFetch();
   case 'http://localhost:3001/inventory':
+  case 'http://localhost:3001/PutExercise/inventory':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/inventory':
     return inventoryEUIFetch();
   case 'http://localhost:3001/query':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/query':
     return queryEUIFetch(options);
   case 'http://localhost:3001/object':
+  case 'http://localhost:3001/PutExercise/object':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/object':
     return objectEUIFetch(options);
   case 'http://localhost:3001/generateSolution':
