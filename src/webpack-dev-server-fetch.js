@@ -78,10 +78,20 @@ const generateSolutionEUIFetch = () => {
 const queryEUIFetch = options => {
   const body = options.body;
   const o = JSON.parse(body.replace('query=', ''));
+  let jsonData;
 
   console.log(o);
-  instructorMode = true;
-  return Promise.resolve(new window.Response(null, httpResponse));
+
+  switch (o.type) {
+  case 'Reset':
+    instructorMode = true;
+    break;
+  case 'KbId':
+    jsonData = [ o.query[ 0 ] + Date.now() ];
+    break;
+  }
+
+  return Promise.resolve(new window.Response(JSON.stringify({ KbIds: jsonData }), httpResponse));
 };
 
 const objectEUIFetch = options => {

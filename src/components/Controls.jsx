@@ -80,7 +80,7 @@ export const Controls = React.createClass({
   },
 
   fetchTooltray() {
-    fetch(`${ this.props.baseServerAddress }/inventory`,  { mode: 'cors' })
+    fetch(`${ this.props.baseServerAddress }/inventory`, { mode: 'cors' })
     .then(response => response.json())
     .then(json => {
       tooltrayItems = json.tooltray;
@@ -100,7 +100,7 @@ export const Controls = React.createClass({
   },
 
   handleResetClick(/* e */) {
-    fetch(`${ this.props.baseServerAddress }/query`,  {
+    fetch(`${ this.props.baseServerAddress }/query`, {
       method: 'post',
       mode: 'cors',
       body: 'query=' + JSON.stringify({ type: 'Reset' }),

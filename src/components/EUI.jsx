@@ -106,18 +106,20 @@ export const EUI = React.createClass({
   },
 
   saveSolution() {
+    let { controlsComponentDialog, snackbarStudentMode, snackbarInstructorMode } = this.refs;
+
     fetch(`${ this.baseServerAddress }/generateSolution`, { mode: 'cors' })
     .then(() => {
-      if (this.refs.controlsComponentDialog.isOpen()) this.refs.controlsComponentDialog.dismiss(); // do this first since it does a setState!
+      if (controlsComponentDialog.isOpen()) controlsComponentDialog.dismiss(); // do this first since it does a setState!
 
       this.setState({
         reloadTray: true,
         instructorToggle: false,
       });
-      this.refs.snackbarStudentMode.show();
+      snackbarStudentMode.show();
     })
     .catch(e => {
-      this.refs.snackbarInstructorMode.show();
+      snackbarInstructorMode.show();
       console.error(e);
     });
   },
