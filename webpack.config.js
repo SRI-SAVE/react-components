@@ -7,15 +7,12 @@ let webpack = require('webpack');
 let merge = require('webpack-merge');
 let path = require('path'); //.join(__dirname, 'build');
 let wdsDebug = false;
-// let cosmosFixture = false;
 
 // let TARGET = process.env.TARGET;
 let ROOT_PATH = path.resolve(__dirname);
 
 if (process.argv[ 1 ].match(/webpack-dev-server$/) != null) {
   wdsDebug = true;
-} else if (process.argv[ 1 ].match(/component-playground$/) != null) {
-  // cosmosFixture = true;
 }
 
 let common = {
@@ -62,7 +59,7 @@ if (wdsDebug) {
       // inline: true,
       // hot: true,
     },
-    devtool: 'eval', // webpack-dev-server --devtool eval
+    devtool: 'eval-source-map',// webpack-dev-server --devtool eval-source-map
     plugins: [
       new HtmlWebpackPlugin({
         title: 'SAVE React Components App',
