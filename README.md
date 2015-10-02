@@ -11,10 +11,7 @@ npm install
 
 Now you can run your local server:
 ```
-npm run hot
+npm run hot -s
 ```
-or
-```
-npm run cosmos # component isolation tests with fixtures
-```
-Open http://localhost:8080 to view the documentation site.
+
+Open http://localhost:8080
