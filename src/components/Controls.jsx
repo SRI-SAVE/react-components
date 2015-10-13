@@ -22,6 +22,7 @@ export const Controls = React.createClass({
     return {
       instructorMode: false,
       loaded: false,
+      tooltrayItems: null,
     };
   },
 
@@ -88,6 +89,7 @@ export const Controls = React.createClass({
       this.setState({
         instructorMode: json.instructorMode,
         loaded: true,
+        tooltrayItems: tooltrayItems,
       });
     })
     .catch(e => console.error(e));
@@ -95,6 +97,7 @@ export const Controls = React.createClass({
 
   resetAnd(andFunc) {
     tooltrayItems = null;
+    this.setState({ tooltrayItems: tooltrayItems });
 
     if (andFunc) andFunc();
   },
@@ -125,6 +128,7 @@ export const Controls = React.createClass({
     const grouping = json[ 0 ].grouping;
 
     tooltrayItems.splice(itemIdx, 1);
+    this.setState({ tooltrayItems: tooltrayItems });
     window._dSAVE.createSemanticAsset(name, assetURL, KbId, grouping);
     this.props.onToolTrayItemClick(itemIdx);
   },
@@ -161,7 +165,7 @@ export const Controls = React.createClass({
           <TooltrayList
             baseServerAddress={ this.props.baseServerAddress }
             container={ false }
-            items={ tooltrayItems }
+            items={ this.state.tooltrayItems }
             onItemClick={ this.handleToolTrayItemClick }/> :
           <LinearProgress mode="indeterminate"/>
         }

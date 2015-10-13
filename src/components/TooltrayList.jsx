@@ -69,11 +69,11 @@ export const TooltrayList = React.createClass({
     const list = (
       <List subheader={ this.props.subheader || 'Tooltray Items' }>
         { this.props.items != null?
-          this.props.items.map((ttObj, i) =>
+          this.props.items.map((ttObj, idx) =>
             <ListItem
-              key={ i }
+              key={ ttObj.ID }
               leftIcon={ <MapsTerrain/> }
-              onClick={ this.handleFetchToolTrayItem.bind(this, i) }
+              onClick={ this.handleFetchToolTrayItem.bind(this, idx) }
               primaryText={ ttObj.name }/>
             ) :
           null
