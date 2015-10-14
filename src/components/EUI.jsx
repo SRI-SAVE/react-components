@@ -186,7 +186,6 @@ export const EUI = React.createClass({
     const value = e.target.value;
     const isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
     const missingProtocol = value.match(/^(http|https):\/\//) == null;
-    const eidx = this.state.selectedExerciseListIndex;
     let serverErrorText = '';
 
     if (isNumeric) {
@@ -195,8 +194,23 @@ export const EUI = React.createClass({
       serverErrorText = 'Field example http://<host>:<port>';
     }
 
-    this.setState({ serverErrorText: serverErrorText });
-    this.setBase({ host: value, exercise: this.state.exerciseList[ eidx ].payload });
+    if (isNumeric || missingProtocol) {
+      this.setState({ serverErrorText: serverErrorText });
+      return;
+    }
+
+    if (value !== this.baseServer) {
+      this.setState({
+        exerciseList: [ ],
+        instructorToggle: false,
+        loadedExerciseList: false,
+        reloadTray: true,
+        selectedExerciseListIndex: null,
+        serverErrorText: serverErrorText,
+      });
+      this.setBase({ host: value, exercise: '' });
+      this.fetchExercises();
+    }
   },
 
   handleToolTrayItemClick(/* itemIdx */) {
@@ -219,6 +233,7 @@ export const EUI = React.createClass({
       },
 
       exerciseDropdown: {
+        float: 'right',
         width: 200,
       },
 
@@ -268,10 +283,19 @@ export const EUI = React.createClass({
 
     return (
         <Paper style={ styles.paper }>
-          <div className="clearfix" style={ styles.toolbarBlock }>
+          <div style={ styles.toolbarBlock }>
             <Toolbar style={{ backgroundColor: canvasColor }}>
               <ToolbarGroup float="left" key={ 0 }>
                 <ToolbarTitle style={ styles.toolbarTitle } text="exercise"/>
+                  <TextField
+                    defaultValue={ this.props.baseServerHost }
+                    errorStyle={{ color: Colors.red600 }}
+                    errorText={ serverErrorText }
+                    floatingLabelText="Exercise Server"
+                    hintText="http://<host>:<port>"
+                    onChange={ this.handleServerInputChange }
+                    ref="exerciseServer"
+                    style={ styles.textfield }/>
                 { loadedExerciseList?
                   <DropDownMenu
                     menuItems={ exerciseList }
@@ -281,15 +305,6 @@ export const EUI = React.createClass({
                     style={ styles.exerciseDropdown }/> :
                   <CircularProgress mode="indeterminate" size={ .5 } style={ styles.exerciseProgress }/>
                 }
-                <TextField
-                  defaultValue={ this.props.baseServerHost }
-                  errorStyle={{ color: Colors.red600 }}
-                  errorText={ serverErrorText }
-                  floatingLabelText="Exercise Server"
-                  hintText="http://<host>:<port>"
-                  onChange={ this.handleServerInputChange }
-                  ref="exerciseServer"
-                  style={ styles.textfield }/>
               </ToolbarGroup>
               <ToolbarGroup float="right" key={ 1 }>
                 <ToolbarSeparator/>

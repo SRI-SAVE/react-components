@@ -22,7 +22,7 @@ export const Controls = React.createClass({
     return {
       instructorMode: false,
       loaded: false,
-      tooltrayItems: null,
+      tooltrayItems: tooltrayItems,
     };
   },
 
