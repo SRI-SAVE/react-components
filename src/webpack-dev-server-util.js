@@ -13,8 +13,8 @@ export const _dSAVE = {
     },
 };
 
-const installFakeSandbox = () => {
+const fakeSandbox = () => {
   window._dSAVE = _dSAVE;
 }
 
-installFakeSandbox();
+fakeSandbox();

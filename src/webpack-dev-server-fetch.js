@@ -15,7 +15,7 @@ const routeHandler = (route, options) => {
   case 'http://localhost:3001/inventory':
   case 'http://localhost:3001/PutExercise/inventory':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/inventory':
-    return inventoryEUIFetch();
+    return delayResponse(1500, inventoryEUIFetch());
   case 'http://localhost:3001/query':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/query':
     return queryEUIFetch(options);
@@ -27,7 +27,7 @@ const routeHandler = (route, options) => {
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/generateSolution':
     return generateSolutionEUIFetch();
   case 'http://localhost:3001/listfiles/exercise/json':
-    return exerciseFetch();
+    return delayResponse(1000, exerciseFetch());
   default:
     return Promise.reject(new Error('fakeFetch has no handler for: ' + route));
   }
@@ -35,6 +35,12 @@ const routeHandler = (route, options) => {
 
 const saveFetch = window.fetch;
 const httpResponse = { status: 200, headers: { 'Content-type': 'application/json' }};
+
+const delayResponse = (delay, response) => {
+  const executor = (resolve /*, reject */) => setTimeout(() => resolve(response), delay);
+
+  return new Promise(executor);
+};
 
 const exerciseFetch = () => {
   const exercises = [
@@ -44,7 +50,7 @@ const exerciseFetch = () => {
     'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear_exer_ese',
   ];
 
-  return Promise.resolve(new window.Response(JSON.stringify(exercises), httpResponse));
+  return new window.Response(JSON.stringify(exercises), httpResponse);
 };
 
 const inventoryCATFetch = () => {
@@ -68,7 +74,7 @@ const inventoryEUIFetch = () => {
   ]);
   const jsonData = `{ "instructorMode": ${ instructorMode }, "tooltray": ${ fakeData } }`;
 
-  return Promise.resolve(new window.Response(jsonData, httpResponse));
+  return new window.Response(jsonData, httpResponse);
 };
 
 const generateSolutionEUIFetch = () => {

@@ -62,7 +62,12 @@ export const EUI = React.createClass({
   },
 
   componentDidMount() {
-    this.refs.snackbarSimulateBackend.show();
+    // this.fetchExercises().catch(() => this.refs.snackbarSimulateBackend.show());
+    this.fetchExercises().catch((e) => {
+      if (__WEBPACK_DEV_SERVER_DEBUG__) console.error(e);
+
+      this.refs.snackbarSimulateBackend.show()
+    });
   },
 
   setBase(options) {
@@ -77,17 +82,10 @@ export const EUI = React.createClass({
     }
   },
 
-  dismissedSimulateBackend() {
-    if (!this.simulatedBackend) this.fetchExercises();
-
-    this.setState({ noSnackbarSimulateBackend: true });
-  },
-
   simulateBackend() {
-    this.simulatedBackend = true;
     this.refs.snackbarSimulateBackend.dismiss();
     require('../webpack-dev-server-fetch');
-    this.fetchExercises();
+    this.fetchExercises().catch(e => console.error(e));
   },
 
   processFetchedExercises(json) {
@@ -125,12 +123,12 @@ export const EUI = React.createClass({
   },
 
   fetchExercises() {
-    fetch(`${ this.baseServer }/listfiles/exercise/json`, { mode: 'cors' })
+    return fetch(`${ this.baseServer }/listfiles/exercise/json`, { mode: 'cors' })
     .then(response => response.json())
     .then(json => {
       this.processFetchedExercises(json);
-    })
-    .catch(e => console.error(e));
+    });
+    // .catch(e => console.error(e));
   },
 
   setExerciseListWidth() {
@@ -346,10 +344,9 @@ export const EUI = React.createClass({
           { !this.state.noSnackbarSimulateBackend?
             <Snackbar
               action="Simulate"
-              autoHideDuration={ 10000 }
+              autoHideDuration={ 0 }
               message="Backend"
               onActionTouchTap={ this.simulateBackend }
-              onDismiss={ this.dismissedSimulateBackend }
               ref="snackbarSimulateBackend"/> :
             null
           }

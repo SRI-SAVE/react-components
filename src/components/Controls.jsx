@@ -76,7 +76,7 @@ export const Controls = React.createClass({
 
   componentDidMount() {
     if (tooltrayItems == null) {
-      setTimeout(this.fetchTooltray, 1000);
+      this.fetchTooltray();
     }
   },
 
