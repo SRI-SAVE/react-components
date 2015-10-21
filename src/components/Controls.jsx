@@ -1,7 +1,3 @@
-/*global __WEBPACK_DEV_SERVER_DEBUG__*/
-if (__WEBPACK_DEV_SERVER_DEBUG__) {
-  require('../webpack-dev-server-util');
-}
 
 import React from 'react';
 import 'whatwg-fetch';
@@ -81,7 +77,7 @@ export const Controls = React.createClass({
   },
 
   fetchTooltray() {
-    fetch(`${ this.props.baseServerAddress }/inventory`, { mode: 'cors' })
+    fetch(`${ this.props.baseServerAddress }${ this.isCAT()? '/CAT' : '' }/inventory`, { mode: 'cors' })
     .then(response => response.json())
     .then(json => {
       tooltrayItems = json.tooltray;

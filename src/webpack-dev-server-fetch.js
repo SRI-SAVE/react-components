@@ -11,7 +11,7 @@ let instructorMode = true;
 const routeHandler = (route, options) => {
   switch (route) {
   case 'http://localhost:3001/CAT/inventory':
-    return inventoryCATFetch();
+    return delayResponse(500, inventoryCATFetch());
   case 'http://localhost:3001/inventory':
   case 'http://localhost:3001/PutExercise/inventory':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/inventory':
@@ -63,7 +63,7 @@ const inventoryCATFetch = () => {
     },
   ]);
 
-  return Promise.resolve(new window.Response(`{ "tooltray": ${ fakeData } }`, httpResponse));
+  return new window.Response(`{ "tooltray": ${ fakeData } }`, httpResponse);
 };
 
 const inventoryEUIFetch = () => {

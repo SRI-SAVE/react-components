@@ -1,16 +1,18 @@
 
+window._EntityLibrary = true;
+
 export const _dSAVE = {
-    createSemanticAsset() {
-      console.log(arguments);
-    },
+  createSemanticAsset() {
+    console.log(arguments);
+  },
 
-    installAutoLoads() {
-      console.log(arguments);
-    },
+  installAutoLoads() {
+    console.log(arguments);
+  },
 
-    setBaseServerAddress() {
-      console.log(arguments);
-    },
+  setBaseServerAddress() {
+    console.log(arguments);
+  },
 };
 
 const fakeSandbox = () => {
