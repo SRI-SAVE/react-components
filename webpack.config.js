@@ -2,6 +2,7 @@
 'use strict';
 
 let HtmlWebpackPlugin = require('html-webpack-plugin');
+let ProgressBarPlugin = require('progress-bar-webpack-plugin');
 // let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let webpack = require('webpack');
 let merge = require('webpack-merge');
@@ -42,6 +43,7 @@ let common = {
     configFile: '.eslintrc',
   },
   plugins: [
+    new ProgressBarPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
       '__WEBPACK_SAVE_MODE__': JSON.stringify(wpSandboxMode),

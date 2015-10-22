@@ -11,6 +11,7 @@
     "comma-dangle": [ 2, "always-multiline" ],
     "no-undef": 2,
     "no-unused-vars": [ 2, { "vars": "all", "args": "after-used" }],
+    "no-empty-pattern": 2,
     "comma-spacing": 2,
     "consistent-return": 0,
     "strict": 0,

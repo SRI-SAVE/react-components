@@ -54,7 +54,6 @@ export const CAT = React.createClass({
   },
 
   componentDidMount() {
-    // this.fetchExercises().catch(() => this.refs.snackbarSimulateBackend.show());
     this.fetchExercises().catch((e) => {
       console.error(e);
       this.refs.snackbarSimulateBackend.show()
@@ -118,7 +117,6 @@ export const CAT = React.createClass({
     .then(json => {
       this.processFetchedExercises(json);
     });
-    // .catch(e => console.error(e));
   },
 
   setExerciseListWidth() {
