@@ -1,7 +1,4 @@
-/*global __WEBPACK_DEV_SERVER_DEBUG__*/
-if (__WEBPACK_DEV_SERVER_DEBUG__) {
-  require('../webpack-dev-server-fetch');
-}
+/*global SAVE2*/
 
 import React from 'react';
 import Controls from './Controls.jsx';
@@ -64,8 +61,7 @@ export const EUI = React.createClass({
   componentDidMount() {
     // this.fetchExercises().catch(() => this.refs.snackbarSimulateBackend.show());
     this.fetchExercises().catch((e) => {
-      if (__WEBPACK_DEV_SERVER_DEBUG__) console.error(e);
-
+      console.error(e);
       this.refs.snackbarSimulateBackend.show()
     });
   },
@@ -77,8 +73,8 @@ export const EUI = React.createClass({
     this.baseServerAddress = this.baseServer + exercise;
 
     if (exercise !== '') {
-      window._dSAVE.setBaseServerAddress(this.baseServerAddress);
-      // call window._dSAVE.issueautoloads...
+      SAVE2.vwf.view.setBaseServerAddress(this.baseServerAddress);
+      // call issueautoloads...
     }
   },
 

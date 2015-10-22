@@ -1,3 +1,4 @@
+/*global SAVE2*/
 
 import React from 'react';
 import 'whatwg-fetch';
@@ -125,7 +126,7 @@ export const Controls = React.createClass({
 
     tooltrayItems.splice(itemIdx, 1);
     this.setState({ tooltrayItems: tooltrayItems });
-    window._dSAVE.createSemanticAsset(name, assetURL, KbId, grouping);
+    SAVE2.vwf.view.createSemanticAsset(name, assetURL, KbId, grouping);
     this.props.onToolTrayItemClick(itemIdx);
   },
 

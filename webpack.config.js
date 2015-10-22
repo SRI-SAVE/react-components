@@ -7,6 +7,7 @@ let webpack = require('webpack');
 let merge = require('webpack-merge');
 let path = require('path'); //.join(__dirname, 'build');
 let wdsDebug = false;
+let wpSandboxMode = process.env[ 'SAVE_MODE' ] || 'CAT';
 
 // let TARGET = process.env.TARGET;
 let ROOT_PATH = path.resolve(__dirname);
@@ -42,7 +43,10 @@ let common = {
   },
   plugins: [
     new webpack.NoErrorsPlugin(),
-    new webpack.DefinePlugin({ '__WEBPACK_DEV_SERVER_DEBUG__': wdsDebug }),
+    new webpack.DefinePlugin({
+      '__WEBPACK_SAVE_MODE__': JSON.stringify(wpSandboxMode),
+      '__WEBPACK_DEV_SERVER_DEBUG__': wdsDebug,
+    }),
     // new ExtractTextPlugin('bundle.css')
   ],
 };

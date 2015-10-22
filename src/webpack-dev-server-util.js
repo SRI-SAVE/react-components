@@ -1,5 +1,5 @@
-
-window._EntityLibrary = true;
+/*global __WEBPACK_SAVE_MODE__*/
+if (__WEBPACK_SAVE_MODE__ === 'CAT') window._EntityLibrary = { };
 
 export const _dSAVE = {
   createSemanticAsset() {
