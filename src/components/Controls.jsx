@@ -8,11 +8,12 @@ import LinearProgress from 'material-ui/lib/linear-progress';
 import ActionRestore from 'material-ui/lib/svg-icons/action/restore';
 import ActionBackup from 'material-ui/lib/svg-icons/action/backup';
 import MenuDivider from 'material-ui/lib/menus/menu-divider';
-import Checkbox from 'material-ui/lib/checkbox';
 import TooltrayList from './TooltrayList';
 import ExerciseNameField from './ExerciseNameField';
+import CheckboxListItems from './CheckboxListItems';
 
 let tooltrayItems = null;
+let staticItems = [ ];
 
 export const Controls = React.createClass({
 
@@ -21,6 +22,7 @@ export const Controls = React.createClass({
       instructorMode: false,
       loaded: false,
       tooltrayItems: tooltrayItems,
+      staticItems: staticItems,
     };
   },
 
@@ -95,7 +97,8 @@ export const Controls = React.createClass({
 
   resetAnd(andFunc) {
     tooltrayItems = null;
-    this.setState({ tooltrayItems: tooltrayItems });
+    staticItems = [ ];
+    this.setState({ tooltrayItems: tooltrayItems, staticItems: staticItems });
 
     if (andFunc) andFunc();
   },
@@ -124,9 +127,13 @@ export const Controls = React.createClass({
     const assetURL = json[ 0 ].assetURL;
     const KbId = json[ 0 ].KbId;
     const grouping = json[ 0 ].grouping;
+    const spliced = tooltrayItems.splice(itemIdx, 1);
 
-    tooltrayItems.splice(itemIdx, 1);
-    this.setState({ tooltrayItems: tooltrayItems });
+    staticItems.push(spliced[ 0 ]);
+    this.setState({
+      tooltrayItems: tooltrayItems,
+      staticItems: staticItems,
+    });
     SAVE2.vwf.view.createSemanticAsset(name, assetURL, KbId, grouping);
     this.props.onToolTrayItemClick(itemIdx);
   },
@@ -157,33 +164,38 @@ export const Controls = React.createClass({
       },
     };
 
-    return (
-      <div ref="container" style={ styles.container }>
-        { this.state.loaded?
-          <TooltrayList
-            baseServerAddress={ this.props.baseServerAddress }
-            container={ false }
-            items={ this.state.tooltrayItems }
-            onItemClick={ this.handleToolTrayItemClick }/> :
-          <LinearProgress mode="indeterminate"/>
+    return <div ref="container" style={ styles.container }>
+      { this.state.loaded?
+        <TooltrayList
+          baseServerAddress={ this.props.baseServerAddress }
+          container={ false }
+          items={ this.state.tooltrayItems }
+          onItemClick={ this.handleToolTrayItemClick }/> :
+        <LinearProgress mode="indeterminate"/>
+      }
+      <MenuDivider/>
+      <List subheader="Controls">
+        <ListItem leftIcon={ <ActionRestore/> } onClick={ this.handleResetClick } primaryText="Reset"/>
+        { this.isCAT()?
+          <div>
+            <CheckboxListItems items={ this.state.staticItems } onItemClick={ this.handleStaticCBClick }/>
+            <ExerciseNameField/>
+          </div> :
+          null
         }
-        <MenuDivider/>
-        <List subheader="Controls">
-          { this.isCAT()? <ListItem leftIcon={ <Checkbox name="cb1"/> } onClick={ this.handleStaticClick } primaryText="TT Item 1"/> : null }
-          { this.isCAT()? <ListItem leftIcon={ <Checkbox name="cb2"/> }onClick={ this.handleStaticClick } primaryText="TT Item 2"/> : null }
-          <ListItem leftIcon={ <ActionRestore/> } onClick={ this.handleResetClick } primaryText="Reset"/>
-          { this.isCAT()? <ExerciseNameField/> : null }
-          { this.hasEUIAssessmentItemAvailable()?
-            <ListItem leftIcon={ <ActionBackup/> } onClick={ this.props.onAssessment } primaryText="Assessment"/> :
-            null
-          }
-          { this.hasSaveItemAvaialable()?
-            <ListItem leftIcon={ <ActionBackup/> } onClick={ this.handleSaveClick } primaryText={ this.props.savePrimaryText }/> :
-            null
-          }
-        </List>
-      </div>
-    )
+        { this.hasEUIAssessmentItemAvailable()?
+          <ListItem leftIcon={ <ActionBackup/> } onClick={ this.props.onAssessment } primaryText="Assessment"/> :
+          null
+        }
+        { this.hasSaveItemAvaialable()?
+          <ListItem
+            leftIcon={ <ActionBackup/> }
+            onClick={ this.handleSaveClick }
+            primaryText={ this.props.savePrimaryText }/> :
+          null
+        }
+      </List>
+    </div>;
   },
 });
 
