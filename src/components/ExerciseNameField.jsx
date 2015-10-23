@@ -41,21 +41,19 @@ export const ExerciseNameField = React.createClass({
       },
     };
 
-    return (
-      <div>
-        <div style={ styles.icons }>
-          <ActionInput/>
-        </div>
-        <TextField
-          defaultValue=""
-          errorStyle={{ color: Colors.red600 }}
-          errorText={ this.state.errorTextExerciseName }
-          floatingLabelText="Exercise Path and Name"
-          hintText="Ex. /PutExercise"
-          onChange={ this.onExerciseNameChange }
-          style={ styles.textfield }/>
+    return <div>
+      <div style={ styles.icons }>
+        <ActionInput/>
       </div>
-    );
+      <TextField
+        defaultValue=""
+        errorStyle={{ color: Colors.red600 }}
+        errorText={ this.state.errorTextExerciseName }
+        floatingLabelText="Exercise Path and Name"
+        hintText="Ex. /PutExercise"
+        onChange={ this.onExerciseNameChange }
+        style={ styles.textfield }/>
+    </div>
   },
 });
 

@@ -66,31 +66,28 @@ export const TooltrayList = React.createClass({
         overflow: 'hidden',
       },
     };
-    const list = (
-      <List subheader={ this.props.subheader || 'Tooltray Items' }>
-        { this.props.items != null?
-          this.props.items.map((ttObj, idx) =>
-            <ListItem
-              key={ ttObj.ID }
-              leftIcon={ <MapsTerrain/> }
-              onClick={ this.handleFetchToolTrayItem.bind(this, idx) }
-              primaryText={ ttObj.name }/>
-            ) :
+    const { clearFix, container, items, subheader } = this.props;
+    const list = <List subheader={ subheader || 'Tooltray Items' }>
+        { items != null?
+          items.map((ttObj, idx) =>
+          <ListItem
+            key={ ttObj.ID }
+            leftIcon={ <MapsTerrain/> }
+            onClick={ this.handleFetchToolTrayItem.bind(this, idx) }
+            primaryText={ ttObj.name }/>
+          ) :
           null
         }
       </List>
-    );
 
-    return this.props.container? (
-      <div className={ this.props.clearFix ? 'clearfix' : '' }>
-        <div style={ styles.wrapperDiv }>
-          <div style={ styles.container }>
-            { list }
-          </div>
-          <BottomTear/>
+    return container? <div className={ clearFix? 'clearfix' : '' }>
+      <div style={ styles.wrapperDiv }>
+        <div style={ styles.container }>
+          { list }
         </div>
+        <BottomTear/>
       </div>
-    ) : list;
+    </div> : list
   },
 });
 

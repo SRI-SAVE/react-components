@@ -242,55 +242,53 @@ export const CAT = React.createClass({
       tooltip: 'Controls',
     };
 
-    return (
-        <Paper style={ styles.paper }>
-          <div style={ styles.toolbarBlock }>
-            <Toolbar style={{ backgroundColor: canvasColor }}>
-              <ToolbarGroup float="left" key={ 0 }>
-                <ToolbarTitle style={ styles.toolbarTitle } text="exercise"/>
-                  <TextField
-                    defaultValue={ this.props.baseServerHost }
-                    errorStyle={{ color: Colors.red600 }}
-                    errorText={ serverErrorText }
-                    floatingLabelText="Exercise Server"
-                    hintText="http://<host>:<port>"
-                    onChange={ this.handleServerInputChange }
-                    ref="exerciseServer"
-                    style={ styles.textfield }/>
-                { loadedExerciseList?
-                  <DropDownMenu
-                    menuItems={ exerciseList }
-                    onChange={ this.handleExerciseSelectChange }
-                    ref="exerciseList"
-                    selectedIndex={ selectedExerciseListIndex }
-                    style={ styles.exerciseDropdown }/> :
-                  <CircularProgress mode="indeterminate" size={ .5 } style={ styles.exerciseProgress }/>
-                }
-              </ToolbarGroup>
-              <ToolbarGroup float="right" key={ 1 }>
-                <ToolbarSeparator/>
-                <div style={{ width: 116 }}>
-                  <IconButton { ...controlsIconButtonProps }>
-                    <NavigationMenu/>
-                  </IconButton>
-                </div>
-              </ToolbarGroup>
-            </Toolbar>
-          </div>
-          <ComponentDialog onDismiss={ this.dialogDismiss } ref="controlsComponentDialog" title="EUI Controls">
-            <Controls { ...controlsProps }/>
-          </ComponentDialog>
-          { !this.state.noSnackbarSimulateBackend?
-            <Snackbar
-              action="Simulate"
-              autoHideDuration={ 0 }
-              message="Backend"
-              onActionTouchTap={ this.simulateBackend }
-              ref="snackbarSimulateBackend"/> :
-            null
-          }
-        </Paper>
-    );
+    return <Paper style={ styles.paper }>
+      <div style={ styles.toolbarBlock }>
+        <Toolbar style={{ backgroundColor: canvasColor }}>
+          <ToolbarGroup float="left" key={ 0 }>
+            <ToolbarTitle style={ styles.toolbarTitle } text="exercise"/>
+              <TextField
+                defaultValue={ this.props.baseServerHost }
+                errorStyle={{ color: Colors.red600 }}
+                errorText={ serverErrorText }
+                floatingLabelText="Exercise Server"
+                hintText="http://<host>:<port>"
+                onChange={ this.handleServerInputChange }
+                ref="exerciseServer"
+                style={ styles.textfield }/>
+            { loadedExerciseList?
+              <DropDownMenu
+                menuItems={ exerciseList }
+                onChange={ this.handleExerciseSelectChange }
+                ref="exerciseList"
+                selectedIndex={ selectedExerciseListIndex }
+                style={ styles.exerciseDropdown }/> :
+              <CircularProgress mode="indeterminate" size={ .5 } style={ styles.exerciseProgress }/>
+            }
+          </ToolbarGroup>
+          <ToolbarGroup float="right" key={ 1 }>
+            <ToolbarSeparator/>
+            <div style={{ width: 116 }}>
+              <IconButton { ...controlsIconButtonProps }>
+                <NavigationMenu/>
+              </IconButton>
+            </div>
+          </ToolbarGroup>
+        </Toolbar>
+      </div>
+      <ComponentDialog onDismiss={ this.dialogDismiss } ref="controlsComponentDialog" title="EUI Controls">
+        <Controls { ...controlsProps }/>
+      </ComponentDialog>
+      { !this.state.noSnackbarSimulateBackend?
+        <Snackbar
+          action="Simulate"
+          autoHideDuration={ 0 }
+          message="Backend"
+          onActionTouchTap={ this.simulateBackend }
+          ref="snackbarSimulateBackend"/> :
+        null
+      }
+    </Paper>;
   },
 });
 
