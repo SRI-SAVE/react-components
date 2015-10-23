@@ -8,6 +8,7 @@ import LinearProgress from 'material-ui/lib/linear-progress';
 import ActionRestore from 'material-ui/lib/svg-icons/action/restore';
 import ActionBackup from 'material-ui/lib/svg-icons/action/backup';
 import MenuDivider from 'material-ui/lib/menus/menu-divider';
+import Checkbox from 'material-ui/lib/checkbox';
 import TooltrayList from './TooltrayList';
 import ExerciseNameField from './ExerciseNameField';
 
@@ -168,6 +169,8 @@ export const Controls = React.createClass({
         }
         <MenuDivider/>
         <List subheader="Controls">
+          { this.isCAT()? <ListItem leftIcon={ <Checkbox name="cb1"/> } onClick={ this.handleStaticClick } primaryText="TT Item 1"/> : null }
+          { this.isCAT()? <ListItem leftIcon={ <Checkbox name="cb2"/> }onClick={ this.handleStaticClick } primaryText="TT Item 2"/> : null }
           <ListItem leftIcon={ <ActionRestore/> } onClick={ this.handleResetClick } primaryText="Reset"/>
           { this.isCAT()? <ExerciseNameField/> : null }
           { this.hasEUIAssessmentItemAvailable()?
