@@ -13,14 +13,12 @@ const routeHandler = (route, options) => {
   case 'http://localhost:3001/CAT/inventory':
     return delayResponse(500, inventoryCATFetch());
   case 'http://localhost:3001/inventory':
-  case 'http://localhost:3001/PutExercise/inventory':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/inventory':
     return delayResponse(1500, inventoryEUIFetch());
   case 'http://localhost:3001/query':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/query':
     return queryEUIFetch(options);
   case 'http://localhost:3001/object':
-  case 'http://localhost:3001/PutExercise/object':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/object':
     return objectEUIFetch(options);
   case 'http://localhost:3001/generateSolution':
@@ -112,6 +110,9 @@ const objectEUIFetch = options => {
       switch (o.ID) {
       case 'myM4':
         jsonData = JSON.stringify([ M4Grouping ]);
+        break;
+      case 'myRange':
+        jsonData = JSON.stringify([ RangeGrouping ]);
         break;
       default:
         return Promise.reject(new Error('Tool tray ID not handled for object create: ' + o.ID));
