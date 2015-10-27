@@ -93,22 +93,18 @@ export const CAT = React.createClass({
     this.setExerciseListWidth();
   },
 
-  saveExercise() {
-    // let { controlsComponentDialog, snackbarStudentMode, snackbarInstructorMode } = this.refs;
-    //
-    // fetch(`${ this.baseServerAddress }/generateSolution`, { mode: 'cors' })
-    // .then(() => {
-    //   if (controlsComponentDialog.isOpen()) controlsComponentDialog.dismiss(); // do this first since it does a setState!
-    //
-    //   this.setState({
-    //     reloadTray: true,
-    //   });
-    //   snackbarStudentMode.show();
-    // })
-    // .catch(e => {
-    //   snackbarInstructorMode.show();
-    //   console.error(e);
-    // });
+  saveExercise(exercise, staticIds) {
+    let { controlsComponentDialog } = this.refs;
+
+    fetch(`${ this.baseServerAddress }/CAT/finishExercise`, {
+      method: 'post',
+      mode: 'cors',
+      body: `save=${JSON.stringify({ exercise: exercise, auto: staticIds })}`,
+    })
+    .then(() => {
+      if (controlsComponentDialog.isOpen()) controlsComponentDialog.dismiss(); // do this first since it does a setState!
+    })
+    .catch(e => console.error(e));
   },
 
   fetchExercises() {

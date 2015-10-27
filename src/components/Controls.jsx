@@ -118,7 +118,11 @@ export const Controls = React.createClass({
   handleSaveClick(/* e */) {
     if (this.isEUI()) this.setState({ instructorMode: false });
 
-    this.props.onSave();
+    if (this.isCAT()) {
+      this.props.onSave(this.refs.exerciseNameField.getValue(), staticItems.map(item => item.ID));
+    } else {
+      this.props.onSave();
+    }
   },
 
   handleToolTrayItemClick(itemIdx, json) {
@@ -164,7 +168,7 @@ export const Controls = React.createClass({
       },
     };
 
-    return <div ref="container" style={ styles.container }>
+    return <div style={ styles.container }>
       { this.state.loaded?
         <TooltrayList
           baseServerAddress={ this.props.baseServerAddress }
@@ -179,7 +183,7 @@ export const Controls = React.createClass({
         { this.isCAT()?
           <div>
             <CheckboxListItems items={ this.state.staticItems } onItemClick={ this.handleStaticCBClick }/>
-            <ExerciseNameField/>
+            <ExerciseNameField ref="exerciseNameField"/>
           </div> :
           null
         }

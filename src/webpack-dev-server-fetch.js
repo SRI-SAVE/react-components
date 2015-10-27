@@ -26,6 +26,8 @@ const routeHandler = (route, options) => {
     return generateSolutionEUIFetch();
   case 'http://localhost:3001/listfiles/exercise/json':
     return delayResponse(1000, exerciseFetch());
+  case 'http://localhost:3001/CAT/finishExercise':
+    return finishExercise(options);
   default:
     return Promise.reject(new Error('fakeFetch has no handler for: ' + route));
   }
@@ -79,6 +81,7 @@ const generateSolutionEUIFetch = () => {
   instructorMode = false;
   return Promise.resolve(new window.Response(null, httpResponse));
 };
+
 const queryEUIFetch = options => {
   const body = options.body;
   const o = JSON.parse(body.replace('query=', ''));
@@ -121,6 +124,14 @@ const objectEUIFetch = options => {
   }
 
   return Promise.resolve(new window.Response(jsonData, httpResponse));
+};
+
+const finishExercise = options => {
+  const body = options.body;
+  const o = JSON.parse(body.replace('save=', ''));
+
+  console.log(o);
+  return Promise.resolve(new window.Response(null, httpResponse));
 };
 
 export const fakeFetch = () => {

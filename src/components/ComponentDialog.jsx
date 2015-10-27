@@ -2,13 +2,7 @@
 import React from 'react';
 import Dialog from 'material-ui/lib/dialog';
 
-// import ReactRenderVisualizer from 'react-render-visualizer';
-
 export const ComponentDialog = React.createClass({
-
-  mixins: [
-    // ReactRenderVisualizer
-  ],
 
   getInitialState() {
     return {

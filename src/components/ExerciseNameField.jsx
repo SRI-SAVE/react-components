@@ -14,6 +14,10 @@ export const ExerciseNameField = React.createClass({
     };
   },
 
+  getValue() {
+    return this.refs.textField.getValue();
+  },
+
   onExerciseNameChange(e) {
     const value = e.target.value;
     const isNumeric = !isNaN(parseFloat(value)) && isFinite(value);
@@ -52,6 +56,7 @@ export const ExerciseNameField = React.createClass({
         floatingLabelText="Exercise Path and Name"
         hintText="Ex. /PutExercise"
         onChange={ this.onExerciseNameChange }
+        ref="textField"
         style={ styles.textfield }/>
     </div>
   },
