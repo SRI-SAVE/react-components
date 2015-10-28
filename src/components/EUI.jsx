@@ -59,8 +59,7 @@ export const EUI = React.createClass({
   },
 
   componentDidMount() {
-    // this.fetchExercises().catch(() => this.refs.snackbarSimulateBackend.show());
-    this.fetchExercises().catch((e) => {
+    this.fetchExercises().catch(e => {
       console.error(e);
       this.refs.snackbarSimulateBackend.show()
     });
@@ -71,11 +70,8 @@ export const EUI = React.createClass({
 
     this.baseServer = host || this.baseServer;
     this.baseServerAddress = this.baseServer + exercise;
-
-    if (exercise !== '') {
-      SAVE2.vwf.view.setBaseServerAddress(this.baseServerAddress);
-      // call issueautoloads...
-    }
+    // SAVE2.lib.view.setBaseServerAddress(this.baseServerAddress);
+    // call issueautoloads...
   },
 
   simulateBackend() {
@@ -121,10 +117,7 @@ export const EUI = React.createClass({
   fetchExercises() {
     return fetch(`${ this.baseServer }/listfiles/exercise/json`, { mode: 'cors' })
     .then(response => response.json())
-    .then(json => {
-      this.processFetchedExercises(json);
-    });
-    // .catch(e => console.error(e));
+    .then(json => this.processFetchedExercises(json));
   },
 
   setExerciseListWidth() {
@@ -156,6 +149,8 @@ export const EUI = React.createClass({
   },
 
   handleControlsClick() {
+    SAVE2.lib.view.setBaseServerAddress(this.baseServerAddress);
+    // call issueautoloads...
     this.refs.controlsComponentDialog.show();
   },
 

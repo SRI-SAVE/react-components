@@ -2,19 +2,26 @@
 'use strict';
 
 let HtmlWebpackPlugin = require('html-webpack-plugin');
-let ProgressBarPlugin = require('progress-bar-webpack-plugin');
 // let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let webpack = require('webpack');
 let merge = require('webpack-merge');
 let path = require('path'); //.join(__dirname, 'build');
 let wdsDebug = false;
-let wpSandboxMode = process.env[ 'SAVE_MODE' ] || 'CAT';
+let wpSandboxMode = process.env.SAVE_MODE || 'CAT';
+let wdsNoff = false;
 
 // let TARGET = process.env.TARGET;
 let ROOT_PATH = path.resolve(__dirname);
 
 if (process.argv[ 1 ].match(/webpack-dev-server$/) != null) {
   wdsDebug = true;
+}
+
+if (process.argv.length > 2) {
+  for (let arg of process.argv) {
+    if (arg.match(/-eui/)) wpSandboxMode = 'EUI';
+    if (arg.match(/-noff/)) wdsNoff = true;
+  }
 }
 
 let common = {
@@ -43,10 +50,10 @@ let common = {
     configFile: '.eslintrc',
   },
   plugins: [
-    new ProgressBarPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.DefinePlugin({
       '__WEBPACK_SAVE_MODE__': JSON.stringify(wpSandboxMode),
+      '__WEBPACK_DEV_SERVER_NO_FF__': wdsNoff,
       '__WEBPACK_DEV_SERVER_DEBUG__': wdsDebug,
     }),
     // new ExtractTextPlugin('bundle.css')

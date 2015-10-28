@@ -138,7 +138,7 @@ export const Controls = React.createClass({
       tooltrayItems: tooltrayItems,
       staticItems: staticItems,
     });
-    SAVE2.vwf.view.createSemanticAsset(name, assetURL, KbId, grouping);
+    SAVE2.lib.view.createSemanticAsset(name, assetURL, KbId, grouping);
     this.props.onToolTrayItemClick(itemIdx);
   },
 
