@@ -1,6 +1,12 @@
 /*global SAVE2*/
 
 import React from 'react';
+
+import { PureRenderMixin } from 'react/addons';
+import joyride from 'react-joyride';
+// import '../react-joyride.css';
+import 'react-joyride/lib/styles/react-joyride.css';
+
 import Controls from './Controls.jsx';
 import ComponentDialog from './ComponentDialog.jsx';
 import MaterialUITheme from '../mixins/material-ui-theme';
@@ -23,7 +29,9 @@ const { Colors, Spacing  } = Styles;
 export const CAT = React.createClass({
 
   mixins: [
+    joyride.Mixin,
     MaterialUITheme,
+    PureRenderMixin,
   ],
 
   propTypes: {
@@ -51,10 +59,35 @@ export const CAT = React.createClass({
     const exercisePathname = exerciseList.length? exerciseList[ selectedExerciseListIndex ].payload : '';
 
     this.setBase({ host: this.props.baseServerHost, exercise: exercisePathname });
+    this.steps = [{
+        text: 'React components.<br/><br/>SAVE Semantic 3D UI for content assembly and exercises',
+        selector: '.rc-cat-main',
+        position: 'bottom',
+      }, {
+        title: 'CAT Controls',
+        text: 'Controls and tooltray items',
+        selector: '.rc-cat-controls',
+        position: 'bottom',
+      },
+    ];
+    this.joyrideSetOptions({
+        debug: true,
+        completeCallback: (steps, skipped) => {
+            console.log('completeCallback', steps, skipped);
+        },
+        showSkipButton: true,
+        stepCallback: (step) => {
+            console.log('stepCallback', step);
+        },
+        type: 'guided',
+    });
+
   },
 
   componentDidMount() {
-    this.fetchExercises().catch(e => {
+    this.fetchExercises()
+    .then(() => this.joyrideAddSteps(this.steps, true))
+    .catch(e => {
       console.error(e);
       this.refs.snackbarSimulateBackend.show()
     });
@@ -229,6 +262,7 @@ export const CAT = React.createClass({
       type: 'CAT',
     };
     const controlsIconButtonProps = {
+      className: 'rc-cat-controls',
       disabled: !loadedExerciseList,
       onClick: this.handleControlsClick,
       tooltip: 'Controls',
@@ -236,7 +270,7 @@ export const CAT = React.createClass({
 
     return <Paper style={ styles.paper }>
       <div style={ styles.toolbarBlock }>
-        <Toolbar style={{ backgroundColor: canvasColor }}>
+        <Toolbar className="rc-cat-main" style={{ backgroundColor: canvasColor }}>
           <ToolbarGroup float="left" key={ 0 }>
             <ToolbarTitle style={ styles.toolbarTitle } text="exercise"/>
               <TextField

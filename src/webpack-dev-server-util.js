@@ -3,14 +3,17 @@ if (__WEBPACK_SAVE_MODE__ === 'CAT') window._EntityLibrary = { };
 
 export default  {
   createSemanticAsset() {
-    console.log(arguments);
+    console.info('createSemanticAsset()');
+    console.info(arguments);
   },
 
   installAutoLoads() {
-    console.log(arguments);
+    console.info('installAutoLoads');
+    console.info(arguments);
   },
 
   setBaseServerAddress() {
-    console.log(arguments);
+    console.info('setBaseServerAddress');
+    console.info(arguments);
   },
 };

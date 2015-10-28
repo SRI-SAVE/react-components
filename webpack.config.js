@@ -42,7 +42,10 @@ let common = {
     ],
     loaders: [
       { test: /\.jsx?$/, loaders: [ 'react-hot', 'babel' ], exclude: /node_modules/ },
-      { test: /\.css$/, loaders: [ 'style', 'css' ], include: path.resolve(ROOT_PATH, 'src') },
+      { test: /\.css$/, loaders: [ 'style', 'css' ], include: [
+        path.resolve(ROOT_PATH, 'src'),
+        path.resolve(ROOT_PATH, 'node_modules/react-joyride/lib/styles'),
+      ]},
       // { test: /\.css$/, loader: ExtractTextPlugin.extract("style-loader", "css-loader") }
     ],
   },
