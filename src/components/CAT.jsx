@@ -104,7 +104,7 @@ export const CAT = React.createClass({
 
   simulateBackend() {
     this.refs.snackbarSimulateBackend.dismiss();
-    require('../webpack-dev-server-fetch');
+    SAVE2.simulate();
     this.fetchExercises().catch(e => console.error(e));
   },
 

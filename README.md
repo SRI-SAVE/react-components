@@ -8,7 +8,10 @@ After cloning the repository, install dependencies:
 cd <project folder>/react-components
 npm install
 ```
-## Run
+## Demo
+http://sri-save.github.io/react-components
+
+## Development
 Run a local dev server **CAT**:
 ```
 npm run hot
