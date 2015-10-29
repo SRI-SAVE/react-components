@@ -20795,6 +20795,7 @@
 	'use strict';
 
 	var SAVE = undefined;
+	var host = window.location.hostname;
 
 	if (false) {
 	  // for webpack-dev-server auto simulate
@@ -20807,7 +20808,7 @@
 	  VERSION: '2.0.1',
 	  lib: { view: SAVE },
 	  isCAT: function isCAT() {
-	    return window._EntityLibrary != null || window.location.hostname === 'save.github.io';
+	    return window._EntityLibrary != null || host === 'sri-save.github.io' || host === '';
 	  },
 	  simulate: function simulate() {
 	    window.SAVE2.lib.view = __webpack_require__(163);
