@@ -71,12 +71,25 @@
 
 	var _componentsCAT = __webpack_require__(275);
 
+	// let steps = [{
+	//     text: 'React components.<br/><br/>SAVE Semantic 3D UI for content assembly and exercises',
+	//     selector: '.rc-cat-main',
+	//     position: 'bottom',
+	//   }, {
+	//     title: 'CAT Controls',
+	//     text: 'Controls and tooltray items',
+	//     selector: '.rc-cat-controls',
+	//     position: 'bottom',
+	//   },
+	// ];
+
 	var elemDiv = document.createElement('div');
 
 	elemDiv.style.cssText = 'position:fixed;top:5px;left:5px;';
 	elemDiv.id = 'save-react-components';
 
 	if (SAVE2.isCAT()) {
+	  // React.render(<CAT steps={ steps }/>, elemDiv);
 	  _react2['default'].render(_react2['default'].createElement(_componentsCAT.CAT, null), elemDiv);
 	} else {
 	  _react2['default'].render(_react2['default'].createElement(_componentsEUI.EUI, null), elemDiv);
@@ -20795,7 +20808,7 @@
 	'use strict';
 
 	var SAVE = undefined;
-	var host = window.location.hostname;
+	var hostn = window.location.hostname;
 
 	if (false) {
 	  // for webpack-dev-server auto simulate
@@ -20808,7 +20821,7 @@
 	  VERSION: '2.0.1',
 	  lib: { view: SAVE },
 	  isCAT: function isCAT() {
-	    return window._EntityLibrary != null || host === 'sri-save.github.io' || host === '';
+	    return window._EntityLibrary != null || hostn === 'sri-save.github.io' || hostn === '';
 	  },
 	  simulate: function simulate() {
 	    window.SAVE2.lib.view = __webpack_require__(163);
@@ -21626,20 +21639,24 @@
 	  },
 
 	  simulateBackend: function simulateBackend() {
+	    var _this2 = this;
+
 	    this.refs.snackbarSimulateBackend.dismiss();
 	    SAVE2.simulate();
-	    this.fetchExercises()['catch'](function (e) {
+	    this.fetchExercises().then(function () {
+	      return _this2.joyrideAddSteps(_this2.steps, true);
+	    })['catch'](function (e) {
 	      return console.error(e);
 	    });
 	  },
 
 	  processFetchedExercises: function processFetchedExercises(json) {
-	    var _this2 = this;
+	    var _this3 = this;
 
 	    var list = this.state.exerciseList;
 
 	    json.forEach(function (e /*, i */) {
-	      var pathName = e.replace(_this2.baseServer, '');
+	      var pathName = e.replace(_this3.baseServer, '');
 
 	      list.push({
 	        payload: pathName,
@@ -21651,7 +21668,7 @@
 	  },
 
 	  saveSolution: function saveSolution() {
-	    var _this3 = this;
+	    var _this4 = this;
 
 	    var _refs = this.refs;
 	    var controlsComponentDialog = _refs.controlsComponentDialog;
@@ -21661,7 +21678,7 @@
 	    fetch(this.baseServerAddress + '/generateSolution', { mode: 'cors' }).then(function () {
 	      if (controlsComponentDialog.isOpen()) controlsComponentDialog.dismiss(); // do this first since it does a setState!
 
-	      _this3.setState({
+	      _this4.setState({
 	        reloadTray: true,
 	        instructorToggle: false
 	      });
@@ -21673,12 +21690,12 @@
 	  },
 
 	  fetchExercises: function fetchExercises() {
-	    var _this4 = this;
+	    var _this5 = this;
 
 	    return fetch(this.baseServer + '/listfiles/exercise/json', { mode: 'cors' }).then(function (response) {
 	      return response.json();
 	    }).then(function (json) {
-	      return _this4.processFetchedExercises(json);
+	      return _this5.processFetchedExercises(json);
 	    });
 	  },
 
@@ -35256,9 +35273,9 @@
 	  componentDidMount: function componentDidMount() {
 	    var _this = this;
 
-	    this.fetchExercises().then(function () {
-	      return _this.joyrideAddSteps(_this.steps, true);
-	    })['catch'](function (e) {
+	    this.fetchExercises()
+	    // .then(() => this.joyrideAddSteps(this.steps, true))
+	    ['catch'](function (e) {
 	      console.error(e);
 	      _this.refs.snackbarSimulateBackend.show();
 	    });
@@ -35277,7 +35294,9 @@
 	  simulateBackend: function simulateBackend() {
 	    this.refs.snackbarSimulateBackend.dismiss();
 	    SAVE2.simulate();
-	    this.fetchExercises()['catch'](function (e) {
+	    this.fetchExercises()
+	    // .then(() => this.joyrideAddSteps(this.steps, true))
+	    ['catch'](function (e) {
 	      return console.error(e);
 	    });
 	  },
@@ -35295,8 +35314,10 @@
 	        text: pathName
 	      });
 	    });
-	    this.setState({ loadedExerciseList: true });
-	    this.setExerciseListWidth();
+	    this.setState({ loadedExerciseList: true }, function () {
+	      _this2.setExerciseListWidth();
+	      _this2.joyrideAddSteps(_this2.steps, true);
+	    });
 	  },
 
 	  saveExercise: function saveExercise(exercise, staticIds) {
