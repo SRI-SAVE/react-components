@@ -77,7 +77,9 @@ export const EUI = React.createClass({
   simulateBackend() {
     this.refs.snackbarSimulateBackend.dismiss();
     SAVE2.simulate();
-    this.fetchExercises().catch(e => console.error(e));
+    this.fetchExercises()
+    .then(() => this.joyrideAddSteps(this.steps, true))
+    .catch(e => console.error(e));
   },
 
   processFetchedExercises(json) {
