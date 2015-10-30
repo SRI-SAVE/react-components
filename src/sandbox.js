@@ -2,7 +2,7 @@
 /*global __WEBPACK_DEV_SERVER_NO_FF__*/
 
 let SAVE;
-let host = window.location.hostname;
+let hostn = window.location.hostname;
 
 if (__WEBPACK_DEV_SERVER_DEBUG__) { // for webpack-dev-server auto simulate
   SAVE = require('./webpack-dev-server-util');
@@ -13,7 +13,7 @@ if (__WEBPACK_DEV_SERVER_DEBUG__) { // for webpack-dev-server auto simulate
 window.SAVE2 = {
   VERSION: '2.0.1',
   lib: { view: SAVE },
-  isCAT: () => window._EntityLibrary != null || host === 'sri-save.github.io' || host === '',
+  isCAT: () => window._EntityLibrary != null || hostn === 'sri-save.github.io' || hostn === '',
   simulate: () => {
     window.SAVE2.lib.view = require('./webpack-dev-server-util');
     require('./webpack-dev-server-fetch');

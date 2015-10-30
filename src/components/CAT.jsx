@@ -1,12 +1,9 @@
 /*global SAVE2*/
 
 import React from 'react';
-
 import { PureRenderMixin } from 'react/addons';
 import joyride from 'react-joyride';
-// import '../react-joyride.css';
 import 'react-joyride/lib/styles/react-joyride.css';
-
 import Controls from './Controls.jsx';
 import ComponentDialog from './ComponentDialog.jsx';
 import MaterialUITheme from '../mixins/material-ui-theme';
@@ -71,23 +68,20 @@ export const CAT = React.createClass({
       },
     ];
     this.joyrideSetOptions({
-        debug: true,
-        completeCallback: (steps, skipped) => {
-            console.log('completeCallback', steps, skipped);
-        },
-        showSkipButton: true,
-        stepCallback: (step) => {
-            console.log('stepCallback', step);
-        },
-        type: 'guided',
+      debug: true,
+      completeCallback: (steps, skipped) => {
+          console.log('completeCallback', steps, skipped);
+      },
+      showSkipButton: true,
+      stepCallback: (step) => {
+          console.log('stepCallback', step);
+      },
+      type: 'guided',
     });
-
   },
 
   componentDidMount() {
-    this.fetchExercises()
-    .then(() => this.joyrideAddSteps(this.steps, true))
-    .catch(e => {
+    this.fetchExercises().catch(e => {
       console.error(e);
       this.refs.snackbarSimulateBackend.show()
     });
@@ -105,9 +99,7 @@ export const CAT = React.createClass({
   simulateBackend() {
     this.refs.snackbarSimulateBackend.dismiss();
     SAVE2.simulate();
-    this.fetchExercises()
-    .then(() => this.joyrideAddSteps(this.steps, true))
-    .catch(e => console.error(e));
+    this.fetchExercises().catch(e => console.error(e));
   },
 
   processFetchedExercises(json) {
@@ -121,8 +113,10 @@ export const CAT = React.createClass({
         text: pathName,
       });
     });
-    this.setState({ loadedExerciseList: true });
-    this.setExerciseListWidth();
+    this.setState({ loadedExerciseList: true }, () => {
+      this.setExerciseListWidth();
+      this.joyrideAddSteps(this.steps, true);
+    });
   },
 
   saveExercise(exercise, staticIds) {

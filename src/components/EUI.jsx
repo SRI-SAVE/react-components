@@ -1,6 +1,9 @@
 /*global SAVE2*/
 
 import React from 'react';
+import { PureRenderMixin } from 'react/addons';
+import joyride from 'react-joyride';
+import 'react-joyride/lib/styles/react-joyride.css';
 import Controls from './Controls.jsx';
 import ComponentDialog from './ComponentDialog.jsx';
 import MaterialUITheme from '../mixins/material-ui-theme';
@@ -27,7 +30,9 @@ export const EUI = React.createClass({
 
   mixins: [
     // ReactRenderVisualizer,
+    joyride.Mixin,
     MaterialUITheme,
+    PureRenderMixin,
   ],
 
   propTypes: {
@@ -56,6 +61,18 @@ export const EUI = React.createClass({
     const exercisePathname = exerciseList.length? exerciseList[ selectedExerciseListIndex ].payload : '';
 
     this.setBase({ host: this.props.baseServerHost, exercise: exercisePathname });
+    this.steps = [{
+        text: 'React components.<br/><br/>SAVE Semantic 3D UI for content assembly and exercises',
+        selector: '.rc-eui-main',
+        position: 'bottom',
+      }, {
+        title: 'EUI Controls',
+        text: 'Controls and tooltray items',
+        selector: '.rc-eui-controls',
+        position: 'bottom',
+      },
+    ];
+    this.joyrideSetOptions({ type: 'guided' });
   },
 
   componentDidMount() {
@@ -77,9 +94,7 @@ export const EUI = React.createClass({
   simulateBackend() {
     this.refs.snackbarSimulateBackend.dismiss();
     SAVE2.simulate();
-    this.fetchExercises()
-    .then(() => this.joyrideAddSteps(this.steps, true))
-    .catch(e => console.error(e));
+    this.fetchExercises().catch(e => console.error(e));
   },
 
   processFetchedExercises(json) {
@@ -93,8 +108,10 @@ export const EUI = React.createClass({
         text: pathName,
       });
     });
-    this.setState({ loadedExerciseList: true });
-    this.setExerciseListWidth();
+    this.setState({ loadedExerciseList: true }, () => {
+      this.setExerciseListWidth();
+      this.joyrideAddSteps(this.steps, true);
+    });
   },
 
   saveSolution() {
@@ -267,6 +284,7 @@ export const EUI = React.createClass({
       type: 'EUI',
     };
     const controlsIconButtonProps = {
+      className: 'rc-eui-controls',
       disabled: !loadedExerciseList,
       onClick: this.handleControlsClick,
       tooltip: 'Controls',
@@ -275,7 +293,7 @@ export const EUI = React.createClass({
     return (
         <Paper style={ styles.paper }>
           <div style={ styles.toolbarBlock }>
-            <Toolbar style={{ backgroundColor: canvasColor }}>
+            <Toolbar className="rc-eui-main" style={{ backgroundColor: canvasColor }}>
               <ToolbarGroup float="left" key={ 0 }>
                 <ToolbarTitle style={ styles.toolbarTitle } text="exercise"/>
                   <TextField
