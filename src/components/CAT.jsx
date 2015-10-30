@@ -53,7 +53,7 @@ export const CAT = React.createClass({
 
   componentWillMount() {
     const { selectedExerciseListIndex, exerciseList } = this.state;
-    const exercisePathname = exerciseList.length? exerciseList[ selectedExerciseListIndex ].payload : '';
+    const exercisePathname = exerciseList.length? exerciseList[ selectedExerciseListIndex ].payload : '/CAT';
 
     this.setBase({ host: this.props.baseServerHost, exercise: exercisePathname });
     this.steps = [{
@@ -91,7 +91,7 @@ export const CAT = React.createClass({
     const { host, exercise } = options;
 
     this.baseServer = host || this.baseServer;
-    this.baseServerAddress = this.baseServer + exercise;
+    this.baseServerAddress = `${ this.baseServer }${ exercise }`;
     // SAVE2.lib.view.setBaseServerAddress(this.baseServerAddress);
     // call issueautoloads...
   },
@@ -122,7 +122,7 @@ export const CAT = React.createClass({
   saveExercise(exercise, staticIds) {
     let { controlsComponentDialog } = this.refs;
 
-    fetch(`${ this.baseServerAddress }/CAT/finishExercise`, {
+    fetch(`${ this.baseServerAddress }/finishExercise`, {
       method: 'post',
       mode: 'cors',
       body: `save=${JSON.stringify({ exercise: exercise, auto: staticIds })}`,
@@ -147,7 +147,13 @@ export const CAT = React.createClass({
   },
 
   reset() {
-    this.refs.controlsComponentDialog.dismiss();
+    fetch(`${ this.baseServerAddress }/query`, {
+      method: 'post',
+      mode: 'cors',
+      body: `query=${ JSON.stringify({ type: 'Reset' }) }`,
+    })
+    .then(() => this.refs.controlsComponentDialog.dismiss())
+    .catch(e => console.error(e));
   },
 
   dialogDismiss() {
@@ -156,7 +162,7 @@ export const CAT = React.createClass({
 
   handleControlsClick() {
     SAVE2.lib.view.setBaseServerAddress(this.baseServerAddress);
-    // call issueautoloads...
+    // XXX call issueautoloads...
     this.refs.controlsComponentDialog.show();
   },
 
@@ -298,7 +304,7 @@ export const CAT = React.createClass({
           </ToolbarGroup>
         </Toolbar>
       </div>
-      <ComponentDialog onDismiss={ this.dialogDismiss } ref="controlsComponentDialog" title="EUI Controls">
+      <ComponentDialog onDismiss={ this.dialogDismiss } ref="controlsComponentDialog" title="CAT Controls">
         <Controls { ...controlsProps }/>
       </ComponentDialog>
       { !this.state.noSnackbarSimulateBackend?

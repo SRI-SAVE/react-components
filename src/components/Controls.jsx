@@ -81,7 +81,7 @@ export const Controls = React.createClass({
   },
 
   fetchTooltray() {
-    fetch(`${ this.props.baseServerAddress }${ this.isCAT()? '/CAT' : '' }/inventory`, { mode: 'cors' })
+    fetch(`${ this.props.baseServerAddress }/inventory`, { mode: 'cors' })
     .then(response => response.json())
     .then(json => {
       tooltrayItems = json.tooltray;

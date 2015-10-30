@@ -86,7 +86,7 @@ export const EUI = React.createClass({
     const { host, exercise } = options;
 
     this.baseServer = host || this.baseServer;
-    this.baseServerAddress = this.baseServer + exercise;
+    this.baseServerAddress = `${ this.baseServer }${ exercise }`;
     // SAVE2.lib.view.setBaseServerAddress(this.baseServerAddress);
     // call issueautoloads...
   },
@@ -154,6 +154,14 @@ export const EUI = React.createClass({
   reset() {
     this.setState({ instructorToggle: false });
     this.refs.controlsComponentDialog.dismiss();
+    // XXX todo
+    // fetch(`${ this.baseServerAddress }/query`, {
+    //   method: 'post',
+    //   mode: 'cors',
+    //   body: `query=${ JSON.stringify({ type: 'Reset' }) }`,
+    // })
+    // .then(() => this.refs.controlsComponentDialog.dismiss())
+    // .catch(e => console.error(e));
   },
 
   dialogDismiss() {
@@ -169,7 +177,7 @@ export const EUI = React.createClass({
 
   handleControlsClick() {
     SAVE2.lib.view.setBaseServerAddress(this.baseServerAddress);
-    // call issueautoloads...
+    // XXX call issueautoloads...
     this.refs.controlsComponentDialog.show();
   },
 

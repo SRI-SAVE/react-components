@@ -15,10 +15,10 @@ const routeHandler = (route, options) => {
   case 'http://localhost:3001/inventory':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/inventory':
     return delayResponse(1500, inventoryEUIFetch());
-  case 'http://localhost:3001/query':
+  case 'http://localhost:3001/CAT/query':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/query':
     return queryEUIFetch(options);
-  case 'http://localhost:3001/object':
+  case 'http://localhost:3001/CAT/object':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/object':
     return objectEUIFetch(options);
   case 'http://localhost:3001/generateSolution':
