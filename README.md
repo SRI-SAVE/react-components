@@ -5,7 +5,7 @@ These are components for SAVE [Sandbox](https://github.com/SRI-SAVE/Sandbox).
 ## Demo
 http://sri-save.github.io/react-components
 
-<a href="http://sri-save.github.io/react-components/cat.gif" target="_blank">![](https://http://sri-save.github.io/react-components/cat.gif)</a>
+<a href="http://sri-save.github.io/react-components/cat.gif" target="_blank">![](http://sri-save.github.io/react-components/cat.gif)</a>
 
 ## Installation
 After cloning the repository, install dependencies:
