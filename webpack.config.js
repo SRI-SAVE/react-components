@@ -14,7 +14,7 @@ let wdsNoff = false;
 // let TARGET = process.env.TARGET;
 let ROOT_PATH = path.resolve(__dirname);
 
-if (process.argv[ 1 ].match(/webpack-dev-server$/) != null) {
+if (process.argv[ 1 ].match(/webpack-dev-server|webpack-dev-server.js$/) != null) {
   console.info(chalk.bgGreen('[ Running development debug mode ]'));
   wdsDebug = true;
 }
