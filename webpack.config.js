@@ -4,6 +4,7 @@
 let HtmlWebpackPlugin = require('html-webpack-plugin');
 // let ExtractTextPlugin = require('extract-text-webpack-plugin');
 let webpack = require('webpack');
+let chalk = require('chalk');
 let merge = require('webpack-merge');
 let path = require('path'); //.join(__dirname, 'build');
 let wdsDebug = false;
@@ -14,6 +15,7 @@ let wdsNoff = false;
 let ROOT_PATH = path.resolve(__dirname);
 
 if (process.argv[ 1 ].match(/webpack-dev-server$/) != null) {
+  console.info(chalk.bgGreen('[ Running development debug mode ]'));
   wdsDebug = true;
 }
 
