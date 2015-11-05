@@ -87,8 +87,6 @@ export const EUI = React.createClass({
 
     this.baseServer = host || this.baseServer;
     this.baseServerAddress = `${ this.baseServer }${ exercise }`;
-    // SAVE2.lib.view.setBaseServerAddress(this.baseServerAddress);
-    // call issueautoloads...
   },
 
   simulateBackend() {
@@ -154,14 +152,6 @@ export const EUI = React.createClass({
   reset() {
     this.setState({ instructorToggle: false });
     this.refs.controlsComponentDialog.dismiss();
-    // XXX todo
-    // fetch(`${ this.baseServerAddress }/query`, {
-    //   method: 'post',
-    //   mode: 'cors',
-    //   body: `query=${ JSON.stringify({ type: 'Reset' }) }`,
-    // })
-    // .then(() => this.refs.controlsComponentDialog.dismiss())
-    // .catch(e => console.error(e));
   },
 
   dialogDismiss() {

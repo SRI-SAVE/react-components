@@ -92,8 +92,6 @@ export const CAT = React.createClass({
 
     this.baseServer = host || this.baseServer;
     this.baseServerAddress = `${ this.baseServer }${ exercise }`;
-    // SAVE2.lib.view.setBaseServerAddress(this.baseServerAddress);
-    // call issueautoloads...
   },
 
   simulateBackend() {
@@ -123,6 +121,7 @@ export const CAT = React.createClass({
     let { controlsComponentDialog } = this.refs;
 
     fetch(`${ this.baseServerAddress }/finishExercise`, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
       method: 'post',
       mode: 'cors',
       body: `save=${JSON.stringify({ exercise: exercise, auto: staticIds })}`,
@@ -147,13 +146,7 @@ export const CAT = React.createClass({
   },
 
   reset() {
-    fetch(`${ this.baseServerAddress }/query`, {
-      method: 'post',
-      mode: 'cors',
-      body: `query=${ JSON.stringify({ type: 'Reset' }) }`,
-    })
-    .then(() => this.refs.controlsComponentDialog.dismiss())
-    .catch(e => console.error(e));
+    this.refs.controlsComponentDialog.dismiss();
   },
 
   dialogDismiss() {

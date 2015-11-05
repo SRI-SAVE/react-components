@@ -39,6 +39,7 @@ export const TooltrayList = React.createClass({
 
   handleFetchToolTrayItem(key /*, e */) {
     fetch(`${ this.props.baseServerAddress }/object`,  {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
       method: 'post',
       mode: 'cors',
       body: `object=${ JSON.stringify({ type: 'create', ID: this.props.items[ key ].ID, auto: false }) }`,
@@ -47,7 +48,7 @@ export const TooltrayList = React.createClass({
     .then(json => {
       this.props.onItemClick(key, json);
     })
-    .catch(e => { console.error(e); });
+    .catch(e => console.error(e));
   },
 
   render() {

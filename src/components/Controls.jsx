@@ -71,6 +71,8 @@ export const Controls = React.createClass({
         instructorMode: this.props.instructorMode,
         loaded: true,
       });
+    } else { // first time
+      this.sendReset().catch(e => console.error(e));
     }
   },
 
@@ -95,6 +97,15 @@ export const Controls = React.createClass({
     .catch(e => console.error(e));
   },
 
+  sendReset() {
+    return fetch(`${ this.props.baseServerAddress }/query`, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+      method: 'post',
+      mode: 'cors',
+      body: 'query=' + JSON.stringify({ type: 'Reset' }),
+    });
+  },
+
   resetAnd(andFunc) {
     tooltrayItems = null;
     staticItems = [ ];
@@ -104,15 +115,11 @@ export const Controls = React.createClass({
   },
 
   handleResetClick(/* e */) {
-    fetch(`${ this.props.baseServerAddress }/query`, {
-      method: 'post',
-      mode: 'cors',
-      body: 'query=' + JSON.stringify({ type: 'Reset' }),
-    })
+    this.sendReset()
     .then(() => {
       this.resetAnd(this.props.onReset);
     })
-    .catch(e => { console.error(e); });
+    .catch(e => console.error(e));
   },
 
   handleSaveClick(/* e */) {
