@@ -73,6 +73,15 @@ export const EUI = React.createClass({
       },
     ];
     this.joyrideSetOptions({ type: 'guided' });
+    fetch(`${ this.baseServerAddress }/object`,  {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+      method: 'post',
+      mode: 'cors',
+      body: `object=${ JSON.stringify({ type: 'create', ID: null, auto: true }) }`,
+    })
+    .then(response => response.json())
+    .then(list => { SAVE2.lib.view.loadStaticAutoAssets(list); })
+    .catch(e => console.error(e));
   },
 
   componentDidMount() {
@@ -167,7 +176,6 @@ export const EUI = React.createClass({
 
   handleControlsClick() {
     SAVE2.lib.view.setBaseServerAddress(this.baseServerAddress);
-    // XXX call issueautoloads...
     this.refs.controlsComponentDialog.show();
   },
 

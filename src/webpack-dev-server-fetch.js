@@ -92,8 +92,7 @@ const actionFetch = options => {
   const o = JSON.parse(body.replace('activity=', ''));
 
   console.group('actionFetch()');
-    console.table([ o.arguments ]);
-    console.table([ o.names ]);
+    console.table([ [ o.arguments ], [ o.names ] ]);
   console.groupEnd();
   return Promise.resolve(new window.Response(null, httpResponse));
 };

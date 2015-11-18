@@ -155,7 +155,6 @@ export const CAT = React.createClass({
 
   handleControlsClick() {
     SAVE2.lib.view.setBaseServerAddress(this.baseServerAddress);
-    // XXX call issueautoloads...
     this.refs.controlsComponentDialog.show();
   },
 

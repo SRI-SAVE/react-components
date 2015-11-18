@@ -5,19 +5,18 @@ export default  {
   createSemanticAsset() {
     console.group('SAVE2.lib.view.createSemanticAsset()');
       console.table([ arguments ]);
-      // console.dir(arguments);
     console.groupEnd();
   },
 
-  installAutoLoads() {
-    console.group('SAVE2.lib.view.installAutoLoads()');
-      console.table([ arguments ]);
+  loadStaticAutoAssets(list) {
+    console.group('SAVE2.lib.view.loadStaticAutoAssets()');
+      list.forEach(auto => { console.dir(auto); });
     console.groupEnd();
   },
 
-  setBaseServerAddress() {
+  setBaseServerAddress(baseServerAddress) {
     console.group('SAVE2.lib.view.setBaseServerAddress()');
-      console.table([ arguments ]);
+      console.dir(baseServerAddress);
     console.groupEnd();
   },
 };
