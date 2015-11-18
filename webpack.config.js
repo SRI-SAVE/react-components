@@ -14,16 +14,16 @@ let wdsNoff = false;
 // let TARGET = process.env.TARGET;
 let ROOT_PATH = path.resolve(__dirname);
 
-if (process.argv[ 1 ].match(/webpack-dev-server|webpack-dev-server.js$/) != null) {
-  console.info(chalk.bgGreen('[ Running development debug mode ]'));
-  wdsDebug = true;
-}
-
 if (process.argv.length > 2) {
   for (let arg of process.argv) {
     if (arg.match(/-eui/)) wpSandboxMode = 'EUI';
     if (arg.match(/-noff/)) wdsNoff = true;
   }
+}
+
+if (process.argv[ 1 ].match(/webpack-dev-server|webpack-dev-server.js$/) != null) {
+  console.info(chalk.bgGreen('[ Running development ' + wpSandboxMode + ' debug mode ]'));
+  wdsDebug = true;
 }
 
 let common = {

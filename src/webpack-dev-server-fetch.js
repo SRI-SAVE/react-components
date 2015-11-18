@@ -15,19 +15,24 @@ const routeHandler = (route, options) => {
   case 'http://localhost:3001/inventory':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/inventory':
     return delayResponse(1500, inventoryEUIFetch());
+  case 'http://localhost:3001/query':
   case 'http://localhost:3001/CAT/query':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/query':
-    return queryEUIFetch(options);
+    return queryFetch(options);
+  case 'http://localhost:3001/object':
   case 'http://localhost:3001/CAT/object':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/object':
-    return objectEUIFetch(options);
+    return objectFetch(options);
+  case 'http://localhost:3001/action':
+  case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/action':
+    return actionFetch(options);
   case 'http://localhost:3001/generateSolution':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/generateSolution':
     return generateSolutionEUIFetch();
-  case 'http://localhost:3001/listfiles/exercise/json':
-    return delayResponse(1000, exerciseFetch());
   case 'http://localhost:3001/CAT/finishExercise':
     return finishExercise(options);
+  case 'http://localhost:3001/listfiles/exercise/json':
+    return delayResponse(1000, exerciseFetch());
   default:
     return Promise.reject(new Error('fakeFetch has no handler for: ' + route));
   }
@@ -82,12 +87,25 @@ const generateSolutionEUIFetch = () => {
   return Promise.resolve(new window.Response(null, httpResponse));
 };
 
-const queryEUIFetch = options => {
+const actionFetch = options => {
+  const body = options.body;
+  const o = JSON.parse(body.replace('activity=', ''));
+
+  console.group('actionFetch()');
+    console.table([ o.arguments ]);
+    console.table([ o.names ]);
+  console.groupEnd();
+  return Promise.resolve(new window.Response(null, httpResponse));
+};
+
+const queryFetch = options => {
   const body = options.body;
   const o = JSON.parse(body.replace('query=', ''));
   let jsonData;
 
-  console.log(o);
+  console.group('queryFetch()');
+    console.table([ [ 'type', o.type ], [ o.query? o.query[ 0 ] : undefined ] ]);
+  console.groupEnd();
 
   switch (o.type) {
   case 'Reset':
@@ -101,7 +119,7 @@ const queryEUIFetch = options => {
   return Promise.resolve(new window.Response(JSON.stringify({ KbIds: jsonData }), httpResponse));
 };
 
-const objectEUIFetch = options => {
+const objectFetch = options => {
   const body = options.body;
   const o = JSON.parse(body.replace('object=', ''));
   let jsonData = null;

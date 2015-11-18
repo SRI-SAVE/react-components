@@ -68,7 +68,7 @@ export const CAT = React.createClass({
       },
     ];
     this.joyrideSetOptions({
-      debug: true,
+      // debug: true,
       completeCallback: (steps, skipped) => {
           console.log('completeCallback', steps, skipped);
       },
