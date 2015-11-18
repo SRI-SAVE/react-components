@@ -73,15 +73,7 @@ export const EUI = React.createClass({
       },
     ];
     this.joyrideSetOptions({ type: 'guided' });
-    fetch(`${ this.baseServerAddress }/object`,  {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-      method: 'post',
-      mode: 'cors',
-      body: `object=${ JSON.stringify({ type: 'create', ID: null, auto: true }) }`,
-    })
-    .then(response => response.json())
-    .then(list => { SAVE2.lib.view.loadStaticAutoAssets(list); })
-    .catch(e => console.error(e));
+    this.requestStaticLoadedSemanticAssets();
   },
 
   componentDidMount() {
@@ -96,6 +88,18 @@ export const EUI = React.createClass({
 
     this.baseServer = host || this.baseServer;
     this.baseServerAddress = `${ this.baseServer }${ exercise }`;
+  },
+
+  requestStaticLoadedSemanticAssets() {
+    fetch(`${ this.baseServerAddress }/object`,  {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+      method: 'post',
+      mode: 'cors',
+      body: `object=${ JSON.stringify({ type: 'create', ID: null, auto: true }) }`,
+    })
+    .then(response => response.json())
+    .then(list => { SAVE2.lib.view.loadStaticAutoAssets(list); })
+    .catch(e => console.error(e));
   },
 
   simulateBackend() {
@@ -161,6 +165,7 @@ export const EUI = React.createClass({
   reset() {
     this.setState({ instructorToggle: false });
     this.refs.controlsComponentDialog.dismiss();
+    this.requestStaticLoadedSemanticAssets();
   },
 
   dialogDismiss() {
