@@ -14,6 +14,11 @@ export default  {
     console.groupEnd();
   },
 
+  reset() {
+    console.group('SAVE2.lib.view.reset()');
+    console.groupEnd();
+  },
+
   setBaseServerAddress(baseServerAddress) {
     console.group('SAVE2.lib.view.setBaseServerAddress()');
       console.dir(baseServerAddress);

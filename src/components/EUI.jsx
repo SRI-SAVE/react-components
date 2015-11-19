@@ -166,6 +166,7 @@ export const EUI = React.createClass({
     this.setState({ instructorToggle: false });
     this.refs.controlsComponentDialog.dismiss();
     this.requestStaticLoadedSemanticAssets();
+    SAVE2.lib.view.reset();
   },
 
   dialogDismiss() {
