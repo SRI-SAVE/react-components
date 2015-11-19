@@ -73,7 +73,6 @@ export const EUI = React.createClass({
       },
     ];
     this.joyrideSetOptions({ type: 'guided' });
-    this.requestStaticLoadedSemanticAssets();
   },
 
   componentDidMount() {
@@ -122,6 +121,7 @@ export const EUI = React.createClass({
     this.setState({ loadedExerciseList: true }, () => {
       this.setExerciseListWidth();
       this.joyrideAddSteps(this.steps, true);
+      this.requestStaticLoadedSemanticAssets();
     });
   },
 
