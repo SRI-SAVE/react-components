@@ -120,14 +120,13 @@ export const CAT = React.createClass({
   saveExercise(exercise, staticIds) {
     let { controlsComponentDialog } = this.refs;
 
+    if (controlsComponentDialog.isOpen()) controlsComponentDialog.dismiss(); // do this first since it does a setState!
+
     fetch(`${ this.baseServerAddress }/finishExercise`, {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
       method: 'post',
       mode: 'cors',
       body: `save=${JSON.stringify({ exercise: exercise, auto: staticIds })}`,
-    })
-    .then(() => {
-      if (controlsComponentDialog.isOpen()) controlsComponentDialog.dismiss(); // do this first since it does a setState!
     })
     .catch(e => console.error(e));
   },

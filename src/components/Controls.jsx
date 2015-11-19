@@ -65,14 +65,12 @@ export const Controls = React.createClass({
 
   componentWillMount() {
     if (this.props.forceUpdate) {
-      this.resetAnd();
+      this.handleResetClick();
     } else if (tooltrayItems) {
       this.setState({
         instructorMode: this.props.instructorMode,
         loaded: true,
       });
-    } else { // first time
-      this.sendReset().catch(e => console.error(e));
     }
   },
 
@@ -97,29 +95,12 @@ export const Controls = React.createClass({
     .catch(e => console.error(e));
   },
 
-  sendReset() {
-    return fetch(`${ this.props.baseServerAddress }/query`, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
-      method: 'post',
-      mode: 'cors',
-      body: 'query=' + JSON.stringify({ type: 'Reset' }),
-    });
-  },
-
-  resetAnd(andFunc) {
+  handleResetClick(andFunc) {
     tooltrayItems = null;
     staticItems = [ ];
-    this.setState({ tooltrayItems: tooltrayItems, staticItems: staticItems });
-
-    if (andFunc) andFunc();
-  },
-
-  handleResetClick(/* e */) {
-    this.sendReset()
-    .then(() => {
-      this.resetAnd(this.props.onReset);
-    })
-    .catch(e => console.error(e));
+    this.setState({ tooltrayItems: tooltrayItems, staticItems: staticItems }, () => {
+      if (andFunc) andFunc();
+    });
   },
 
   handleSaveClick(/* e */) {
@@ -186,7 +167,7 @@ export const Controls = React.createClass({
       }
       <MenuDivider/>
       <List subheader="Controls">
-        <ListItem leftIcon={ <ActionRestore/> } onClick={ this.handleResetClick } primaryText="Reset"/>
+        <ListItem leftIcon={ <ActionRestore/> } onClick={ this.handleResetClick.bind(this, this.props.onReset) } primaryText="Reset"/>
         { this.isCAT()?
           <div>
             <CheckboxListItems items={ this.state.staticItems } onItemClick={ this.handleStaticCBClick }/>

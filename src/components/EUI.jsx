@@ -121,22 +121,21 @@ export const EUI = React.createClass({
     this.setState({ loadedExerciseList: true }, () => {
       this.setExerciseListWidth();
       this.joyrideAddSteps(this.steps, true);
-      this.requestStaticLoadedSemanticAssets();
     });
   },
 
   saveSolution() {
     let { controlsComponentDialog, snackbarStudentMode, snackbarInstructorMode } = this.refs;
 
+    if (controlsComponentDialog.isOpen()) controlsComponentDialog.dismiss(); // do this first since it does a setState!
+
     fetch(`${ this.baseServerAddress }/generateSolution`, { mode: 'cors' })
     .then(() => {
-      if (controlsComponentDialog.isOpen()) controlsComponentDialog.dismiss(); // do this first since it does a setState!
-
-      this.setState({
-        reloadTray: true,
-        instructorToggle: false,
+      snackbarInstructorMode.dismiss();
+      this.setState({ reloadTray: true, instructorToggle: false }, () => {
+        snackbarStudentMode.show();
+        this.resetEUI();
       });
-      snackbarStudentMode.show();
     })
     .catch(e => {
       snackbarInstructorMode.show();
@@ -158,15 +157,39 @@ export const EUI = React.createClass({
   },
 
   showAssessment() {
-    this.refs.controlsComponentDialog.dismiss();
+    this.refs.controlsComponentDialog.dismiss(); // setState!
     this.refs.assessmentComponentDialog.show();
   },
 
+  sendReset() {
+    return fetch(`${ this.baseServerAddress }/query`, {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+      method: 'post',
+      mode: 'cors',
+      body: 'query=' + JSON.stringify({ type: 'Reset' }),
+    });
+  },
+
   reset() {
-    this.setState({ instructorToggle: false });
-    this.refs.controlsComponentDialog.dismiss();
-    this.requestStaticLoadedSemanticAssets();
-    SAVE2.lib.view.reset();
+    this.refs.controlsComponentDialog.dismiss(); // setState!
+    this.refs.snackbarInstructorMode.dismiss();
+    this.setState({
+      instructorToggle: false,
+      reloadTray: true,
+    }, () => {
+      this.resetEUI();
+    });
+  },
+
+  resetEUI() {
+    if (this.state.selectedExerciseListIndex != null) {
+      this.sendReset()
+      .then(() => {
+        this.requestStaticLoadedSemanticAssets();
+        SAVE2.lib.view.reset();
+      })
+      .catch(e => console.error(e));
+    }
   },
 
   dialogDismiss() {
@@ -186,14 +209,14 @@ export const EUI = React.createClass({
   },
 
   handleExerciseSelectChange(e, selectedIndex /*, menuItem */) {
+    this.setBase({ exercise: this.state.exerciseList[ selectedIndex ].payload });
     this.setState({
       instructorToggle: false,
       reloadTray: true,
       selectedExerciseListIndex: selectedIndex,
+    }, () => {
+      this.resetEUI();
     });
-
-    this.setBase({ exercise: this.state.exerciseList[ selectedIndex ].payload });
-    this.refs.snackbarInstructorMode.dismiss();
   },
 
   handleInstructorModeToggle(e, toggle) {
@@ -220,6 +243,7 @@ export const EUI = React.createClass({
     }
 
     if (value !== this.baseServer) {
+      this.setBase({ host: value, exercise: '' });
       this.setState({
         exerciseList: [ ],
         instructorToggle: false,
@@ -227,9 +251,9 @@ export const EUI = React.createClass({
         reloadTray: true,
         selectedExerciseListIndex: null,
         serverErrorText: serverErrorText,
+      }, () => {
+        this.fetchExercises();
       });
-      this.setBase({ host: value, exercise: '' });
-      this.fetchExercises();
     }
   },
 

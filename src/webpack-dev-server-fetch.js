@@ -12,21 +12,21 @@ const routeHandler = (route, options) => {
   switch (route) {
   case 'http://localhost:3001/CAT/inventory':
     return delayResponse(500, inventoryCATFetch());
-  case 'http://localhost:3001/inventory':
+  // case 'http://localhost:3001/inventory':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/inventory':
     return delayResponse(1500, inventoryEUIFetch());
-  case 'http://localhost:3001/query':
+  // case 'http://localhost:3001/query':
   case 'http://localhost:3001/CAT/query':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/query':
     return queryFetch(options);
-  case 'http://localhost:3001/object':
+  // case 'http://localhost:3001/object':
   case 'http://localhost:3001/CAT/object':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/object':
     return objectFetch(options);
-  case 'http://localhost:3001/action':
+  // case 'http://localhost:3001/action':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/action':
     return actionFetch(options);
-  case 'http://localhost:3001/generateSolution':
+  // case 'http://localhost:3001/generateSolution':
   case 'http://localhost:3001/exercises/071-100-0032/step01/m4_flora_clear/generateSolution':
     return generateSolutionEUIFetch();
   case 'http://localhost:3001/CAT/finishExercise':
@@ -108,14 +108,11 @@ const queryFetch = options => {
 
   switch (o.type) {
   case 'Reset':
-    instructorMode = true;
-    break;
+    return Promise.resolve(new window.Response(null, httpResponse));
   case 'KbId':
     jsonData = [ o.query[ 0 ] + Date.now() ];
-    break;
+    return Promise.resolve(new window.Response(JSON.stringify({ KbIds: jsonData }), httpResponse));
   }
-
-  return Promise.resolve(new window.Response(JSON.stringify({ KbIds: jsonData }), httpResponse));
 };
 
 const objectFetch = options => {
